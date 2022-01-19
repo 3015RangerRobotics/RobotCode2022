@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+ 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,24 +15,30 @@ package frc.robot;
 public final class Constants {
 
     /* CAN IDs */
-        /* Swerve Modules */
-        public static final int SWERVE_DRIVE_CHANNEL_FL = 0;
-        public static final int SWERVE_DRIVE_CHANNEL_FR = 0;
-        public static final int SWERVE_DRIVE_CHANNEL_BL = 0;
-        public static final int SWERVE_DRIVE_CHANNEL_BR = 0;
+    /* Swerve Modules */;
+    public static final int[] SWERVE_DRIVE_CHANNELS = { 15, 4, 2, 17 }; // { FL, FR, BR, BL }
+    public static final int[] SWERVE_ROTATION_CHANNELS = { 16, 3, 1, 18 }; // { FL, FR, BR, BL }
 
-        public static final int SWERVE_ROTATION_CHANNEL_FL = 0;
-        public static final int SWERVE_ROTATION_CHANNEL_FR = 0;
-        public static final int SWERVE_ROTATION_CHANNEL_BL = 0;
-        public static final int SWERVE_ROTATION_CHANNEL_BR = 0;
+    /* Intake */
+    public static final int[] INTAKE_MOTORS = { 14, 5 }; // { left, right }
 
-        public static final int DRIVE_PIGEON_CHANNEL = 0;
+    /* Feeder */
+    public static final int[] FEEDER_TOP_MOTORS = { 12, 7 }; // { left, right }
+    public static final int[] FEEDER_BOTTOM_MOTORS = { 13, 6 }; // { left, right }
+
+    /* Shooter */
+    public static final int[] SHOOTER_MOTORS = { 10, 9 }; // { left, right }
+
+    /* Hood */
+    public static final int[] HOOD_MOTORS = { 11, 8 }; // { left, right }
+
+
 
     /* Drive Constants */
-        public static final double SWERVE_DRIVE_P = 0;
-        public static final double SWERVE_DRIVE_I = 0;
-        public static final double SWERVE_DRIVE_D = 0;
-        public static final double SWERVE_DRIVE_F = 0;
+    public static final double SWERVE_DRIVE_P = 0;
+    public static final double SWERVE_DRIVE_I = 0;
+    public static final double SWERVE_DRIVE_D = 0;
+    public static final double SWERVE_DRIVE_F = 0;
 
     public static final double SWERVE_ROTATION_P = 0;
     public static final double SWERVE_ROTATION_I = 0;
@@ -51,14 +57,12 @@ public final class Constants {
     public static final double SHOOTER_MOTOR_SPEED = 0;
 
     //Hood Constants
-    public static final double HOOD_MOTOR_CONTROLLER = 0;
 
     //Feeder Constants
-    public static final double FEEDER_TOP_MOTOR1 = 0;
-    public static final double FEEDER_BOTTOM_MOTOR1 = 0;
-    public static final double FEEDER_TOP_MOTOR2 = 0;
-    public static final double FEEDER_BOTTOM_MOTOR2 = 0;
+
+    // Intake Constants
+
 
     //Climber Constants
-    public static final double CLIMBER_MOTOR = 0;
+    public static final double CLIMBER_MOTOR = 19;
 }

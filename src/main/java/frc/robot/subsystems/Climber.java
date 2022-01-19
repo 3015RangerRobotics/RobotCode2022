@@ -9,7 +9,7 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
     private TalonFX climberMotor;
-
+ 
     public Climber() {
         climberMotor = new WPI_TalonFX(Constants.CLIMBER_MOTOR);
         //climberMotor.setInverted(false);

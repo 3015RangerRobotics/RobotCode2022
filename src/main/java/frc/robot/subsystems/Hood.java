@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
+ 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
@@ -22,4 +22,8 @@ public class Hood extends SubsystemBase {
     private boolean holdAutoPos = false;
     private Timer timer = new Timer();
 
+
+    public Hood(int id) {
+        hoodMotor = new CANSparkMax(Constants.HOOD_MOTORS[id]);
+    }
     //include the switch statement?

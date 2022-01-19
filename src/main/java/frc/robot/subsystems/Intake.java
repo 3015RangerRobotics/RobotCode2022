@@ -3,13 +3,16 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-
+ 
 public class Intake extends Subsystem {
-    private VictorSP intakeLeft;
-    private VictorSP intakeRight;
+    private VictorSP intakeMotor;
 
     private final double INTAKE_SPEED = 1; //update number later. should this be in constants?
     private final double OUTTAKE_SPEED = -1; //update number later. should this be in constants?
+
+	public Intake(int id) {
+		intakeMotor = new VictorSP(Constants.INTAKE_MOTORS(id));
+	}
 
     @Override
 	public void initDefaultCommand() {

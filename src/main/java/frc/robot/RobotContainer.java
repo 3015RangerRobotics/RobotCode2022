@@ -26,6 +26,13 @@ import frc.robot.subsystems.drive.Drive;
  */
 public class RobotContainer {
 
+  public static Drive drive;
+  public static Intake[] intake;
+  public static Feeder[] feeder;
+  public static Shooter[] shooter;
+  public static Hood[] hood;
+  public static Climber climber;
+
   private static final XboxController driver = new XboxController(0);
   private static final XboxController coDriver = new XboxController(1);
 
@@ -70,6 +77,12 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    drive = new Drive();
+    climber = new Climber();
+    // intake = { new Intake(0), new Intake(1) };
+    // feeder = { new Feeder(0), new Feeder(1) };
+    // hood = { new Hood(0), new Hood(1) };
+    // shooter = { new Shooter(0), new Shooter(1) };
 
     
 
