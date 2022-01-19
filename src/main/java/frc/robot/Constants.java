@@ -29,10 +29,10 @@ public final class Constants {
         public static final int DRIVE_PIGEON_CHANNEL = 0;
 
     /* Drive Constants */
-    public static final double SWERVE_DRIVE_P = 0;
-    public static final double SWERVE_DRIVE_I = 0;
-    public static final double SWERVE_DRIVE_D = 0;
-    public static final double SWERVE_DRIVE_F = 0;
+        public static final double SWERVE_DRIVE_P = 0;
+        public static final double SWERVE_DRIVE_I = 0;
+        public static final double SWERVE_DRIVE_D = 0;
+        public static final double SWERVE_DRIVE_F = 0;
 
     public static final double SWERVE_ROTATION_P = 0;
     public static final double SWERVE_ROTATION_I = 0;
@@ -46,4 +46,19 @@ public final class Constants {
     public static final double SWERVE_DEGREES_PER_PULSE = 0;
 
     public static final double SWERVE_CENTER_DISTANCE = 0;
+
+    //Shooter Constants
+    public static final double SHOOTER_MOTOR_SPEED = 0;
+
+    //Hood Constants
+    public static final double HOOD_MOTOR_CONTROLLER = 0;
+
+    //Feeder Constants
+    public static final double FEEDER_TOP_MOTOR1 = 0;
+    public static final double FEEDER_BOTTOM_MOTOR1 = 0;
+    public static final double FEEDER_TOP_MOTOR2 = 0;
+    public static final double FEEDER_BOTTOM_MOTOR2 = 0;
+
+    //Climber Constants
+    public static final double CLIMBER_MOTOR = 0;
 }

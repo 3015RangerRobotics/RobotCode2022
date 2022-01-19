@@ -1,0 +1,26 @@
+package frc.robot.subsystems;
+
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
+public class Feeder extends Subsystem {
+    public VictorSPX topMotor1;
+    public VictorSPX bottomMotor1;
+    public VictorSPX topMotor2;
+    public VictorSPX bottomMotor2;
+}
+
+public Feeder()
+{
+    topMotor1 = new VictorSPX(Constants.FEEDER_TOP_MOTOR1);
+    bottomMotor1 = new VictorSPX(Constants.FEEDER_BOTTOM_MOTOR1);
+    topMotor2 = new VictorSPX(Constants.FEEDER_TOP_MOTOR2);
+    bottomMotor2 = new VictorSPX(Constants.FEEDER_BOTTOM_MOTOR2);
+}
+
+@Override
+public void periodic() {
+    //switch statement??
+}
