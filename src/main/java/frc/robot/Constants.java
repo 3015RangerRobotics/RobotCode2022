@@ -57,7 +57,7 @@ public final class Constants {
 
     public static final double SWERVE_CENTER_DISTANCE = 0;
 
-    //Shooter Constants
+    /* Shooter Constants */
     public static final double SHOOTER_MOTOR_SPEED = 0;
 
     public static final double SHOOTER_P = 0;
@@ -72,12 +72,8 @@ public final class Constants {
 
     public static final double SHOOTER_PULSES_PER_ROTATION = 0;
 
-    //Hood Constants
-
-    //Feeder Constants
-
-    // Intake Constants
-
-
-    //Climber Constants
+    /*  Limelight Constants */
+    public static final double LL_TARGET_HEIGHT = 0; //8' 8" tall
+    public static final double LL_MOUNT_HEIGHT = 0;
+    public static final double LL_MOUNT_ANGLE = 0;
 }
