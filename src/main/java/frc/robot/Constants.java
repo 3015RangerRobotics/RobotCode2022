@@ -15,9 +15,10 @@ package frc.robot;
 public final class Constants {
 
     /* CAN IDs */
-    /* Swerve Modules */;
-    public static final int[] SWERVE_DRIVE_CHANNELS = { 15, 4, 2, 17 }; // { FL, FR, BR, BL }
-    public static final int[] SWERVE_ROTATION_CHANNELS = { 16, 3, 1, 18 }; // { FL, FR, BR, BL }
+    /* Drive */;
+    public static final int[] SWERVE_DRIVE_CHANNELS = { 4, 15, 17, 2 }; // { FR, FL, BL, BR }
+    public static final int[] SWERVE_ROTATION_CHANNELS = { 3, 16, 18, 1 }; // { FR, FL, BL, BR }
+    public static final int DRIVE_PIGEON_CHANNEL = 0;
 
     /* Intake */
     public static final int[] INTAKE_MOTORS = { 14, 5 }; // { left, right }
@@ -31,6 +32,9 @@ public final class Constants {
 
     /* Hood */
     public static final int[] HOOD_MOTORS = { 11, 8 }; // { left, right }
+
+    /* Climber */
+    public static final int CLIMBER_MOTOR = 19;
 
 
 
@@ -47,7 +51,7 @@ public final class Constants {
 
     public static final double SWERVE_ROTATION_I_ZONE = 0;
 
-    public static final double SWERVE_MAX_VELOCITY = 0;
+    public static final double SWERVE_MAX_VELOCITY_METERS = 0;
     public static final double SWERVE_METERS_PER_PULSE = 0;
     public static final double SWERVE_DEGREES_PER_PULSE = 0;
 
@@ -55,6 +59,18 @@ public final class Constants {
 
     //Shooter Constants
     public static final double SHOOTER_MOTOR_SPEED = 0;
+
+    public static final double SHOOTER_P = 0;
+    public static final double SHOOTER_I = 0;
+    public static final double SHOOTER_D = 0;
+    public static final double SHOOTER_F = 0;
+
+    public static final double SHOOTER_SHOOT_P = 0;
+    public static final double SHOOTER_SHOOT_I = 0;
+    public static final double SHOOTER_SHOOT_D = 0;
+    public static final double SHOOTER_SHOOT_F = 0;
+
+    public static final double SHOOTER_PULSES_PER_ROTATION = 0;
 
     //Hood Constants
 
@@ -64,5 +80,4 @@ public final class Constants {
 
 
     //Climber Constants
-    public static final double CLIMBER_MOTOR = 19;
 }

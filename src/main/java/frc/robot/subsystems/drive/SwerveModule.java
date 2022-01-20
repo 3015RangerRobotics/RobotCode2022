@@ -4,9 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-//Added WPI_ prefix for compatabilitiy with WPI lib classes
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -17,15 +16,15 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
 
 public class SwerveModule {
-    private WPI_TalonFX driveMotor;
-    private WPI_TalonSRX rotationMotor;
+    private TalonFX driveMotor;
+    private TalonSRX rotationMotor;
     private double rotationOffset;
 
     SwerveModule(int driveChannel, int rotationChannel, double rotationOffset) {
         this.rotationOffset = rotationOffset;
-        driveMotor = new WPI_TalonFX(driveChannel);
+        driveMotor = new TalonFX(driveChannel);
         driveMotor.configFactoryDefault();
-        rotationMotor = new WPI_TalonSRX(rotationChannel);
+        rotationMotor = new TalonSRX(rotationChannel);
         rotationMotor.configFactoryDefault();
         rotationMotor.setNeutralMode(NeutralMode.Coast);
 

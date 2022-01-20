@@ -26,5 +26,4 @@ public class Hood extends SubsystemBase {
     public Hood(int id) {
         hoodMotor = new CANSparkMax(Constants.HOOD_MOTORS[id], MotorType.kBrushless);
     }
-    //include the switch statement?
 }

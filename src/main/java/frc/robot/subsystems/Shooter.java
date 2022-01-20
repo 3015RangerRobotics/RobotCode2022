@@ -13,8 +13,6 @@ import frc.robot.RobotContainer;
 public class Shooter extends SubsystemBase {
     public TalonFX shooter;
 
-	//private DigitalInput ballSensor; ?will there be one on the robot?
-
     public Shooter(int id) {
 		shooter = new TalonFX(Constants.SHOOTER_MOTORS[id]);
 
