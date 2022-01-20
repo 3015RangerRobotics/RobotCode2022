@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
  
-publc class Shooter extends Subsystem {
+public class Shooter extends Subsystem {
     public FalconFX shooter;
 
 	//private DigitalInput ballSensor; ?will there be one on the robot?

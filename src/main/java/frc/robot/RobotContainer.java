@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 
@@ -38,7 +37,7 @@ public class RobotContainer {
 
   private static final JoystickButton driverA = new JoystickButton(driver, XboxController.Button.kA.value);
   private static final JoystickButton driverB = new JoystickButton(driver, XboxController.Button.kB.value);
-  public static final JoystickButton driverX = new JoystickButton(driver, XboxController.Button.kX.value);
+  private static final JoystickButton driverX = new JoystickButton(driver, XboxController.Button.kX.value);
   private static final JoystickButton driverY = new JoystickButton(driver, XboxController.Button.kY.value);
   private static final JoystickButton driverLB = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private static final JoystickButton driverRB = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
@@ -46,8 +45,8 @@ public class RobotContainer {
   private static final DPadButton driverDDown = new DPadButton(driver, DPadButton.Value.kDPadDown);
   private static final DPadButton driverDLeft = new DPadButton(driver, DPadButton.Value.kDPadLeft);
   private static final DPadButton driverDRight = new DPadButton(driver, DPadButton.Value.kDPadRight);
-  private static final TriggerButton driverLT = new TriggerButton(driver, driver.getLeftX());
-  private static final TriggerButton driverRT = new TriggerButton(driver, driver.getRightX());
+  private static final TriggerButton driverLT = new TriggerButton(driver, true);
+  private static final TriggerButton driverRT = new TriggerButton(driver, false);
   private static final JoystickButton driverStart = new JoystickButton(driver, XboxController.Button.kStart.value);
   private static final JoystickButton driverBack = new JoystickButton(driver, XboxController.Button.kBack.value);
 
@@ -61,30 +60,18 @@ public class RobotContainer {
   private static final DPadButton coDriverDDown = new DPadButton(coDriver, DPadButton.Value.kDPadDown);
   private static final DPadButton coDriverDLeft = new DPadButton(coDriver, DPadButton.Value.kDPadLeft);
   private static final DPadButton coDriverDRight = new DPadButton(coDriver, DPadButton.Value.kDPadRight);
-  private static final TriggerButton coDriverLT = new TriggerButton(coDriver, driver.getLeftX());
-  private static final TriggerButton coDriverRT = new TriggerButton(coDriver, driver.getRightX());
+  private static final TriggerButton coDriverLT = new TriggerButton(coDriver, true);
+  private static final TriggerButton coDriverRT = new TriggerButton(coDriver, false);
   private static final JoystickButton coDriverStart = new JoystickButton(coDriver, XboxController.Button.kStart.value);
   private static final JoystickButton coDriverBack = new JoystickButton(coDriver, XboxController.Button.kBack.value);
 
   private static final Timer timer = new Timer();
-
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     drive = new Drive();
-    climber = new Climber();
-    // intake = { new Intake(0), new Intake(1) };
-    // feeder = { new Feeder(0), new Feeder(1) };
-    // hood = { new Hood(0), new Hood(1) };
-    // shooter = { new Shooter(0), new Shooter(1) };
-
-    
 
     // Configure the button bindings
     configureButtonBindings();
@@ -109,25 +96,49 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
+  }
+
+  public static double getDriverLeftTrigger() {
+    return driver.getLeftTriggerAxis();
+  }
+
+  public static double getDriverRightTrigger() {
+    return driver.getRightTriggerAxis();
+  }
+
+  public static double getDriverLeftStickX() {
+    return driver.getLeftX();
+  }
+
+  public static double getDriverLeftStickY() {
+    return driver.getLeftY();
+  }
+
+  public static double getDriverRightStickX() {
+    return driver.getRightX();
+  }
+
+  public static double getDriverRightStickY() {
+    return driver.getRightY();
   }
 
   private static class TriggerButton extends Trigger {
-    double hand;
+    boolean isLeftTrigger;
     XboxController controller;
   
-    public TriggerButton(XboxController controller, double hand) {
-      this.hand = hand;
+    public TriggerButton(XboxController controller, boolean isLeftTrigger) {
+      this.isLeftTrigger = isLeftTrigger;
       this.controller = controller;
     }
   
     @Override
     public boolean get() {
-      if (hand == controller.getLeftX())
+      if (isLeftTrigger)
         return controller.getLeftTriggerAxis() >= 0.5;
-      else if (hand == controller.getRightX())
+      else {
         return controller.getRightTriggerAxis() >= 0.5;
-      else return false;
+      }
     }
   }
   

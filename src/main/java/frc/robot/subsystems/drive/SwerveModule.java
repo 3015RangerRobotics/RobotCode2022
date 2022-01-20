@@ -34,7 +34,7 @@ public class SwerveModule {
         driveMotor.config_kP(0, Constants.SWERVE_DRIVE_P);
         driveMotor.config_kI(0, Constants.SWERVE_DRIVE_I);
         driveMotor.config_kD(0, Constants.SWERVE_DRIVE_D);
-        driveMotor.config_kF(0, 1023.0 / (Constants.SWERVE_MAX_VELOCITY / Constants.SWERVE_METERS_PER_PULSE));
+        driveMotor.config_kF(0, 1023.0 / (Constants.SWERVE_MAX_VELOCITY_METERS / Constants.SWERVE_METERS_PER_PULSE));
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
 //        driveMotor.configClosedloopRamp(0.5);
@@ -62,6 +62,12 @@ public class SwerveModule {
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 10);
     }
 
+    /**
+     * Sets the swerve module's drive motor to brake mode or coast mode
+     * 
+     * @param enable <ul><li><code>true</code> - brake mode
+     *               <li><code>false</code> - coast mode
+     */
     public void enableBrakeMode(boolean enable){
         if (enable){
             driveMotor.setNeutralMode(NeutralMode.Brake);
@@ -70,31 +76,67 @@ public class SwerveModule {
             driveMotor.setNeutralMode(NeutralMode.Coast);
         }
     }
+
+    /**
+     * Resets the module's drive and rotation encoders
+     */
     public void resetEncoders() {
         rotationMotor.setSelectedSensorPosition(0);
         driveMotor.setSelectedSensorPosition(0);
     }
 
+    /**
+     * Gets the module's absolute rotation relative to a defined zero in degrees
+     * 
+     * @return The module's angle in degrees
+     */
     public double getAbsoluteRotation(){
         return (rotationMotor.getSelectedSensorPosition(1) * Constants.SWERVE_DEGREES_PER_PULSE) - 180 - rotationOffset;
     }
 
+    /**
+     * Gets the module's rotation relative to the most recent encoder reset
+     * 
+     * @return The module's relative angle in degrees
+     */
     public double getRelativeRotation(){
         return rotationMotor.getSelectedSensorPosition(0) * Constants.SWERVE_DEGREES_PER_PULSE;
     }
 
+    /**
+     * Sets the drive motor based on specified control mode and speed
+     * 
+     * @param controlMode Specifies how 'outputValue' should be interpreted by the motor
+     * @param outputValue The value the drive motor will be set to. Based on the controlMode
+     */
     public void setDriveMotor(ControlMode controlMode, double outputValue) {
         driveMotor.set(controlMode, outputValue);
     }
 
+    /**
+     * Gets the swerve module's current velocity in meters and angle in degrees encapsulated
+     * in a SwerveModuleState
+     * 
+     * @return The swerve module's current state
+     */
     public SwerveModuleState getSwerveModuleState() {
         return new SwerveModuleState(getVelocity(), Rotation2d.fromDegrees(getAbsoluteRotation()));
     }
 
+    /**
+     * Get the swerve module's current velocity in meters
+     * 
+     * @return The drive motor's current velocity in meters
+     */
     public double getVelocity(){
         return driveMotor.getSelectedSensorVelocity() * 10 * Constants.SWERVE_METERS_PER_PULSE;
     }
 
+    /**
+     * Sets the rotation of the swerve module to a specified angle in degrees
+     * 
+     * @param degrees the angle the module will be set to
+     */
     public void setRotationPosition(double degrees){
         double currentPosAbs = getAbsoluteRotation();
         double currentPosRel = getRelativeRotation();
@@ -107,13 +149,17 @@ public class SwerveModule {
         rotationMotor.set(ControlMode.Position, (currentPosRel + delta) / Constants.SWERVE_DEGREES_PER_PULSE);
     }
 
+    /**
+     * Sets the rotation and velocity of the swerve module based on a swerve module state
+     * 
+     * @param state The swerve module state to target, with speed in meters per second and angle in degrees
+     */
     public void setSwerveModuleState(SwerveModuleState state) {
         SwerveModuleState optimizedState = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getAbsoluteRotation()));
         if(Math.abs(optimizedState.speedMetersPerSecond) > 0){
             setRotationPosition(optimizedState.angle.getDegrees());
         }
         setDriveMotor(ControlMode.Velocity, optimizedState.speedMetersPerSecond / Constants.SWERVE_METERS_PER_PULSE);
-//        System.out.println(optimizedState.speedMetersPerSecond);
     }
 
 }
