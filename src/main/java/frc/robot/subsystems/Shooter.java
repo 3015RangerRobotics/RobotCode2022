@@ -3,20 +3,20 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
  
-public class Shooter extends Subsystem {
-    public FalconFX shooter;
+public class Shooter extends SubsystemBase {
+    public TalonFX shooter;
 
 	//private DigitalInput ballSensor; ?will there be one on the robot?
 
-    public Shooter() {
-		shooter = new WPI_TalonFX(Constants.SHOOTER_MOTOR);
+    public Shooter(int id) {
+		shooter = new TalonFX(Constants.SHOOTER_MOTORS[id]);
 
 		shooter.configFactoryDefault();
 		
@@ -46,13 +46,12 @@ public class Shooter extends Subsystem {
     }
 
     @Override
-	public void periodic() {
+	public void periodic() {}
 
-        /**
-	     * @return The RPM of the shooter wheel
-	     */
-	    public double getRPM() {
-	    	return (shooter.getSelectedSensorVelocity() * 10 * 60 / Constants.SHOOTER_PULSES_PER_ROTATION);
-	    }
-    }
+	/**
+	 * @return The RPM of the shooter wheel
+	 */
+	public double getRPM() {
+		return (shooter.getSelectedSensorVelocity() * 10 * 60 / Constants.SHOOTER_PULSES_PER_ROTATION);
+	}
 }

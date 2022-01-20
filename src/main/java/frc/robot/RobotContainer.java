@@ -72,6 +72,13 @@ public class RobotContainer {
    */
   public RobotContainer() {
     drive = new Drive();
+    climber = new Climber();
+    for (int i = 0; i < 2; i++) {
+        intake[i] = new Intake(i);
+        feeder[i] = new Feeder(i);
+        shooter[i] = new Shooter(i);
+        hood[i] = new Hood(i);
+    }
 
     // Configure the button bindings
     configureButtonBindings();

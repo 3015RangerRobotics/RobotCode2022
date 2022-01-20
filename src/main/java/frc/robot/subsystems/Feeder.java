@@ -11,12 +11,13 @@ public class Feeder extends SubsystemBase {
     public VictorSPX topMotor;
     public VictorSPX bottomMotor; 
 
-public Feeder(int id) {
-    topMotor = new VictorSPX(Constants.FEEDER_TOP_MOTORS[id]);
-    bottomMotor = new VictorSPX(Constants.FEEDER_BOTTOM_MOTORS[id]);
-}
+    public Feeder(int id) {
+        topMotor = new VictorSPX(Constants.FEEDER_TOP_MOTORS[id]);
+        bottomMotor = new VictorSPX(Constants.FEEDER_BOTTOM_MOTORS[id]);
+    }
 
-@Override
-public void periodic() {
-    //switch statement??
+    @Override
+    public void periodic() {
+        //switch statement??
+    }
 }

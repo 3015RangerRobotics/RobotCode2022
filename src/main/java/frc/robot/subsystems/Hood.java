@@ -5,8 +5,8 @@
 package frc.robot.subsystems;
  
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -24,6 +24,7 @@ public class Hood extends SubsystemBase {
 
 
     public Hood(int id) {
-        hoodMotor = new CANSparkMax(Constants.HOOD_MOTORS[id]);
+        hoodMotor = new CANSparkMax(Constants.HOOD_MOTORS[id], MotorType.kBrushless);
     }
     //include the switch statement?
+}
