@@ -49,6 +49,24 @@ public final class Constants {
     public static final double SWERVE_ROTATION_D = 0;
     public static final double SWERVE_ROTATION_F = 0;
 
+    public static final double DRIVE_ROTATION_CONTROLLER_P = 0;
+    public static final double DRIVE_ROTATION_CONTROLLER_I = 0;
+    public static final double DRIVE_ROTATION_CONTROLLER_D = 0;
+    public static final double DRIVE_ROTATION_CONTROLLER_F = 0;
+
+    public static final double DRIVE_POS_ERROR_CONTROLLER_P = 0;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_F = 0;
+
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0;
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0;
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_F = 0;    
+
+    public static final double DRIVE_MAX_ANGULAR_ACCEL = 0;
+    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 0;
+
     public static final double SWERVE_ROTATION_I_ZONE = 0;
 
     public static final double SWERVE_MAX_VELOCITY_METERS = 0;
@@ -73,7 +91,7 @@ public final class Constants {
     public static final double SHOOTER_PULSES_PER_ROTATION = 0;
 
     /*  Limelight Constants */
-    public static final double LL_TARGET_HEIGHT = 0; //8' 8" tall
+    public static final double LL_TARGET_HEIGHT = 0;
     public static final double LL_MOUNT_HEIGHT = 0;
     public static final double LL_MOUNT_ANGLE = 0;
 }

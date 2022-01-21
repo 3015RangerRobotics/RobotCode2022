@@ -20,12 +20,6 @@ import frc.robot.Constants;
 public class Drive extends SubsystemBase {
 
     Translation2d[] moduleLocations = new Translation2d[4];
-
-    // Translation2d frontLeftLocation = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE);
-    // Translation2d frontRightLocation = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE);
-    // Translation2d backLeftLocation = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE);
-    // Translation2d backRightLocation = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE);
-
     SwerveModule[] swerveModules = new SwerveModule[4];
 
     PigeonIMU imu;
@@ -234,5 +228,14 @@ public class Drive extends SubsystemBase {
      */
     public Pose2d getPoseMeters() {
         return odometry.getPoseMeters();
+    }
+
+    /**
+     * Resets the zeros of all swerve modules to their current positions
+     */
+    public void resetZeros() {
+        for (SwerveModule s : swerveModules) {
+            s.updateRotationOffset();
+        }
     }
 }

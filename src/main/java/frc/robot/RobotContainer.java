@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.DriveWithGamepad;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 
@@ -80,6 +81,7 @@ public class RobotContainer {
         hood[i] = new Hood(i);
     }
 
+    drive.setDefaultCommand(new DriveWithGamepad());
     // Configure the button bindings
     configureButtonBindings();
   }

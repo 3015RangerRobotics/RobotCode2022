@@ -55,10 +55,13 @@ public class SwerveModule {
 //        rotationMotor.config_kF(0, Constants.SWERVE_ROTATION_KV);
 //        rotationMotor.configMotionCruiseVelocity(Constants.SWERVE_ROTATION_MAX_VELOCITY);
 //        rotationMotor.configMotionAcceleration(Constants.SWERVE_ROTATION_MAX_ACCEL);
-//        rotationMotor.configAllowableClosedloopError(0, 1/Constants.SWERVE_DEGREES_PER_PULSE);
+        rotationMotor.configPeakCurrentLimit(0);
+        rotationMotor.configPeakCurrentDuration(0);
+        rotationMotor.configAllowableClosedloopError(0, 1/Constants.SWERVE_DEGREES_PER_PULSE);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 10);
+        
     }
 
     /**
@@ -161,4 +164,10 @@ public class SwerveModule {
         setDriveMotor(ControlMode.Velocity, optimizedState.speedMetersPerSecond / Constants.SWERVE_METERS_PER_PULSE);
     }
 
+    /**
+     * Sets the Swerve Module's zero position to its current angle
+     */
+    public void updateRotationOffset() {
+        rotationOffset = getAbsoluteRotation();
+    }
 }
