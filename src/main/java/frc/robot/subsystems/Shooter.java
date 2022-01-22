@@ -47,9 +47,16 @@ public class Shooter extends SubsystemBase {
 	public void periodic() {}
 
 	/**
-	 * @return The RPM of the shooter wheel
+	 * @return The current RPM of the shooter wheel
 	 */
 	public double getRPM() {
 		return (shooter.getSelectedSensorVelocity() * 10 * 60 / Constants.SHOOTER_PULSES_PER_ROTATION);
+	}
+
+	/**
+	 * @param rpm The new RPM of the shooter wheel
+	 */
+	public void setRPM(double rpm) {
+		shooter.set(ControlMode.Velocity, rpm / 10 / 60 * Constants.SHOOTER_PULSES_PER_ROTATION);
 	}
 }
