@@ -35,8 +35,12 @@ public final class Constants {
 
     /* Climber */
     public static final int CLIMBER_MOTOR = 19;
-
-
+    public static final int CLIMBER_SOLENOID_UP = 0;
+    public static final int CLIMBER_SOLENOID_DOWN = 0;
+    public static final int CLIMBER_BOTTOM_SWITCH = 0;
+    public static final int CLIMBER_TOP_SWITCH = 0;
+    public static final int CLIMBER_PARM_SWITCH = 0;
+    public static final int CLIMBER_SARM_SWITCH = 0;
 
     /* Drive Constants */
     public static final double SWERVE_DRIVE_P = 0;
@@ -94,4 +98,19 @@ public final class Constants {
     public static final double LL_TARGET_HEIGHT = 0;
     public static final double LL_MOUNT_HEIGHT = 0;
     public static final double LL_MOUNT_ANGLE = 0;
+
+    /* Climber Constants */
+    public static final double CLIMBER_METERS_PER_PULSE = 0;
+    public static final double CLIMBER_MAX_HEIGHT_METERS = 0;
+
+    public static final double CLIMBER_RAISE_P = 0;
+    public static final double CLIMBER_RAISE_I = 0;
+    public static final double CLIMBER_RAISE_D = 0;
+    public static final double CLIMBER_RAISE_F = 0;
+    
+    public static final double CLIMBER_LOWER_P = 0;    
+    public static final double CLIMBER_LOWER_I = 0;
+    public static final double CLIMBER_LOWER_D = 0;
+    public static final double CLIMBER_LOWER_F = 0;    
+
 }
