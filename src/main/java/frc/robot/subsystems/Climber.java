@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -53,8 +54,14 @@ public class Climber extends SubsystemBase {
         climberMotor = new TalonFX(Constants.CLIMBER_MOTOR);
         climberMotor.configVoltageCompSaturation(12.5);
         climberMotor.enableVoltageCompensation(true);
+        climberMotor.setInverted(false);
         climberMotor.setSensorPhase(false);
         climberMotor.setNeutralMode(NeutralMode.Brake);
+        climberMotor.config_kP(0, Constants.CLIMBER_RAISE_P);
+        climberMotor.config_kI(0, Constants.CLIMBER_RAISE_I);
+        climberMotor.config_kD(0, Constants.CLIMBER_RAISE_D);
+        climberMotor.config_kF(0, Constants.CLIMBER_RAISE_F);
+        climberMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, normalOpenOrClose, deviceID)
 
         /* Might need to change pneumatics module type */
         secondaryArm = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.CLIMBER_SOLENOID_DOWN,
@@ -72,31 +79,51 @@ public class Climber extends SubsystemBase {
         SmartDashboard.putBoolean("Primary Climber Arm Switch", getPrimaryArmLimit());
         SmartDashboard.putBoolean("Secondary Climber Arm Switch", getSecondaryArmLimit());
 
-        switch (state) {
-            case kHoming:
-                if (getBottomLimit()) {
-                    climberMotor.set(ControlMode.Velocity, 0);
-                    climberMotor.setSelectedSensorPosition(0);
-                    state = State.kDefault;
-                }
-                climberMotor.set(ControlMode.Velocity, -0.25);
-                break;
-            case kExtend:
-                if (getTopLimit()) {
-                    climberMotor.set(ControlMode.Velocity, 0);
-                    state = State.kDefault;
-                }
-                climberMotor.set(ControlMode.Velocity, 1);
-                break;
-            case kRetract:
-                if (getBottomLimit()) {
-                    climberMotor.set(ControlMode.Velocity, 0);
-                    state = State.kDefault;
-                }
-                climberMotor.set(ControlMode.Velocity, -1);
-            case kDefault:
-                break;
-        }
+        // switch (state) {
+        //     case kHoming:
+        //         if (getBottomLimit()) {
+                    // climberMotor.set(ControlMode.Velocity, 0);
+        //             climberMotor.setSelectedSensorPosition(0);
+        //             state = State.kDefault;
+        //         }
+        //         climberMotor.set(ControlMode.Velocity, -0.25);
+        //         break;
+        //     case kExtend:
+        //         if (getTopLimit()) {
+        //             climberMotor.set(ControlMode.Velocity, 0);
+        //             state = State.kDefault;
+        //         }
+        //         climberMotor.set(ControlMode.Velocity, 1);
+        //         break;
+        //     case kRetract:
+        //         if (getBottomLimit()) {
+        //             climberMotor.set(ControlMode.Velocity, 0);
+        //             state = State.kDefault;
+        //         }
+        //         climberMotor.set(ControlMode.Velocity, -1);
+        //     case kDefault:
+        //         break;
+        // }
+    }
+
+    public void homeClimber()
+    {
+        climberMotor.set(ControlMode.Position, 0);
+    }
+
+    public void setClimberPos(double position)
+    {
+        climberMotor.set(ControlMode.Position, position);
+    }
+
+    public void setSensorZero()
+    {
+        climberMotor.setSelectedSensorPosition(0);
+    }
+
+    public void getClimberPos()
+    {
+        climberMotor.getSelectedSensorPosition();
     }
 
     public boolean getBottomLimit() {
