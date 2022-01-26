@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -75,10 +74,10 @@ public class Limelight extends SubsystemBase {
 	@Override
 	public void periodic() {
 		//SmartDashboard output
-		avgDistance.add(getRobotToTargetDistance());
-		if(avgDistance.size() == 10){ //??
-			avgDistance.remove(0);
-		}
+		// avgDistance.add(getRobotToTargetDistance());
+		// if(avgDistance.size() == 10){ //??
+		// 	avgDistance.remove(0);
+		// }
 	}
 
     public double getAvgDistance(){ //??

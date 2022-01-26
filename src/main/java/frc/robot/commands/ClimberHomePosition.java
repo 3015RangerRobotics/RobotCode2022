@@ -6,46 +6,40 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Climber.State;
 
-public class ClimberSetPosition extends CommandBase {
+public class ClimberHomePosition extends CommandBase {
 
-  boolean extend;
+  double threshold = 10; // set this to some reasonable number
 
-  /** Creates a new ClimberSetPosition. */
-  public ClimberSetPosition(boolean extend) {
-
-    this.extend = extend;
-
+  /** Creates a new ClimberHomePosition. */
+  public ClimberHomePosition() {
     addRequirements(RobotContainer.climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(extend) {
-      RobotContainer.climber.setState(Climber.State.kExtend);
-    } else {
-      RobotContainer.climber.setState(Climber.State.kRetract);
-    }
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    RobotContainer.climber.setOutput(-1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.climber.setState(Climber.State.kDefault);
+    RobotContainer.climber.setOutput(0);
+    if(RobotContainer.climber.getBottomLimit()) {
+      RobotContainer.climber.setSensorZero();
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.climber.getState() == Climber.State.kDefault;
+    return RobotContainer.climber.getBottomLimit() || RobotContainer.climber.getClimberCurrent() > threshold;
   }
 }
