@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,6 +18,7 @@ public class Climber extends SubsystemBase {
     private DoubleSolenoid secondaryArm;
     private DigitalInput bottomLimit;
     private DigitalInput primaryArmSwitch;
+    private DigitalInput beamBreakSensor;
 
     /**
      * <ul>
@@ -50,6 +52,8 @@ public class Climber extends SubsystemBase {
 
         bottomLimit = new DigitalInput(Constants.CLIMBER_BOTTOM_SWITCH);
         primaryArmSwitch = new DigitalInput(Constants.CLIMBER_PARM_SWITCH);
+        beamBreakSensor = new DigitalInput(Constants.CLIMBER_BEAMBREAK_SENSOR);
+        
     }
 
     public void periodic() {
@@ -101,5 +105,9 @@ public class Climber extends SubsystemBase {
 
     public double getClimberCurrent() {
         return climberMotor.getSupplyCurrent();
+    }
+
+    public boolean getBeamBreakSensor() {
+        return beamBreakSensor.get();
     }
 }
