@@ -32,13 +32,18 @@ public class Drive extends SubsystemBase {
      */
     public Drive() {
 
-        moduleLocations[0] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // Front Right
-        moduleLocations[1] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // Front Left
-        moduleLocations[2] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // Back Left
-        moduleLocations[3] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // Back Right
-        
+        moduleLocations[0] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // Front
+                                                                                                                    // Right
+        moduleLocations[1] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // Front
+                                                                                                                     // Left
+        moduleLocations[2] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // Back
+                                                                                                                      // Left
+        moduleLocations[3] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // Back
+                                                                                                                     // Right
+
         for (int i = 0; i < 4; i++) {
-            swerveModules[i] = new SwerveModule(Constants.SWERVE_DRIVE_CHANNELS[i], Constants.SWERVE_ROTATION_CHANNELS[i], 0);
+            swerveModules[i] = new SwerveModule(Constants.SWERVE_DRIVE_CHANNELS[i],
+                    Constants.SWERVE_ROTATION_CHANNELS[i], 0);
         }
 
         resetEncoders();
@@ -69,11 +74,13 @@ public class Drive extends SubsystemBase {
     /**
      * Sets all swerve modules' drive motors to brake or coast mode
      * 
-     * @param enable <ul><li>true - Brake mode;
+     * @param enable
+     *               <ul>
+     *               <li>true - Brake mode;
      *               <li>false - Coast mode
      */
-    public void enableBrakeMode(boolean enable){
-        for(SwerveModule s : swerveModules) {
+    public void enableBrakeMode(boolean enable) {
+        for (SwerveModule s : swerveModules) {
             s.enableBrakeMode(enable);
         }
     }
@@ -105,9 +112,9 @@ public class Drive extends SubsystemBase {
      */
     public double getAngleDegrees() {
         double angle = imu.getFusedHeading() % 360;
-        if(angle > 180){
+        if (angle > 180) {
             angle -= 360;
-        }else if(angle <= -180) {
+        } else if (angle <= -180) {
             angle += 360;
         }
         return -angle;
@@ -126,13 +133,16 @@ public class Drive extends SubsystemBase {
      * Update's the Odometry based on current swerve module states
      */
     public void updateOdometry() {
-        odometry.update(getAngleRotation2d(), swerveModules[0].getSwerveModuleState(), swerveModules[1].getSwerveModuleState(), swerveModules[2].getSwerveModuleState(), swerveModules[3].getSwerveModuleState());
+        odometry.update(getAngleRotation2d(), swerveModules[0].getSwerveModuleState(),
+                swerveModules[1].getSwerveModuleState(), swerveModules[2].getSwerveModuleState(),
+                swerveModules[3].getSwerveModuleState());
     }
 
     /**
      * Reset's the Odometry based on the input pose
      * 
-     * @param pose a <code>Pose2d</code> representing the Robot's new position and angle
+     * @param pose a <code>Pose2d</code> representing the Robot's new position and
+     *             angle
      */
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(pose, getAngleRotation2d());
@@ -141,7 +151,8 @@ public class Drive extends SubsystemBase {
     /**
      * Sets the output of all drive motors as a percentage of their maximum output
      * 
-     * @param pct a number representing percentage speed normalized between -1 and +1
+     * @param pct a number representing percentage speed normalized between -1 and
+     *            +1
      */
     public void setModuleDrivePct(double pct) {
         for (SwerveModule s : swerveModules) {
@@ -164,22 +175,23 @@ public class Drive extends SubsystemBase {
      * Sets the rotation of a module with a specified index
      * 
      * @param degrees the rotation relative to the absolute zero in degrees
-     * @param index the index of the motor to rotate;
-     *              <ul><li>0 - Front Right
-     *              <li>1 - Front Left
-     *              <li>2 - Back Left
-     *              <li>3 - Back Right
+     * @param index   the index of the motor to rotate;
+     *                <ul>
+     *                <li>0 - Front Right
+     *                <li>1 - Front Left
+     *                <li>2 - Back Left
+     *                <li>3 - Back Right
      */
     public void setModuleRotation(double degrees, int index) {
         swerveModules[index].setRotationPosition(degrees);
     }
 
-
     /**
      * Gets the rotation of a module with specified index
      * 
      * @param index the index of the module
-     *              <ul><li>0 - Front Right
+     *              <ul>
+     *              <li>0 - Front Right
      *              <li>1 - Front Left
      *              <li>2 - Back Left
      *              <li>3 - Back Right
@@ -189,9 +201,11 @@ public class Drive extends SubsystemBase {
     }
 
     /**
-     * Sets the states of all swerve modules based on input <code>ChassisSpeeds</code>
+     * Sets the states of all swerve modules based on input
+     * <code>ChassisSpeeds</code>
      * 
-     * @param chassisSpeeds an object encapsulating desired dx, dy, and dθ of the robot
+     * @param chassisSpeeds an object encapsulating desired dx, dy, and dθ of the
+     *                      robot
      */
     public void drive(ChassisSpeeds chassisSpeeds) {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
@@ -205,28 +219,53 @@ public class Drive extends SubsystemBase {
     }
 
     /**
-     * Sets the states of all swerve modules based on input velocities with NWU coordinates
+     * Sets the states of all swerve modules based on input velocities with NWU
+     * coordinates
      * 
-     * @param xVelMeters the desired velocity of the robot in the x direction in meters; relative to either the robot or the field.
-     * @param yVelMeters the desired velocity of the robot in the y direction in meters; relative to either the robot or the field.
+     * @param xVelMeters       the desired velocity of the robot in the x direction
+     *                         in meters; relative to either the robot or the field.
+     * @param yVelMeters       the desired velocity of the robot in the y direction
+     *                         in meters; relative to either the robot or the field.
      * @param degreesPerSecond the desired angular velocity of the robot in degrees
-     * @param isFieldRelative <ul><li>true - the x and y velocities refer to an absolute coordinate axis defined by the field;
-     *                        <li>false - the x and y velocities refer to a coordinate axis defined by the robot's current angle
+     * @param isFieldRelative
+     *                         <ul>
+     *                         <li>true - the x and y velocities refer to an
+     *                         absolute coordinate axis defined by the field;
+     *                         <li>false - the x and y velocities refer to a
+     *                         coordinate axis defined by the robot's current angle
      */
     public void drive(double xVelMeters, double yVelMeters, double degreesPerSecond, boolean isFieldRelative) {
         if (isFieldRelative) {
-            drive(ChassisSpeeds.fromFieldRelativeSpeeds(xVelMeters, yVelMeters, Math.toRadians(degreesPerSecond), getAngleRotation2d()));
+            drive(ChassisSpeeds.fromFieldRelativeSpeeds(xVelMeters, yVelMeters, Math.toRadians(degreesPerSecond),
+                    getAngleRotation2d()));
         } else {
             drive(new ChassisSpeeds(xVelMeters, yVelMeters, Math.toRadians(degreesPerSecond)));
         }
     }
 
-    //TODO:Add method to stop all modules rotation and drive motors.
-
-    //TODO: add method to rotate all drive modules given param speed
+    /**
+     * Stops all rotation and drive motors
+     */
+    public void stopAll() {
+        for (SwerveModule s : swerveModules) {
+            s.setStopMotor();
+        }
+    }
 
     /**
-     * Gets the robot's current position as a <code>Pose2d</code> with distance units in meters
+     * Sets the rotation speed of all swerve modules
+     * 
+     * @param speed the speed of the modules in percent output
+     */
+    public void setAllRotate(double speed) {
+        for (SwerveModule s : swerveModules) {
+            s.setRotationSpeed(speed);
+        }
+    }
+
+    /**
+     * Gets the robot's current position as a <code>Pose2d</code> with distance
+     * units in meters
      * 
      * @return the robot's current Pose in meters
      */

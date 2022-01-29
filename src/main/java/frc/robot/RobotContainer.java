@@ -33,6 +33,7 @@ public class RobotContainer {
   public static Shooter[] shooter;
   public static Hood[] hood;
   public static Climber climber;
+  public static Compressor compressor;
 
   private static final XboxController driver = new XboxController(0);
   private static final XboxController coDriver = new XboxController(1);
@@ -56,8 +57,10 @@ public class RobotContainer {
   private static final JoystickButton coDriverB = new JoystickButton(coDriver, XboxController.Button.kB.value);
   private static final JoystickButton coDriverX = new JoystickButton(coDriver, XboxController.Button.kX.value);
   private static final JoystickButton coDriverY = new JoystickButton(coDriver, XboxController.Button.kY.value);
-  private static final JoystickButton coDriverLB = new JoystickButton(coDriver, XboxController.Button.kLeftBumper.value);
-  private static final JoystickButton coDriverRB = new JoystickButton(coDriver, XboxController.Button.kRightBumper.value);
+  private static final JoystickButton coDriverLB = new JoystickButton(coDriver,
+      XboxController.Button.kLeftBumper.value);
+  private static final JoystickButton coDriverRB = new JoystickButton(coDriver,
+      XboxController.Button.kRightBumper.value);
   private static final DPadButton coDriverDUp = new DPadButton(coDriver, DPadButton.Value.kDPadUp);
   private static final DPadButton coDriverDDown = new DPadButton(coDriver, DPadButton.Value.kDPadDown);
   private static final DPadButton coDriverDLeft = new DPadButton(coDriver, DPadButton.Value.kDPadLeft);
@@ -75,11 +78,12 @@ public class RobotContainer {
   public RobotContainer() {
     drive = new Drive();
     climber = new Climber();
+    compressor = new Compressor();
     for (int i = 0; i < 2; i++) {
-        intake[i] = new Intake(i);
-        feeder[i] = new Feeder(i);
-        shooter[i] = new Shooter(i);
-        hood[i] = new Hood(i);
+      intake[i] = new Intake(i);
+      feeder[i] = new Feeder(i);
+      shooter[i] = new Shooter(i);
+      hood[i] = new Hood(i);
     }
 
     drive.setDefaultCommand(new DriveWithGamepad());
@@ -135,12 +139,12 @@ public class RobotContainer {
   private static class TriggerButton extends Trigger {
     boolean isLeftTrigger;
     XboxController controller;
-  
+
     public TriggerButton(XboxController controller, boolean isLeftTrigger) {
       this.isLeftTrigger = isLeftTrigger;
       this.controller = controller;
     }
-  
+
     @Override
     public boolean get() {
       if (isLeftTrigger)
@@ -150,22 +154,22 @@ public class RobotContainer {
       }
     }
   }
-  
+
   private static class DPadButton extends Button {
     private final int dPadDegree;
     private final XboxController controller;
-  
+
     public enum Value {
       kDPadRight, kDPadUpRight, kDPadUp, kDPadUpLeft, kDPadLeft, kDPadDownLeft, kDPadDown, kDPadDownRight,
     }
-  
+
     /**
      * Creates a dpad button
      *
      * @param controller the controller to attach the button to
      * @param value      the dpad value
      */
-  
+
     public DPadButton(XboxController controller, Value value) {
       this.controller = controller;
       switch (value) {
@@ -197,11 +201,11 @@ public class RobotContainer {
           throw new AssertionError("Illegal value" + value);
       }
     }
-  
+
     @Override
     public boolean get() {
       return controller.getPOV() == dPadDegree;
     }
   }
-  
+
 }

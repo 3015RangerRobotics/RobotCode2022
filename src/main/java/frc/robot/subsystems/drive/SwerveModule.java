@@ -6,13 +6,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -36,13 +31,15 @@ public class SwerveModule {
         driveMotor.config_kF(0, 1023.0 / (Constants.SWERVE_MAX_VELOCITY_METERS / Constants.SWERVE_METERS_PER_PULSE));
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
-//        driveMotor.configClosedloopRamp(0.5);
-//        driveMotor.setNeutralMode(NeutralMode.Coast);
+        // driveMotor.configClosedloopRamp(0.5);
+        // driveMotor.setNeutralMode(NeutralMode.Coast);
 
         rotationMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 1, 10);
         rotationMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-//        rotationMotor.configSelectedFeedbackCoefficient(Constants.SWERVE_DEGREES_PER_PULSE, 0, 10);
-//        rotationMotor.configSelectedFeedbackCoefficient(Constants.SWERVE_DEGREES_PER_PULSE, 1, 10);
+        // rotationMotor.configSelectedFeedbackCoefficient(Constants.SWERVE_DEGREES_PER_PULSE,
+        // 0, 10);
+        // rotationMotor.configSelectedFeedbackCoefficient(Constants.SWERVE_DEGREES_PER_PULSE,
+        // 1, 10);
         rotationMotor.configVoltageCompSaturation(12.5);
         rotationMotor.enableVoltageCompensation(true);
         rotationMotor.configFeedbackNotContinuous(true, 10);
@@ -52,29 +49,30 @@ public class SwerveModule {
         rotationMotor.config_kI(0, Constants.SWERVE_ROTATION_I);
         rotationMotor.config_IntegralZone(0, Constants.SWERVE_ROTATION_I_ZONE);
         rotationMotor.config_kD(0, Constants.SWERVE_ROTATION_D);
-//        rotationMotor.config_kF(0, Constants.SWERVE_ROTATION_KV);
-//        rotationMotor.configMotionCruiseVelocity(Constants.SWERVE_ROTATION_MAX_VELOCITY);
-//        rotationMotor.configMotionAcceleration(Constants.SWERVE_ROTATION_MAX_ACCEL);
+        // rotationMotor.config_kF(0, Constants.SWERVE_ROTATION_KV);
+        // rotationMotor.configMotionCruiseVelocity(Constants.SWERVE_ROTATION_MAX_VELOCITY);
+        // rotationMotor.configMotionAcceleration(Constants.SWERVE_ROTATION_MAX_ACCEL);
         rotationMotor.configPeakCurrentLimit(0);
         rotationMotor.configPeakCurrentDuration(0);
-        rotationMotor.configAllowableClosedloopError(0, 1/Constants.SWERVE_DEGREES_PER_PULSE);
+        rotationMotor.configAllowableClosedloopError(0, 1 / Constants.SWERVE_DEGREES_PER_PULSE);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 10);
-        
+
     }
 
     /**
      * Sets the swerve module's drive motor to brake mode or coast mode
      * 
-     * @param enable <ul><li><code>true</code> - brake mode
+     * @param enable
+     *               <ul>
+     *               <li><code>true</code> - brake mode
      *               <li><code>false</code> - coast mode
      */
-    public void enableBrakeMode(boolean enable){
-        if (enable){
+    public void enableBrakeMode(boolean enable) {
+        if (enable) {
             driveMotor.setNeutralMode(NeutralMode.Brake);
-        }
-        else {
+        } else {
             driveMotor.setNeutralMode(NeutralMode.Coast);
         }
     }
@@ -92,7 +90,7 @@ public class SwerveModule {
      * 
      * @return The module's angle in degrees
      */
-    public double getAbsoluteRotation(){
+    public double getAbsoluteRotation() {
         return (rotationMotor.getSelectedSensorPosition(1) * Constants.SWERVE_DEGREES_PER_PULSE) - 180 - rotationOffset;
     }
 
@@ -101,22 +99,25 @@ public class SwerveModule {
      * 
      * @return The module's relative angle in degrees
      */
-    public double getRelativeRotation(){
+    public double getRelativeRotation() {
         return rotationMotor.getSelectedSensorPosition(0) * Constants.SWERVE_DEGREES_PER_PULSE;
     }
 
     /**
      * Sets the drive motor based on specified control mode and speed
      * 
-     * @param controlMode Specifies how 'outputValue' should be interpreted by the motor
-     * @param outputValue The value the drive motor will be set to. Based on the controlMode
+     * @param controlMode Specifies how 'outputValue' should be interpreted by the
+     *                    motor
+     * @param outputValue The value the drive motor will be set to. Based on the
+     *                    controlMode
      */
     public void setDriveMotor(ControlMode controlMode, double outputValue) {
         driveMotor.set(controlMode, outputValue);
     }
 
     /**
-     * Gets the swerve module's current velocity in meters and angle in degrees encapsulated
+     * Gets the swerve module's current velocity in meters and angle in degrees
+     * encapsulated
      * in a SwerveModuleState
      * 
      * @return The swerve module's current state
@@ -130,7 +131,7 @@ public class SwerveModule {
      * 
      * @return The drive motor's current velocity in meters
      */
-    public double getVelocity(){
+    public double getVelocity() {
         return driveMotor.getSelectedSensorVelocity() * 10 * Constants.SWERVE_METERS_PER_PULSE;
     }
 
@@ -139,26 +140,29 @@ public class SwerveModule {
      * 
      * @param degrees the angle the module will be set to
      */
-    public void setRotationPosition(double degrees){
+    public void setRotationPosition(double degrees) {
         double currentPosAbs = getAbsoluteRotation();
         double currentPosRel = getRelativeRotation();
         double delta = degrees - currentPosAbs;
-        if(delta > 180){
+        if (delta > 180) {
             delta -= 360;
-        }else if(delta < -180){
+        } else if (delta < -180) {
             delta += 360;
         }
         rotationMotor.set(ControlMode.Position, (currentPosRel + delta) / Constants.SWERVE_DEGREES_PER_PULSE);
     }
 
     /**
-     * Sets the rotation and velocity of the swerve module based on a swerve module state
+     * Sets the rotation and velocity of the swerve module based on a swerve module
+     * state
      * 
-     * @param state The swerve module state to target, with speed in meters per second and angle in degrees
+     * @param state The swerve module state to target, with speed in meters per
+     *              second and angle in degrees
      */
     public void setSwerveModuleState(SwerveModuleState state) {
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getAbsoluteRotation()));
-        if(Math.abs(optimizedState.speedMetersPerSecond) > 0){
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(state,
+                Rotation2d.fromDegrees(getAbsoluteRotation()));
+        if (Math.abs(optimizedState.speedMetersPerSecond) > 0) {
             setRotationPosition(optimizedState.angle.getDegrees());
         }
         setDriveMotor(ControlMode.Velocity, optimizedState.speedMetersPerSecond / Constants.SWERVE_METERS_PER_PULSE);
@@ -171,7 +175,21 @@ public class SwerveModule {
         rotationOffset = getAbsoluteRotation();
     }
 
-    //TODO: add method(not param or return) to stop both motors, use PercentOutput, set to 0.0
-    //TODO: add method to rotate the module at a speed. i.e. rotationMotor.set(ControlMode.PercentOutput...
+    /**
+     * Sets both drive and rotation motor to zero velocity
+     */
+    public void setStopMotor() {
+        driveMotor.set(ControlMode.PercentOutput, 0);
+        rotationMotor.set(ControlMode.PercentOutput, 0);
+    }
+
+    /**
+     * Sets the rotation speed of the module by percent
+     * 
+     * @param speed the percent to run the rotation motor at
+     */
+    public void setRotationSpeed(double speed) {
+        rotationMotor.set(ControlMode.PercentOutput, speed);
+    }
 
 }

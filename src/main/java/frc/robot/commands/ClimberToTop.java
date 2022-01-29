@@ -5,10 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class ClimberToTop extends CommandBase {
-
 
   /** Creates a new ClimberToTop. */
   public ClimberToTop() {
@@ -24,19 +24,18 @@ public class ClimberToTop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.drive.getAngleDegrees();
-    RobotContainer.climber.setOutput(1);
+    RobotContainer.climber.setClimberPos(Constants.CLIMBER_MAX_HEIGHT_METERS);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    RobotContainer.climber.setOutput(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return RobotContainer.Climber.getBeamBreakSensor();//TODO: fix this line, left as student exercise
+    return Constants.CLIMBER_MAX_HEIGHT_METERS - RobotContainer.climber.getClimberPos() < 0.005; // 0.5 cm
   }
 }

@@ -3,13 +3,17 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
- 
+
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -29,18 +33,18 @@ public final class Constants {
 
     /* Shooter */
     public static final int[] SHOOTER_MOTORS = { 10, 9 }; // { left, right }
-    
+
     /* Climber */
     public static final int CLIMBER_MOTOR = 19;
-    
+
     /* REV ID's */
     /* Hood */
     public static final int[] HOOD_MOTORS = { 11, 8 }; // { left, right }
 
-    /* Solenoid ID's*/
+    /* Solenoid ID's */
     /* Climber */
-    public static final int CLIMBER_SOLENOID_UP = 0; //TODO: no doulbe id's
-    public static final int CLIMBER_SOLENOID_DOWN = 0;
+    public static final int CLIMBER_SOLENOID_UP = 0; // TEMP
+    public static final int CLIMBER_SOLENOID_DOWN = 1; // TEMP
 
     /* Digital IO ID's */
     /* climber */
@@ -75,7 +79,7 @@ public final class Constants {
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0;
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_F = 0;    
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_F = 0;
 
     public static final double DRIVE_MAX_ANGULAR_ACCEL = 0;
     public static final double DRIVE_MAX_ANGULAR_VELOCITY = 0;
@@ -103,7 +107,7 @@ public final class Constants {
 
     public static final double SHOOTER_PULSES_PER_ROTATION = 0;
 
-    /*  Limelight Constants */
+    /* Limelight Constants */
     public static final double LL_TARGET_HEIGHT = 0;
     public static final double LL_MOUNT_HEIGHT = 0;
     public static final double LL_MOUNT_ANGLE = 0;
@@ -116,17 +120,27 @@ public final class Constants {
     public static final double CLIMBER_RAISE_I = 0;
     public static final double CLIMBER_RAISE_D = 0;
     public static final double CLIMBER_RAISE_F = 0;
-    
-    public static final double CLIMBER_LOWER_P = 0;    
+
+    public static final double CLIMBER_LOWER_P = 0;
     public static final double CLIMBER_LOWER_I = 0;
     public static final double CLIMBER_LOWER_D = 0;
-    public static final double CLIMBER_LOWER_F = 0;    
-
+    public static final double CLIMBER_LOWER_F = 0;
 
     /* Hood Constants */
-    public static final double HOOD_CONTROLLER_P = 0; 
+    public static final double HOOD_CONTROLLER_P = 0;
     public static final double HOOD_CONTROLLER_I = 0;
     public static final double HOOD_CONTROLLER_D = 0;
-    public static final double HOOD_CONTROLLER_F = 0; 
+    public static final double HOOD_CONTROLLER_F = 0;
     public static final double HOOD_DEGREES_PER_ROTATION = 1;
+
+    /* Feeder Constants */
+    public static final int[] FEEDER_BALL_DETECTORS = { 0, 1 }; // { left, right }
+    public static final double FEEDER_INTAKE_SPEED = 1;
+    public static final double FEEDER_PURGE_SPEED = -1;
+    public static final double FEEDER_SHOOT_SPEED = 1;
+
+    /* Intake Constants */
+    public static final double INTAKE_INTAKE_SPEED = 1;
+    public static final double INTAKE_PURGE_SPEED = -1;
+
 }

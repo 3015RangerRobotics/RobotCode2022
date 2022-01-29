@@ -5,29 +5,34 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 
-public class ClimberToPosition extends CommandBase {
-  //todo: make this work! i believe in you
-  /** Creates a new ClimberToPosition. */
-  public ClimberToPosition(double position) {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class ClimberToBottom extends CommandBase {
+  /** Creates a new ClimberToBottom. */
+  public ClimberToBottom() {
+    addRequirements(RobotContainer.climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    RobotContainer.climber.setClimberPos(0);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.climber.setOutput(0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return RobotContainer.climber.getClimberPos() < 0.005; // 0.5 cm
   }
 }

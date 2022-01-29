@@ -3,13 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
- 
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMax.ControlType;
 // import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import edu.wpi.first.wpilibj.Timer;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,16 +20,16 @@ import frc.robot.Constants;
 
 public class Hood extends SubsystemBase {
     private CANSparkMax hoodMotor;
+    private SparkMaxLimitSwitch reverseLimitSwitch;
     private double setPos = 0;
-    // private boolean holdAutoPos = false;
     private Timer timer = new Timer();
 
     private enum State {
         kSetPosition,
-        // kAutoPosition,
         kNeutral,
         kHoming
     }
+
     public State state = State.kNeutral;
 
     public Hood(int id) {
@@ -39,37 +40,33 @@ public class Hood extends SubsystemBase {
         hoodMotor.getPIDController().setI(Constants.HOOD_CONTROLLER_I);
         hoodMotor.getPIDController().setD(Constants.HOOD_CONTROLLER_D);
         hoodMotor.getPIDController().setOutputRange(-1, 1);
-        //       hoodMotor.setInverted(true);
-        //       hoodMotor.getEncoder().setInverted(true);
+        // hoodMotor.setInverted(true);
+        // hoodMotor.getEncoder().setInverted(true);
         hoodMotor.setSoftLimit(SoftLimitDirection.kForward, 0);
         hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
         hoodMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        reverseLimitSwitch = hoodMotor.getReverseLimitSwitch(Type.kNormallyOpen);
         enableForwardSoftLimit(true);
-        //TODO: set up reverse limit switch(this is not a softlimit)
-        hoodMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
 
-        switch (state){
+        switch (state) {
             case kSetPosition:
                 setHoodPosition(setPos);
-//                System.out.println(getHoodPosition());
+                // System.out.println(getHoodPosition());
                 break;
             // case kAutoPosition:
-            //     if(!holdAutoPos)
-            //         setPos = getAutoPosition();
-            //     setHoodPosition(setPos);
-            //     break;
+            // if(!holdAutoPos)
+            // setPos = getAutoPosition();
+            // setHoodPosition(setPos);
+            // break;
             case kHoming:
-                //todo: use the reverse limit switch to home.
-                hoodMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
                 setHoodOutputPercentage(-0.05);
-//                System.out.println("howdy");
-                if(Math.abs(hoodMotor.getEncoder().getVelocity() * 60) < 1 && timer.hasElapsed(0.25)){  //?
-                    setStateNeutral();
+                if (reverseLimitSwitch.isPressed()) {
+                    setState(State.kNeutral);
                     enableForwardSoftLimit(true);
                     timer.stop();
                     hoodMotor.getEncoder().setPosition(0);
@@ -77,34 +74,27 @@ public class Hood extends SubsystemBase {
                 break;
             case kNeutral:
             default:
-//                System.out.println("hello?");
                 setHoodOutputPercentage(0);
                 break;
         }
-        //SmartDashboard.putNumber("Hood Position", getHoodPosition());
-    }
-
-    public void setStatePosition(double pos){
-        setPos = pos;
-        state = State.kSetPosition;
+        // SmartDashboard.putNumber("Hood Position", getHoodPosition());
     }
 
     // public void setHoldAutoPos(boolean hold){
-    //     this.holdAutoPos = hold;
+    // this.holdAutoPos = hold;
     // }
 
     // public void setStateAutoPosition(){
-    //     state = State.kAutoPosition;
+    // state = State.kAutoPosition;
     // }
 
-    public void setStateHoming(){
-        state = State.kHoming;
-        timer.reset();
-        timer.start();
+    public void setState(State state) {
+        this.state = state;
     }
 
-    public void setStateNeutral(){
-        state = State.kNeutral;
+    public void setState(State state, double position) {
+        this.state = state;
+        this.setPos = position;
     }
 
     public double getHoodPosition() {
@@ -116,19 +106,20 @@ public class Hood extends SubsystemBase {
     }
 
     // public double getAutoPosition() {
-    //     double d = RobotContainer.limelight.getAvgDistance();
-    //     return Constants.HOOD_AUTO_POSITION_TABLE.lookup(d);
+    // double d = RobotContainer.limelight.getAvgDistance();
+    // return Constants.HOOD_AUTO_POSITION_TABLE.lookup(d);
     // }
 
     // public boolean getReverseLimit() {
-    //     return hoodMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get();
+    // return
+    // hoodMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get();
     // }
 
-    public void setHoodOutputPercentage(double percentage){
+    public void setHoodOutputPercentage(double percentage) {
         hoodMotor.set(percentage);
     }
 
-    public void enableForwardSoftLimit(boolean enabled){
+    public void enableForwardSoftLimit(boolean enabled) {
         hoodMotor.enableSoftLimit(SoftLimitDirection.kForward, enabled);
     }
 }

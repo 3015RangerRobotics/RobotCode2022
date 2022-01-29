@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,7 +16,6 @@ public class Climber extends SubsystemBase {
     private TalonFX climberMotor;
     private DoubleSolenoid secondaryArm;
     private DigitalInput bottomLimit;
-    private DigitalInput primaryArmSwitch;
     private DigitalInput beamBreakSensor;
 
     /**
@@ -43,48 +41,75 @@ public class Climber extends SubsystemBase {
         climberMotor.config_kI(0, Constants.CLIMBER_RAISE_I);
         climberMotor.config_kD(0, Constants.CLIMBER_RAISE_D);
         climberMotor.config_kF(0, Constants.CLIMBER_RAISE_F);
-        // climberMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, deviceID)
-
+        // climberMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+        // LimitSwitchNormal.NormallyOpen, deviceID)
 
         /* Might need to change pneumatics module type */
         secondaryArm = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.CLIMBER_SOLENOID_DOWN,
                 Constants.CLIMBER_SOLENOID_UP);
 
         bottomLimit = new DigitalInput(Constants.CLIMBER_BOTTOM_SWITCH);
-        primaryArmSwitch = new DigitalInput(Constants.CLIMBER_PARM_SWITCH);
         beamBreakSensor = new DigitalInput(Constants.CLIMBER_BEAMBREAK_SENSOR);
-        
+
     }
 
     public void periodic() {
-        SmartDashboard.putBoolean("Bottom Climber Switch", getBottomLimit());
-        SmartDashboard.putBoolean("Primary Climber Arm Switch", getPrimaryArmLimit());
+        SmartDashboard.putBoolean("Bottom climber switch", getBottomLimit());
+        SmartDashboard.putBoolean("Beam break sensor", getBeamBreakSensor());
     }
 
+    /**
+     * Moves the climber to its current zero position
+     */
     public void homeClimber() {
         climberMotor.set(ControlMode.Position, 0);
     }
 
+    /**
+     * Sets the climber motor's position in sensor units
+     * 
+     * @param position the position to move to
+     */
     public void setClimberPos(double position) {
+        position = Math.max(Math.min(position, 0),
+                Constants.CLIMBER_MAX_HEIGHT_METERS / Constants.CLIMBER_METERS_PER_PULSE);
         climberMotor.set(ControlMode.Position, position);
     }
 
+    /**
+     * Sets the climber motor's zero to its current position
+     */
     public void setSensorZero() {
         climberMotor.setSelectedSensorPosition(0);
     }
 
+    /**
+     * Gets the climber motor's position in sensor units
+     * 
+     * @return the climber motor's position in sensor units
+     */
     public double getClimberPos() {
         return climberMotor.getSelectedSensorPosition();
     }
 
+    /**
+     * Gets the bottom limit switch's current state
+     * 
+     * @return boolean representing the bottom limit's current state
+     */
     public boolean getBottomLimit() {
         return bottomLimit.get();
     }
 
-    public boolean getPrimaryArmLimit() {
-        return primaryArmSwitch.get();
-    }
-
+    /**
+     * Sets the position of the secondary climber arm based on enum value
+     * 
+     * @param solenoidPosition
+     *                         <ul>
+     *                         <li>kNeutral - Neither side is pressurized
+     *                         <li>kUp - Raise the climber arm
+     *                         <li>kDown - Lower the climber arm
+     */
     public void setSolenoidPosition(SolenoidPosition solenoidPosition) {
         switch (solenoidPosition) {
             case kNeutral:
@@ -99,14 +124,29 @@ public class Climber extends SubsystemBase {
         }
     }
 
+    /**
+     * sets the output of the climber motor to a specified percent
+     * 
+     * @param percentOutput the percent to set the climber motor to
+     */
     public void setOutput(double percentOutput) {
         climberMotor.set(ControlMode.PercentOutput, percentOutput);
     }
 
+    /**
+     * gets the current supply current to the motor
+     * 
+     * @return the supply current to the motor in amps
+     */
     public double getClimberCurrent() {
         return climberMotor.getSupplyCurrent();
     }
 
+    /**
+     * Gets the state of the beam break sensor
+     * 
+     * @return the state of the beam break sensor
+     */
     public boolean getBeamBreakSensor() {
         return beamBreakSensor.get();
     }

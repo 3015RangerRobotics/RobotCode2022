@@ -4,20 +4,36 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Compressor extends SubsystemBase {
-  //TODO: use this class as a place for a PneumaticHub object,
-  //TODO: create instant COMmANDS to turn compressor on and offf
+  PneumaticHub pneumaticHub;
+  edu.wpi.first.wpilibj.Compressor compressor;
+
+  // TODO: create instant COMmANDS to turn compressor on and offf
   /** Creates a new Compressor. */
   public Compressor() {
-    //TODO: call the enable compressor method(see below)
+    pneumaticHub = new PneumaticHub();
+    setCompressorEnabled(true);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //TODO: call the pneumatic pressure sensor though PH object and push to SmartDashboard(use math.round, don't need decimalgi)
+    SmartDashboard.putNumber("Pressure (psi)", compressor.getPressure());
   }
-  //TODO: have accessor functions to turn said compressor on and off(.enableCompressorAnalog(),disableCompressor())
+
+  public void setCompressorEnabled(boolean enabled) {
+    if (enabled) {
+      compressor.enableAnalog(120, 120);
+    } else {
+      compressor.disable();
+    }
+  }
+
+  public double getPressure() {
+    return compressor.getPressure();
+  }
 }

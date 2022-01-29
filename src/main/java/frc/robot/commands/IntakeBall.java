@@ -5,31 +5,38 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class IntakeBall extends CommandBase {
-  //TODO: write me
+  private int side;
+
   /** Creates a new IntakeBall. */
   public IntakeBall(int side) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake[side],RobotContainer.feeder[side]);
+    addRequirements(RobotContainer.intake[side], RobotContainer.feeder[side]);
+    this.side = side;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    RobotContainer.intake[side].intake();
+    RobotContainer.feeder[side].setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;//ToDO: base on ball detection sensor
+    return RobotContainer.feeder[side].getBallDetector();
   }
 }
