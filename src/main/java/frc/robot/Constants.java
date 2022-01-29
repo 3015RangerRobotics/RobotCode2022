@@ -42,7 +42,6 @@ public final class Constants {
     public static final int CLIMBER_PARM_SWITCH = 0;
     public static final int CLIMBER_SARM_SWITCH = 0;
     public static final int CLIMBER_BEAMBREAK_SENSOR = 0;
-    public static final double CLIMBER_ENCODER = 0;
 
     /* Drive Constants */
     public static final double SWERVE_DRIVE_P = 0;
@@ -115,4 +114,11 @@ public final class Constants {
     public static final double CLIMBER_LOWER_D = 0;
     public static final double CLIMBER_LOWER_F = 0;    
 
+
+    /* Hood Constants */
+    public static final double HOOD_CONTROLLER_P = 0; 
+    public static final double HOOD_CONTROLLER_I = 0;
+    public static final double HOOD_CONTROLLER_D = 0;
+    public static final double HOOD_CONTROLLER_F = 0; 
+    public static final double HOOD_DEGREES_PER_ROTATION = 1;
 }
