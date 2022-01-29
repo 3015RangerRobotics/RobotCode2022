@@ -73,8 +73,8 @@ public class Climber extends SubsystemBase {
         climberMotor.setSelectedSensorPosition(0);
     }
 
-    public void getClimberPos() {
-        climberMotor.getSelectedSensorPosition();
+    public double getClimberPos() {
+        return climberMotor.getSelectedSensorPosition();
     }
 
     public boolean getBottomLimit() {
