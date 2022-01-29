@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
  
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMax.ControlType;
 // import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
@@ -45,6 +46,7 @@ public class Hood extends SubsystemBase {
         hoodMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
         enableForwardSoftLimit(true);
         //TODO: set up reverse limit switch(this is not a softlimit)
+        hoodMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     }
 
     @Override
@@ -63,6 +65,7 @@ public class Hood extends SubsystemBase {
             //     break;
             case kHoming:
                 //todo: use the reverse limit switch to home.
+                hoodMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
                 setHoodOutputPercentage(-0.05);
 //                System.out.println("howdy");
                 if(Math.abs(hoodMotor.getEncoder().getVelocity() * 60) < 1 && timer.hasElapsed(0.25)){  //?
