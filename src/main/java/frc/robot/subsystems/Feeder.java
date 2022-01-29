@@ -10,6 +10,7 @@ import frc.robot.Constants;
 public class Feeder extends SubsystemBase {
     public VictorSPX topMotor;
     public VictorSPX bottomMotor; 
+    //TODO: add DigitalInput which is the ball detaction sensor, make accessor functions for it.
 
     public Feeder(int id) {
         topMotor = new VictorSPX(Constants.FEEDER_TOP_MOTORS[id]);

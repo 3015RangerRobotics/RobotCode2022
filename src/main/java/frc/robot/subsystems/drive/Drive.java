@@ -221,6 +221,10 @@ public class Drive extends SubsystemBase {
         }
     }
 
+    //TODO:Add method to stop all modules rotation and drive motors.
+
+    //TODO: add method to rotate all drive modules given param speed
+
     /**
      * Gets the robot's current position as a <code>Pose2d</code> with distance units in meters
      * 

@@ -14,7 +14,7 @@ package frc.robot;
  */
 public final class Constants {
 
-    /* CAN IDs */
+    /* STRE CAN IDs */
     /* Drive */;
     public static final int[] SWERVE_DRIVE_CHANNELS = { 4, 15, 17, 2 }; // { FR, FL, BL, BR }
     public static final int[] SWERVE_ROTATION_CHANNELS = { 3, 16, 18, 1 }; // { FR, FL, BL, BR }
@@ -29,20 +29,28 @@ public final class Constants {
 
     /* Shooter */
     public static final int[] SHOOTER_MOTORS = { 10, 9 }; // { left, right }
-
+    
+    /* Climber */
+    public static final int CLIMBER_MOTOR = 19;
+    
+    /* REV ID's */
     /* Hood */
     public static final int[] HOOD_MOTORS = { 11, 8 }; // { left, right }
 
+    /* Solenoid ID's*/
     /* Climber */
-    public static final int CLIMBER_MOTOR = 19;
-    public static final int CLIMBER_SOLENOID_UP = 0;
+    public static final int CLIMBER_SOLENOID_UP = 0; //TODO: no doulbe id's
     public static final int CLIMBER_SOLENOID_DOWN = 0;
+
+    /* Digital IO ID's */
+    /* climber */
     public static final int CLIMBER_BOTTOM_SWITCH = 0;
     public static final int CLIMBER_TOP_SWITCH = 0;
     public static final int CLIMBER_PARM_SWITCH = 0;
     public static final int CLIMBER_SARM_SWITCH = 0;
     public static final int CLIMBER_BEAMBREAK_SENSOR = 0;
 
+    /* -------------- CONSTANTS -------------- */
     /* Drive Constants */
     public static final double SWERVE_DRIVE_P = 0;
     public static final double SWERVE_DRIVE_I = 0;

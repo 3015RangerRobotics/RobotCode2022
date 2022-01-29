@@ -44,6 +44,7 @@ public class Hood extends SubsystemBase {
         hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
         hoodMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
         enableForwardSoftLimit(true);
+        //TODO: set up reverse limit switch(this is not a softlimit)
     }
 
     @Override
@@ -61,6 +62,7 @@ public class Hood extends SubsystemBase {
             //     setHoodPosition(setPos);
             //     break;
             case kHoming:
+                //todo: use the reverse limit switch to home.
                 setHoodOutputPercentage(-0.05);
 //                System.out.println("howdy");
                 if(Math.abs(hoodMotor.getEncoder().getVelocity() * 60) < 1 && timer.hasElapsed(0.25)){  //?
@@ -104,7 +106,7 @@ public class Hood extends SubsystemBase {
 
     public double getHoodPosition() {
         return hoodMotor.getEncoder().getPosition();
-        }
+    }
 
     public void setHoodPosition(double position) {
         hoodMotor.getPIDController().setReference(position, ControlType.kPosition);

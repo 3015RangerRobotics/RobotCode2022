@@ -7,36 +7,29 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class ClimberToTop extends CommandBase {
-
-
-  /** Creates a new ClimberToTop. */
-  public ClimberToTop() {
-    addRequirements(RobotContainer.climber);
+public class IntakeBall extends CommandBase {
+  //TODO: write me
+  /** Creates a new IntakeBall. */
+  public IntakeBall(int side) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.intake[side],RobotContainer.feeder[side]);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    RobotContainer.drive.getAngleDegrees();
-    RobotContainer.climber.setOutput(1);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return RobotContainer.Climber.getBeamBreakSensor();//TODO: fix this line, left as student exercise
+    return false;//ToDO: base on ball detection sensor
   }
 }

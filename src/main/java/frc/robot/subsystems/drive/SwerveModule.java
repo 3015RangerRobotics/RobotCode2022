@@ -170,4 +170,8 @@ public class SwerveModule {
     public void updateRotationOffset() {
         rotationOffset = getAbsoluteRotation();
     }
+
+    //TODO: add method(not param or return) to stop both motors, use PercentOutput, set to 0.0
+    //TODO: add method to rotate the module at a speed. i.e. rotationMotor.set(ControlMode.PercentOutput...
+
 }
