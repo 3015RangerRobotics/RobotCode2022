@@ -18,7 +18,7 @@ package frc.robot;
  */
 public final class Constants {
 
-    /* STRE CAN IDs */
+    /* CTRE CAN IDs */
     /* Drive */;
     public static final int[] SWERVE_DRIVE_CHANNELS = { 4, 15, 17, 2 }; // { FR, FL, BL, BR }
     public static final int[] SWERVE_ROTATION_CHANNELS = { 3, 16, 18, 1 }; // { FR, FL, BL, BR }
@@ -115,6 +115,7 @@ public final class Constants {
     /* Climber Constants */
     public static final double CLIMBER_METERS_PER_PULSE = 0;
     public static final double CLIMBER_MAX_HEIGHT_METERS = 0;
+    public static final double CLIMBER_ARM_DEGREES_PER_PULSE = 0;
 
     public static final double CLIMBER_RAISE_P = 0;
     public static final double CLIMBER_RAISE_I = 0;
@@ -125,6 +126,9 @@ public final class Constants {
     public static final double CLIMBER_LOWER_I = 0;
     public static final double CLIMBER_LOWER_D = 0;
     public static final double CLIMBER_LOWER_F = 0;
+
+    public static final int ENCODER_INPUT_A = 0;
+    public static final int ENCODER_INPUT_B = 0;
 
     /* Hood Constants */
     public static final double HOOD_CONTROLLER_P = 0;

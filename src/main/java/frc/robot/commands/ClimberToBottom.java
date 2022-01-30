@@ -8,7 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class ClimberToBottom extends CommandBase {
-  /** Creates a new ClimberToBottom. */
+
+  /**
+   * Creates a new ClimberToBottom. Moves the climber to its bottom position.
+   * Finishes when the climber is within 0.5cm of the bottom
+   */
   public ClimberToBottom() {
     addRequirements(RobotContainer.climber);
   }

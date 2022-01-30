@@ -4,13 +4,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 
-public class CompressorSetEnabled extends CommandBase {
+public class CompressorSetEnabled extends InstantCommand {
   private boolean enabled;
 
-  /** Creates a new CompressorSetEnabled. */
+  /**
+   * Creates a new CompressorSetEnabled. Sets the compressor to the parameter of
+   * the constructor. Instant command.
+   */
   public CompressorSetEnabled(boolean enabled) {
     addRequirements(RobotContainer.compressor);
   }
@@ -21,19 +24,4 @@ public class CompressorSetEnabled extends CommandBase {
     RobotContainer.compressor.setCompressorEnabled(enabled);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return true;
-  }
 }

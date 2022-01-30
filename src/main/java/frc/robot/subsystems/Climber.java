@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,6 +18,7 @@ public class Climber extends SubsystemBase {
     private DoubleSolenoid secondaryArm;
     private DigitalInput bottomLimit;
     private DigitalInput beamBreakSensor;
+    private Encoder armEncoder;
 
     /**
      * <ul>
@@ -51,6 +53,7 @@ public class Climber extends SubsystemBase {
         bottomLimit = new DigitalInput(Constants.CLIMBER_BOTTOM_SWITCH);
         beamBreakSensor = new DigitalInput(Constants.CLIMBER_BEAMBREAK_SENSOR);
 
+        armEncoder = new Encoder(Constants.ENCODER_INPUT_A, Constants.ENCODER_INPUT_B);
     }
 
     public void periodic() {
@@ -66,14 +69,14 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Sets the climber motor's position in sensor units
+     * Sets the climber motor's position in meters
      * 
      * @param position the position to move to
      */
     public void setClimberPos(double position) {
         position = Math.max(Math.min(position, 0),
                 Constants.CLIMBER_MAX_HEIGHT_METERS / Constants.CLIMBER_METERS_PER_PULSE);
-        climberMotor.set(ControlMode.Position, position);
+        climberMotor.set(ControlMode.Position, position / Constants.CLIMBER_METERS_PER_PULSE);
     }
 
     /**
@@ -84,12 +87,12 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Gets the climber motor's position in sensor units
+     * Gets the climber motor's position in meters
      * 
-     * @return the climber motor's position in sensor units
+     * @return the climber motor's position in meters
      */
     public double getClimberPos() {
-        return climberMotor.getSelectedSensorPosition();
+        return climberMotor.getSelectedSensorPosition() * Constants.CLIMBER_METERS_PER_PULSE;
     }
 
     /**
@@ -149,5 +152,13 @@ public class Climber extends SubsystemBase {
      */
     public boolean getBeamBreakSensor() {
         return beamBreakSensor.get();
+    }
+
+    public double getArmAngle() {
+        return armEncoder.get() * Constants.CLIMBER_ARM_DEGREES_PER_PULSE;
+    }
+
+    public void resetArmAngle() {
+        armEncoder.reset();
     }
 }

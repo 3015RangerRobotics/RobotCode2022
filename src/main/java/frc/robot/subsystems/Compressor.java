@@ -10,9 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Compressor extends SubsystemBase {
   PneumaticHub pneumaticHub;
-  edu.wpi.first.wpilibj.Compressor compressor;
 
-  // TODO: create instant COMmANDS to turn compressor on and offf
   /** Creates a new Compressor. */
   public Compressor() {
     pneumaticHub = new PneumaticHub();
@@ -22,18 +20,18 @@ public class Compressor extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Pressure (psi)", compressor.getPressure());
+    SmartDashboard.putNumber("Pressure (psi)", getPressure());
   }
 
   public void setCompressorEnabled(boolean enabled) {
     if (enabled) {
-      compressor.enableAnalog(120, 120);
+      pneumaticHub.enableCompressorAnalog(95, 120);
     } else {
-      compressor.disable();
+      pneumaticHub.disableCompressor();
     }
   }
 
   public double getPressure() {
-    return compressor.getPressure();
+    return pneumaticHub.getPressure(0); // Might be wrong channel, TBD
   }
 }

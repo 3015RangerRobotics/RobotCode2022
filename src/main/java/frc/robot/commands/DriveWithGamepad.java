@@ -23,7 +23,6 @@ public class DriveWithGamepad extends CommandBase {
    * Runs indefinitely.
    */
   public DriveWithGamepad() {
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.drive);
     rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P,
         Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,

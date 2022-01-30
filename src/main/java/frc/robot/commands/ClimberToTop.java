@@ -10,7 +10,10 @@ import frc.robot.RobotContainer;
 
 public class ClimberToTop extends CommandBase {
 
-  /** Creates a new ClimberToTop. */
+  /**
+   * Creates a new ClimberToTop. Moves the climber to its top position. Finishes
+   * when the climber is within 0.5cm of the top position.
+   */
   public ClimberToTop() {
     addRequirements(RobotContainer.climber);
   }

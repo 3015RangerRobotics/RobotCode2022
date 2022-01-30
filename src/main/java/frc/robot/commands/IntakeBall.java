@@ -11,7 +11,7 @@ import frc.robot.RobotContainer;
 public class IntakeBall extends CommandBase {
   private int side;
 
-  /** Creates a new IntakeBall. */
+  /** Creates a new IntakeBall. Will run eternally */
   public IntakeBall(int side) {
     addRequirements(RobotContainer.intake[side], RobotContainer.feeder[side]);
     this.side = side;
@@ -26,17 +26,23 @@ public class IntakeBall extends CommandBase {
   @Override
   public void execute() {
     RobotContainer.intake[side].intake();
-    RobotContainer.feeder[side].setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
+    if (RobotContainer.feeder[side].getBallDetector()) {
+      RobotContainer.feeder[side].setPercentOutput(0);
+    } else {
+      RobotContainer.feeder[side].setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.intake[side].stop();
+    RobotContainer.feeder[side].setPercentOutput(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.feeder[side].getBallDetector();
+    return false;
   }
 }

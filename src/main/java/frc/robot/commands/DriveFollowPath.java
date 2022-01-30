@@ -27,7 +27,8 @@ public class DriveFollowPath extends CommandBase {
     boolean ignoreHeading;
 
     /**
-     * Drives the robot according to generated path
+     * Drives the robot according to generated path. Ends according to the duration
+     * of the path.
      * 
      * @param pathname filepath to .csv representing path to follow
      */
@@ -36,30 +37,42 @@ public class DriveFollowPath extends CommandBase {
         this.timer = new Timer();
         this.path = SwervePath.fromCSV(pathname);
 
-        PIDController posController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
-        PIDController headingController = new PIDController(Constants.DRIVE_HEADING_ERROR_CONTROLLER_P, Constants.DRIVE_HEADING_ERROR_CONTROLLER_I, Constants.DRIVE_HEADING_ERROR_CONTROLLER_D);
-        ProfiledPIDController rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P, Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,
-                new TrapezoidProfile.Constraints(Constants.DRIVE_MAX_ANGULAR_VELOCITY, Constants.DRIVE_MAX_ANGULAR_ACCEL));
+        PIDController posController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P,
+                Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
+        PIDController headingController = new PIDController(Constants.DRIVE_HEADING_ERROR_CONTROLLER_P,
+                Constants.DRIVE_HEADING_ERROR_CONTROLLER_I, Constants.DRIVE_HEADING_ERROR_CONTROLLER_D);
+        ProfiledPIDController rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P,
+                Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,
+                new TrapezoidProfile.Constraints(Constants.DRIVE_MAX_ANGULAR_VELOCITY,
+                        Constants.DRIVE_MAX_ANGULAR_ACCEL));
         this.pathController = new SwervePathController(posController, headingController, rotationController);
         this.ignoreHeading = false;
     }
 
     /**
-     * Drives the robot according to generated path while ignoring the robot's rotation
+     * Drives the robot according to generated path while ignoring the robot's
+     * rotation
      * 
-     * @param pathname filepath to .csv representing path to follow
-     * @param ignoreHeading <ul><li>true - ignores the robot's rotational orientation
-     *                      <li> false (default) - controls robot's rotational orientation according to path
+     * @param pathname      filepath to .csv representing path to follow
+     * @param ignoreHeading
+     *                      <ul>
+     *                      <li>true - ignores the robot's rotational orientation
+     *                      <li>false (default) - controls robot's rotational
+     *                      orientation according to path
      */
     public DriveFollowPath(String pathname, boolean ignoreHeading) {
         addRequirements(RobotContainer.drive);
         this.timer = new Timer();
         this.path = SwervePath.fromCSV(pathname);
 
-        PIDController posController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
-        PIDController headingController = new PIDController(Constants.DRIVE_HEADING_ERROR_CONTROLLER_P, Constants.DRIVE_HEADING_ERROR_CONTROLLER_I, Constants.DRIVE_HEADING_ERROR_CONTROLLER_D);
-        ProfiledPIDController rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P, Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,
-                new TrapezoidProfile.Constraints(Constants.DRIVE_MAX_ANGULAR_VELOCITY, Constants.DRIVE_MAX_ANGULAR_ACCEL));
+        PIDController posController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P,
+                Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
+        PIDController headingController = new PIDController(Constants.DRIVE_HEADING_ERROR_CONTROLLER_P,
+                Constants.DRIVE_HEADING_ERROR_CONTROLLER_I, Constants.DRIVE_HEADING_ERROR_CONTROLLER_D);
+        ProfiledPIDController rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P,
+                Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,
+                new TrapezoidProfile.Constraints(Constants.DRIVE_MAX_ANGULAR_VELOCITY,
+                        Constants.DRIVE_MAX_ANGULAR_ACCEL));
         this.pathController = new SwervePathController(posController, headingController, rotationController);
         this.ignoreHeading = ignoreHeading;
     }
@@ -70,7 +83,8 @@ public class DriveFollowPath extends CommandBase {
         timer.reset();
         timer.start();
         SwervePath.State initialState = path.getInitialState();
-        RobotContainer.drive.resetOdometry(new Pose2d(RobotContainer.drive.getPoseMeters().getTranslation(), initialState.getRotation()));
+        RobotContainer.drive.resetOdometry(
+                new Pose2d(RobotContainer.drive.getPoseMeters().getTranslation(), initialState.getRotation()));
         pathController.reset(RobotContainer.drive.getPoseMeters());
         lastTime = 0;
     }
@@ -81,9 +95,11 @@ public class DriveFollowPath extends CommandBase {
         double time = timer.get();
         SwervePath.State desiredState = path.sample(time);
 
-        if(ignoreHeading) desiredState.rotation = new Rotation2d(0);
+        if (ignoreHeading)
+            desiredState.rotation = new Rotation2d(0);
 
-        ChassisSpeeds targetSpeeds = pathController.calculate(RobotContainer.drive.getPoseMeters(), desiredState, time - lastTime, timer.hasElapsed(0.1));
+        ChassisSpeeds targetSpeeds = pathController.calculate(RobotContainer.drive.getPoseMeters(), desiredState,
+                time - lastTime, timer.hasElapsed(0.1));
         RobotContainer.drive.drive(targetSpeeds);
 
         lastTime = time;
@@ -93,12 +109,16 @@ public class DriveFollowPath extends CommandBase {
         SmartDashboard.putNumber("PIDActual", pathController.getTotalDistance());
 
         // Heading Graph
-//        SmartDashboard.putNumber("PIDTarget", desiredState.getHeading().getDegrees());
-//        SmartDashboard.putNumber("PIDActual", pathController.getCurrentHeading().getDegrees());
+        // SmartDashboard.putNumber("PIDTarget",
+        // desiredState.getHeading().getDegrees());
+        // SmartDashboard.putNumber("PIDActual",
+        // pathController.getCurrentHeading().getDegrees());
 
         // Rotation Graph
-//        SmartDashboard.putNumber("PIDTarget", desiredState.getRotation().getDegrees());
-//        SmartDashboard.putNumber("PIDActual", RobotContainer.drive.getPoseMeters().getRotation().getDegrees());
+        // SmartDashboard.putNumber("PIDTarget",
+        // desiredState.getRotation().getDegrees());
+        // SmartDashboard.putNumber("PIDActual",
+        // RobotContainer.drive.getPoseMeters().getRotation().getDegrees());
     }
 
     // Called once the command ends or is interrupted.
