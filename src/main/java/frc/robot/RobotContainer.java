@@ -54,7 +54,7 @@ public class RobotContainer {
   private static final JoystickButton driverStart = new JoystickButton(driver, XboxController.Button.kStart.value);
   private static final JoystickButton driverBack = new JoystickButton(driver, XboxController.Button.kBack.value);
 
-  private static final JoystickButton coDriverA = new JoystickButton(coDriver, XboxController.Button.kA.value);
+  public static final JoystickButton coDriverA = new JoystickButton(coDriver, XboxController.Button.kA.value);
   private static final JoystickButton coDriverB = new JoystickButton(coDriver, XboxController.Button.kB.value);
   private static final JoystickButton coDriverX = new JoystickButton(coDriver, XboxController.Button.kX.value);
   private static final JoystickButton coDriverY = new JoystickButton(coDriver, XboxController.Button.kY.value);

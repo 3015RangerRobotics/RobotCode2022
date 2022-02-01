@@ -54,6 +54,7 @@ public class Climber extends SubsystemBase {
         beamBreakSensor = new DigitalInput(Constants.CLIMBER_BEAMBREAK_SENSOR);
 
         armEncoder = new Encoder(Constants.ENCODER_INPUT_A, Constants.ENCODER_INPUT_B);
+        armEncoder.setDistancePerPulse(Constants.CLIMBER_ARM_DEGREES_PER_PULSE);
     }
 
     public void periodic() {
@@ -126,7 +127,7 @@ public class Climber extends SubsystemBase {
                 break;
         }
     }
-
+    
     /**
      * sets the output of the climber motor to a specified percent
      * 
@@ -155,7 +156,11 @@ public class Climber extends SubsystemBase {
     }
 
     public double getArmAngle() {
-        return armEncoder.get() * Constants.CLIMBER_ARM_DEGREES_PER_PULSE;
+        return armEncoder.get();
+    }
+
+    public double getArmSpeed() {
+        return armEncoder.getRate();
     }
 
     public void resetArmAngle() {

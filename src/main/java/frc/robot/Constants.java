@@ -130,6 +130,11 @@ public final class Constants {
     public static final int ENCODER_INPUT_A = 0;
     public static final int ENCODER_INPUT_B = 0;
 
+    public static final double CLIMBER_FLOPPY_BAR_TWO_TO_THREE = 0;
+    public static final double CLIMBER_FLOPPY_BAR_THREE_TO_FOUR = 0;
+    public static final double CLIMBER_FLOPPY_POSITION_TOLERANCE = 0;
+    public static final double CLIMBER_FLOPPY_SPEED_TOLERANCE = 0;
+
     /* Hood Constants */
     public static final double HOOD_CONTROLLER_P = 0;
     public static final double HOOD_CONTROLLER_I = 0;
