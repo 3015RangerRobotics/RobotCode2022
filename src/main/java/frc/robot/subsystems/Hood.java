@@ -32,6 +32,14 @@ public class Hood extends SubsystemBase {
 
     public State state = State.kNeutral;
 
+    /**
+     * Do not use
+     */
+    @Deprecated
+    public Hood() {
+
+    }
+
     public Hood(int id) {
         hoodMotor = new CANSparkMax(Constants.HOOD_MOTORS[id], MotorType.kBrushless);
         hoodMotor.restoreFactoryDefaults();
@@ -51,33 +59,6 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
-
-        switch (state) {
-            case kSetPosition:
-                setHoodPosition(setPos);
-                // System.out.println(getHoodPosition());
-                break;
-            // case kAutoPosition:
-            // if(!holdAutoPos)
-            // setPos = getAutoPosition();
-            // setHoodPosition(setPos);
-            // break;
-            case kHoming:
-                setHoodOutputPercentage(-0.05);
-                if (reverseLimitSwitch.isPressed()) {
-                    setState(State.kNeutral);
-                    enableForwardSoftLimit(true);
-                    timer.stop();
-                    hoodMotor.getEncoder().setPosition(0);
-                }
-                break;
-            case kNeutral:
-            default:
-                setHoodOutputPercentage(0);
-                break;
-        }
-        // SmartDashboard.putNumber("Hood Position", getHoodPosition());
     }
 
     // public void setHoldAutoPos(boolean hold){

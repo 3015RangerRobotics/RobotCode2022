@@ -29,65 +29,67 @@ import frc.robot.subsystems.drive.Drive;
 public class RobotContainer {
 
   public static Drive drive;
-  public static Intake[] intake;
-  public static Feeder[] feeder;
-  public static Shooter[] shooter;
-  public static Hood[] hood;
+  public static Intake[] intake = { new Intake(), new Intake() };
+  public static Feeder[] feeder = { new Feeder(), new Feeder() };
+  public static Shooter[] shooter = { new Shooter(), new Shooter() };
+  public static Hood[] hood = { new Hood(), new Hood() };
   public static Climber climber;
   public static Compressor compressor;
 
-  private static final XboxController driver = new XboxController(0);
-  private static final XboxController coDriver = new XboxController(1);
+  public static final XboxController driver = new XboxController(0);
+  public static final XboxController coDriver = new XboxController(1);
 
-  private static final JoystickButton driverA = new JoystickButton(driver, XboxController.Button.kA.value);
-  private static final JoystickButton driverB = new JoystickButton(driver, XboxController.Button.kB.value);
-  private static final JoystickButton driverX = new JoystickButton(driver, XboxController.Button.kX.value);
-  private static final JoystickButton driverY = new JoystickButton(driver, XboxController.Button.kY.value);
-  private static final JoystickButton driverLB = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private static final JoystickButton driverRB = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-  private static final DPadButton driverDUp = new DPadButton(driver, DPadButton.Value.kDPadUp);
-  private static final DPadButton driverDDown = new DPadButton(driver, DPadButton.Value.kDPadDown);
-  private static final DPadButton driverDLeft = new DPadButton(driver, DPadButton.Value.kDPadLeft);
-  private static final DPadButton driverDRight = new DPadButton(driver, DPadButton.Value.kDPadRight);
-  private static final TriggerButton driverLT = new TriggerButton(driver, true);
-  private static final TriggerButton driverRT = new TriggerButton(driver, false);
-  private static final JoystickButton driverStart = new JoystickButton(driver, XboxController.Button.kStart.value);
-  private static final JoystickButton driverBack = new JoystickButton(driver, XboxController.Button.kBack.value);
+  public static final JoystickButton driverA = new JoystickButton(driver, XboxController.Button.kA.value);
+  public static final JoystickButton driverB = new JoystickButton(driver, XboxController.Button.kB.value);
+  public static final JoystickButton driverX = new JoystickButton(driver, XboxController.Button.kX.value);
+  public static final JoystickButton driverY = new JoystickButton(driver, XboxController.Button.kY.value);
+  public static final JoystickButton driverLB = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  public static final JoystickButton driverRB = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+  public static final DPadButton driverDUp = new DPadButton(driver, DPadButton.Value.kDPadUp);
+  public static final DPadButton driverDDown = new DPadButton(driver, DPadButton.Value.kDPadDown);
+  public static final DPadButton driverDLeft = new DPadButton(driver, DPadButton.Value.kDPadLeft);
+  public static final DPadButton driverDRight = new DPadButton(driver, DPadButton.Value.kDPadRight);
+  public static final TriggerButton driverLT = new TriggerButton(driver, true);
+  public static final TriggerButton driverRT = new TriggerButton(driver, false);
+  public static final JoystickButton driverStart = new JoystickButton(driver, XboxController.Button.kStart.value);
+  public static final JoystickButton driverBack = new JoystickButton(driver, XboxController.Button.kBack.value);
 
-  private static final JoystickButton coDriverA = new JoystickButton(coDriver, XboxController.Button.kA.value);
-  private static final JoystickButton coDriverB = new JoystickButton(coDriver, XboxController.Button.kB.value);
-  private static final JoystickButton coDriverX = new JoystickButton(coDriver, XboxController.Button.kX.value);
-  private static final JoystickButton coDriverY = new JoystickButton(coDriver, XboxController.Button.kY.value);
-  private static final JoystickButton coDriverLB = new JoystickButton(coDriver,
+  public static final JoystickButton coDriverA = new JoystickButton(coDriver, XboxController.Button.kA.value);
+  public static final JoystickButton coDriverB = new JoystickButton(coDriver, XboxController.Button.kB.value);
+  public static final JoystickButton coDriverX = new JoystickButton(coDriver, XboxController.Button.kX.value);
+  public static final JoystickButton coDriverY = new JoystickButton(coDriver, XboxController.Button.kY.value);
+  public static final JoystickButton coDriverLB = new JoystickButton(coDriver,
       XboxController.Button.kLeftBumper.value);
-  private static final JoystickButton coDriverRB = new JoystickButton(coDriver,
+  public static final JoystickButton coDriverRB = new JoystickButton(coDriver,
       XboxController.Button.kRightBumper.value);
-  private static final DPadButton coDriverDUp = new DPadButton(coDriver, DPadButton.Value.kDPadUp);
-  private static final DPadButton coDriverDDown = new DPadButton(coDriver, DPadButton.Value.kDPadDown);
-  private static final DPadButton coDriverDLeft = new DPadButton(coDriver, DPadButton.Value.kDPadLeft);
-  private static final DPadButton coDriverDRight = new DPadButton(coDriver, DPadButton.Value.kDPadRight);
-  private static final TriggerButton coDriverLT = new TriggerButton(coDriver, true);
-  private static final TriggerButton coDriverRT = new TriggerButton(coDriver, false);
-  private static final JoystickButton coDriverStart = new JoystickButton(coDriver, XboxController.Button.kStart.value);
-  private static final JoystickButton coDriverBack = new JoystickButton(coDriver, XboxController.Button.kBack.value);
+  public static final DPadButton coDriverDUp = new DPadButton(coDriver, DPadButton.Value.kDPadUp);
+  public static final DPadButton coDriverDDown = new DPadButton(coDriver, DPadButton.Value.kDPadDown);
+  public static final DPadButton coDriverDLeft = new DPadButton(coDriver, DPadButton.Value.kDPadLeft);
+  public static final DPadButton coDriverDRight = new DPadButton(coDriver, DPadButton.Value.kDPadRight);
+  public static final TriggerButton coDriverLT = new TriggerButton(coDriver, true);
+  public static final TriggerButton coDriverRT = new TriggerButton(coDriver, false);
+  public static final JoystickButton coDriverStart = new JoystickButton(coDriver, XboxController.Button.kStart.value);
+  public static final JoystickButton coDriverBack = new JoystickButton(coDriver, XboxController.Button.kBack.value);
 
-  private static final Timer timer = new Timer();
+  public static final Timer timer = new Timer();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     drive = new Drive();
-    climber = new Climber();
     compressor = new Compressor();
-    for (int i = 0; i < 2; i++) {
-      intake[i] = new Intake(i);
-      feeder[i] = new Feeder(i);
-      shooter[i] = new Shooter(i);
-      hood[i] = new Hood(i);
-    }
+    climber = new Climber();
+    intake[0] = new Intake(0);
+    intake[1] = new Intake(1);
+    feeder[0] = new Feeder(0);
+    feeder[1] = new Feeder(1);
+    shooter[0] = new Shooter(0);
+    shooter[1] = new Shooter(1);
+    hood[0] = new Hood(0);
+    hood[1] = new Hood(1);
 
-    drive.setDefaultCommand(new DriveWithGamepad());
+    // drive.setDefaultCommand(new DriveWithGamepad());
     // Configure the button bindings
     configureButtonBindings();
   }

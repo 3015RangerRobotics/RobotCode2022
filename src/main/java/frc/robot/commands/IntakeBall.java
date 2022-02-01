@@ -7,14 +7,19 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Intake;
 
 public class IntakeBall extends CommandBase {
-  private int side;
+  private Intake intake;
+  private Feeder feeder;
 
   /** Creates a new IntakeBall. Will run eternally */
   public IntakeBall(int side) {
-    addRequirements(RobotContainer.intake[side], RobotContainer.feeder[side]);
-    this.side = side;
+    // there has to be a better way to do this
+    intake = RobotContainer.intake[side];
+    feeder = RobotContainer.feeder[side];
+    addRequirements(intake, feeder);
   }
 
   // Called when the command is initially scheduled.
@@ -25,19 +30,15 @@ public class IntakeBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.intake[side].intake();
-    if (RobotContainer.feeder[side].getBallDetector()) {
-      RobotContainer.feeder[side].setPercentOutput(0);
-    } else {
-      RobotContainer.feeder[side].setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
-    }
+    intake.intake();
+    feeder.setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.intake[side].stop();
-    RobotContainer.feeder[side].setPercentOutput(0);
+    intake.stop();
+    feeder.setPercentOutput(0);
   }
 
   // Returns true when the command should end.

@@ -43,16 +43,13 @@ public final class Constants {
 
     /* Solenoid ID's */
     /* Climber */
-    public static final int CLIMBER_SOLENOID_UP = 0; // TEMP
-    public static final int CLIMBER_SOLENOID_DOWN = 1; // TEMP
+    public static final int CLIMBER_SOLENOID_UP = 1; // TEMP
+    public static final int CLIMBER_SOLENOID_DOWN = 2; // TEMP
 
     /* Digital IO ID's */
     /* climber */
     public static final int CLIMBER_BOTTOM_SWITCH = 0;
-    public static final int CLIMBER_TOP_SWITCH = 0;
-    public static final int CLIMBER_PARM_SWITCH = 0;
-    public static final int CLIMBER_SARM_SWITCH = 0;
-    public static final int CLIMBER_BEAMBREAK_SENSOR = 0;
+    public static final int CLIMBER_BEAMBREAK_SENSOR = 1;
 
     /* -------------- CONSTANTS -------------- */
     /* Drive Constants */
@@ -138,7 +135,7 @@ public final class Constants {
     public static final double HOOD_DEGREES_PER_ROTATION = 1;
 
     /* Feeder Constants */
-    public static final int[] FEEDER_BALL_DETECTORS = { 0, 1 }; // { left, right }
+    public static final int[] FEEDER_BALL_DETECTORS = { 2, 3 }; // { left, right }
     public static final double FEEDER_INTAKE_SPEED = 1;
     public static final double FEEDER_PURGE_SPEED = -1;
     public static final double FEEDER_SHOOT_SPEED = 1;

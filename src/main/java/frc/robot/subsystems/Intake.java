@@ -9,6 +9,13 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
 	private VictorSPX intakeMotor;
 
+	/**
+	 * Do not use
+	 */
+	@Deprecated
+	public Intake() {
+	}
+
 	public Intake(int id) {
 		intakeMotor = new VictorSPX(Constants.INTAKE_MOTORS[id]);
 	}

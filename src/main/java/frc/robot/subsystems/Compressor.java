@@ -10,17 +10,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Compressor extends SubsystemBase {
   PneumaticHub pneumaticHub;
+  edu.wpi.first.wpilibj.Compressor compressor;
 
   /** Creates a new Compressor. */
   public Compressor() {
     pneumaticHub = new PneumaticHub();
+    compressor = pneumaticHub.makeCompressor();
     setCompressorEnabled(true);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Pressure (psi)", getPressure());
+    // SmartDashboard.putNumber("Pressure (psi)", (int) getPressure());
   }
 
   public void setCompressorEnabled(boolean enabled) {

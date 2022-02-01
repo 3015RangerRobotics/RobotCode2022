@@ -14,6 +14,14 @@ public class Feeder extends SubsystemBase {
     public DigitalInput ballDetector;
     private double id;
 
+    /**
+     * Do not use
+     */
+    @Deprecated
+    public Feeder() {
+
+    }
+
     public Feeder(int id) {
         topMotor = new VictorSPX(Constants.FEEDER_TOP_MOTORS[id]);
         bottomMotor = new VictorSPX(Constants.FEEDER_BOTTOM_MOTORS[id]);
