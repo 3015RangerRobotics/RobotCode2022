@@ -120,6 +120,10 @@ public class Drive extends SubsystemBase {
         return -angle;
     }
 
+    public double getYAngle() {
+        return imu.getPitch();
+    }
+
     /**
      * Gets the Robot's heading as a <code>Rotation2d</code> object
      * 

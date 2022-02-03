@@ -131,6 +131,7 @@ public final class Constants {
     public static final double CLIMBER_FLOPPY_BAR_THREE_TO_FOUR = 0;
     public static final double CLIMBER_FLOPPY_POSITION_TOLERANCE = 0;
     public static final double CLIMBER_FLOPPY_SPEED_TOLERANCE = 0;
+    public static final double CLIMBER_FLOPPY_ARM_OFFSET = 0;
 
     /* Hood Constants */
     public static final double HOOD_CONTROLLER_P = 0;

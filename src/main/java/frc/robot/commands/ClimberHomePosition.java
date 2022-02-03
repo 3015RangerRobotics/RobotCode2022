@@ -28,6 +28,9 @@ public class ClimberHomePosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (RobotContainer.climber.hasBeenHomed()) {
+      return;
+    }
     RobotContainer.climber.setOutput(-.3);
   }
 
@@ -35,14 +38,16 @@ public class ClimberHomePosition extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     RobotContainer.climber.setOutput(0);
-    if (!interrupted) {// TODO: Make a boolean to run this command once
+    if (!interrupted) {
       RobotContainer.climber.setSensorZero();
+      RobotContainer.climber.setHasBeenHomed();
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.climber.getBottomLimit() || RobotContainer.climber.getClimberCurrent() > threshold;
+    return RobotContainer.climber.getBottomLimit() || RobotContainer.climber.getClimberCurrent() > threshold
+        || RobotContainer.climber.hasBeenHomed();
   }
 }

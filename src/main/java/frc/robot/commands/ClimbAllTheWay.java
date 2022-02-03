@@ -18,20 +18,19 @@ public class ClimbAllTheWay extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ClimberHomePosition(),
-      new ClimberToTop(),
-      new WaitUntilCommand(RobotContainer.coDriverA),
-      new ClimberToBottom(),
-      new WaitUntilCommand(RobotContainer.coDriverA),
-      new FloppyArmUp(Constants.CLIMBER_FLOPPY_BAR_TWO_TO_THREE),
-      new WaitUntilCommand(RobotContainer.coDriverA),
-      new ClimberToTop(),
-      new WaitUntilCommand(RobotContainer.coDriverA),
-      new ClimberToBottom(),
-      new WaitUntilCommand(RobotContainer.coDriverA),
-      new FloppyArmDown(Constants.CLIMBER_FLOPPY_BAR_THREE_TO_FOUR),
-      new WaitUntilCommand(RobotContainer.coDriverA),
-      new ClimberToTop()
-    );
+        new ClimberHomePosition(),
+        new ClimberToTop().withName("prepareToGrabBarTwo"),
+        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToPullRobotUpToBarTwo"),
+        new ClimberToBottom().withName("pullRobotUpToBarTwo"),
+        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToReachToBarThree"),
+        new FloppyArmUp(Constants.CLIMBER_FLOPPY_BAR_TWO_TO_THREE).withName("reachToBarThree"),
+        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToGrabBarThree"),
+        new ClimberToTop().withName("grabBarThree"),
+        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToPullUpToBarThree"),
+        new ClimberToBottom().withName("pullUpToBarThree"),
+        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToDropToGrabBarFour"),
+        new FloppyArmDown(Constants.CLIMBER_FLOPPY_BAR_THREE_TO_FOUR).withName("dropToGrabBarFour"),
+        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToGrabBarFour"),
+        new ClimberToTop().withName("grabBarFour"));
   }
 }
