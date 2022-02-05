@@ -43,7 +43,7 @@ public class Drive extends SubsystemBase {
 
         for (int i = 0; i < 4; i++) {
             swerveModules[i] = new SwerveModule(Constants.SWERVE_DRIVE_CHANNELS[i],
-                    Constants.SWERVE_ROTATION_CHANNELS[i], 0);
+                    Constants.SWERVE_ROTATION_CHANNELS[i], 0);//TODO: need to pull from preference for the module rotation offset https://docs.wpilib.org/en/stable/docs/software/dashboards/smartdashboard/setting-robot-preferences-from-smartdashboard.html
         }
 
         resetEncoders();
@@ -60,6 +60,7 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         updateOdometry();
         SmartDashboard.putNumber("gyro", getAngleDegrees());
+        //TODO:set up readout of each module rotation and drive speed for testing purposes, use smartdashboard.
     }
 
     /**
@@ -278,6 +279,7 @@ public class Drive extends SubsystemBase {
      */
     public void resetZeros() {
         for (SwerveModule s : swerveModules) {
+            //TODO: current method needs to save said offfsets to prefferences https://docs.wpilib.org/en/stable/docs/software/dashboards/smartdashboard/setting-robot-preferences-from-smartdashboard.html
             s.updateRotationOffset();
         }
     }

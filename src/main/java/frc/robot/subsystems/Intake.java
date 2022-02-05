@@ -8,7 +8,8 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 	private VictorSPX intakeMotor;
-
+	//TODO:add intake sensor, a digital sensor like in feeder used to detect ball. make acccessor too please
+	
 	/**
 	 * Do not use
 	 */

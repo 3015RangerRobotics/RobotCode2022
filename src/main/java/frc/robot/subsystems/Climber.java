@@ -156,7 +156,7 @@ public class Climber extends SubsystemBase {
     }
 
     public double getArmAngle() {
-        return armEncoder.get();
+        return armEncoder.get();//TODO: add offset constant, because arm never points straight down.
     }
 
     public double getArmSpeed() {
