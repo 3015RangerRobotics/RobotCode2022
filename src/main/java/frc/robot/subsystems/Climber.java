@@ -19,6 +19,7 @@ public class Climber extends SubsystemBase {
     private DigitalInput bottomLimit;
     private DigitalInput beamBreakSensor;
     private Encoder armEncoder;
+    private boolean hasBeenHomed;
 
     /**
      * <ul>
@@ -55,6 +56,7 @@ public class Climber extends SubsystemBase {
 
         armEncoder = new Encoder(Constants.ENCODER_INPUT_A, Constants.ENCODER_INPUT_B);
         armEncoder.setDistancePerPulse(Constants.CLIMBER_ARM_DEGREES_PER_PULSE);
+        hasBeenHomed = false;
     }
 
     public void periodic() {
@@ -67,6 +69,14 @@ public class Climber extends SubsystemBase {
      */
     public void homeClimber() {
         climberMotor.set(ControlMode.Position, 0);
+    }
+
+    public boolean hasBeenHomed() {
+        return hasBeenHomed;
+    }
+
+    public void setHasBeenHomed() {
+        hasBeenHomed = true;
     }
 
     /**
@@ -127,7 +137,7 @@ public class Climber extends SubsystemBase {
                 break;
         }
     }
-    
+
     /**
      * sets the output of the climber motor to a specified percent
      * 
@@ -156,7 +166,7 @@ public class Climber extends SubsystemBase {
     }
 
     public double getArmAngle() {
-        return armEncoder.get();//TODO: add offset constant, because arm never points straight down.
+        return armEncoder.get() + Constants.CLIMBER_FLOPPY_ARM_OFFSET;
     }
 
     public double getArmSpeed() {

@@ -14,7 +14,7 @@ import frc.robot.subsystems.Climber.SolenoidPosition;
 public class FloppyArmDown extends CommandBase {
   private double endAngle;
   private boolean hasEndCondition;
-  
+
   public FloppyArmDown() {
     this(0, false);
   }
@@ -22,6 +22,7 @@ public class FloppyArmDown extends CommandBase {
   public FloppyArmDown(double endAngle) {
     this(endAngle, true);
   }
+
   /** Creates a new FloppyArmDown. */
   private FloppyArmDown(double endAngle, boolean hasEndCondition) {
     this.endAngle = endAngle;
@@ -32,7 +33,8 @@ public class FloppyArmDown extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -43,16 +45,16 @@ public class FloppyArmDown extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-     
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !hasEndCondition || 
-      ((Math.abs(RobotContainer.climber.getArmAngle() - endAngle) < Constants.CLIMBER_FLOPPY_POSITION_TOLERANCE) &&
-       (Math.abs(RobotContainer.climber.getArmSpeed()) < Constants.CLIMBER_FLOPPY_SPEED_TOLERANCE));
-    
-  
+    boolean atAngle = (Math.abs((RobotContainer.climber.getArmAngle() + RobotContainer.drive.getYAngle())
+        - endAngle) < Constants.CLIMBER_FLOPPY_POSITION_TOLERANCE);
+    boolean isStopped = (Math.abs(RobotContainer.climber.getArmSpeed()) < Constants.CLIMBER_FLOPPY_SPEED_TOLERANCE);
+    return !hasEndCondition || (atAngle && isStopped);
+
   }
 }
