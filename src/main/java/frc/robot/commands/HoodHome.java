@@ -4,48 +4,43 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Hood;
 
-public class DriveMakeAllCurrentModuleAnglesZero extends CommandBase {
-  Timer timer = new Timer();
+public class HoodHome extends CommandBase {
+  private Hood hood;
 
-  /** Creates a new DriveMakeAllCurrentModuleAnglesZero. */
-  public DriveMakeAllCurrentModuleAnglesZero() {
+  /** Creates a new HoodHome. */
+  public HoodHome(int side) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.drive);
+    this.hood = RobotContainer.hood[side];
+    addRequirements(this.hood);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
-    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    hood.setHoodOutputPercentage(-0.05);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    timer.stop();
-    if (!interrupted && DriverStation.isDisabled()) {
-      RobotContainer.drive.resetZeros();
+    hood.setHoodOutputPercentage(0);
+    if (!interrupted) {
+      hood.resetZero();
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (timer.get() >= 10) || !DriverStation.isDisabled();
-  }
-
-  public boolean runsWhenDisabled() {
-    return true;
+    return hood.getReverseLimit();
   }
 }

@@ -58,7 +58,6 @@ public class SwerveModule {
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 10);
-
     }
 
     /**
@@ -169,10 +168,23 @@ public class SwerveModule {
     }
 
     /**
-     * Sets the Swerve Module's zero position to its current angle
+     * Sets the Swerve Module's zero position to its current angle and return the
+     * new offset
+     * 
+     * @return the new offset in degrees
      */
-    public void updateRotationOffset() {
+    public double updateRotationOffset() {
         rotationOffset = getAbsoluteRotation();
+        return rotationOffset;
+    }
+
+    /**
+     * Gets the Swerve Modules current rotation offset
+     * 
+     * @return the current offset in degrees
+     */
+    public double getRotationOffset() {
+        return rotationOffset;
     }
 
     /**

@@ -139,6 +139,10 @@ public class RobotContainer {
     return driver.getRightY();
   }
 
+  public static int getDriverDPad() {
+    return driver.getPOV();
+  }
+
   private static class TriggerButton extends Trigger {
     boolean isLeftTrigger;
     XboxController controller;

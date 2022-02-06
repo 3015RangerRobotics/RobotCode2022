@@ -53,14 +53,25 @@ public final class Constants {
 
     /* -------------- CONSTANTS -------------- */
     /* Drive Constants */
-    public static final double SWERVE_DRIVE_P = 0;
+
+    public static final double SWERVE_MAX_VELOCITY_METERS = 0;
+    public static final double SWERVE_METERS_PER_PULSE = 0;
+    public static final double SWERVE_DEGREES_PER_PULSE = 0;
+
+    public static final double DRIVE_MAX_ANGULAR_ACCEL = 0;
+    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 0;
+
+    public static final double SWERVE_CENTER_DISTANCE = 0;
+
+    public static final double SWERVE_DRIVE_P = -1000;
     public static final double SWERVE_DRIVE_I = 0;
-    public static final double SWERVE_DRIVE_D = 0;
+    public static final double SWERVE_DRIVE_D = -25;
     public static final double SWERVE_DRIVE_F = 0;
 
-    public static final double SWERVE_ROTATION_P = 0;
-    public static final double SWERVE_ROTATION_I = 0;
-    public static final double SWERVE_ROTATION_D = 0;
+    public static final double SWERVE_ROTATION_P = 16;
+    public static final double SWERVE_ROTATION_I = .04;
+    public static final double SWERVE_ROTATION_I_ZONE = 10 / SWERVE_DEGREES_PER_PULSE;
+    public static final double SWERVE_ROTATION_D = 1600;
     public static final double SWERVE_ROTATION_F = 0;
 
     public static final double DRIVE_ROTATION_CONTROLLER_P = 0;
@@ -77,17 +88,6 @@ public final class Constants {
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_F = 0;
-
-    public static final double DRIVE_MAX_ANGULAR_ACCEL = 0;
-    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 0;
-
-    public static final double SWERVE_ROTATION_I_ZONE = 0;
-
-    public static final double SWERVE_MAX_VELOCITY_METERS = 0;
-    public static final double SWERVE_METERS_PER_PULSE = 0;
-    public static final double SWERVE_DEGREES_PER_PULSE = 0;
-
-    public static final double SWERVE_CENTER_DISTANCE = 0;
 
     /* Shooter Constants */
     public static final double SHOOTER_MOTOR_SPEED = 0;
@@ -107,7 +107,7 @@ public final class Constants {
     /* Limelight Constants */
     public static final double LL_TARGET_HEIGHT = 0;
     public static final double LL_MOUNT_HEIGHT = 0;
-    public static final double LL_MOUNT_ANGLE = 0;
+    public static final double LL_MOUNT_ANGLE = 55;
 
     /* Climber Constants */
     public static final double CLIMBER_METERS_PER_PULSE = 0;
@@ -139,6 +139,7 @@ public final class Constants {
     public static final double HOOD_CONTROLLER_D = 0;
     public static final double HOOD_CONTROLLER_F = 0;
     public static final double HOOD_DEGREES_PER_ROTATION = 1;
+    public static final double HOOD_MAX_ANGLE = 0;
 
     /* Feeder Constants */
     public static final int[] FEEDER_BALL_DETECTORS = { 2, 3 }; // { left, right }

@@ -13,16 +13,20 @@ import frc.robot.subsystems.Intake;
 public class PurgeBall extends CommandBase {
   public Intake intake;
   public Feeder feeder;
+  public Shooter shooter;
 
-  // TODO: finish this
-  /** Creates a new BallPurge. */
+  /**
+   * Creates a new PurgeBall.
+   * Runs both the intake and feeder of a specified side in reverse
+   * runs indefinitely.
+   */
   public PurgeBall(int side) {
     // Use addRequirements() here to declare subsystem dependencies.
     // addRequirements(RobotContainer.intake[side], RobotContainer.feeder[side],
     // RobotContainer.shooter[side]);
     intake = RobotContainer.intake[side];
     feeder = RobotContainer.feeder[side];
-    addRequirements(intake, feeder);
+    addRequirements(intake, feeder, shooter);
   }
 
   // Called when the command is initially scheduled.

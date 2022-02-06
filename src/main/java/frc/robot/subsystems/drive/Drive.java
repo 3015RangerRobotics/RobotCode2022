@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,29 +22,40 @@ public class Drive extends SubsystemBase {
 
     Translation2d[] moduleLocations = new Translation2d[4];
     SwerveModule[] swerveModules = new SwerveModule[4];
+    double[] swerveModuleOffsets = new double[4];
 
     PigeonIMU imu;
 
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
 
+    public enum ModuleIndices {
+        kFrontRight(0),
+        kFrontLeft(1),
+        kBackLeft(2),
+        kBackRight(3);
+
+        public int index;
+
+        private ModuleIndices(int index) {
+            this.index = index;
+        }
+    }
+
     /**
      * Creates a new Drive.
      */
     public Drive() {
 
-        moduleLocations[0] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // Front
-                                                                                                                    // Right
-        moduleLocations[1] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // Front
-                                                                                                                     // Left
-        moduleLocations[2] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // Back
-                                                                                                                      // Left
-        moduleLocations[3] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // Back
-                                                                                                                     // Right
+        moduleLocations[0] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // FR
+        moduleLocations[1] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // FL
+        moduleLocations[2] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // BL
+        moduleLocations[3] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // BR
 
         for (int i = 0; i < 4; i++) {
             swerveModules[i] = new SwerveModule(Constants.SWERVE_DRIVE_CHANNELS[i],
-                    Constants.SWERVE_ROTATION_CHANNELS[i], 0);//TODO: need to pull from preference for the module rotation offset https://docs.wpilib.org/en/stable/docs/software/dashboards/smartdashboard/setting-robot-preferences-from-smartdashboard.html
+                    Constants.SWERVE_ROTATION_CHANNELS[i],
+                    Preferences.getDouble(String.format("mod%nangle", i), 0));
         }
 
         resetEncoders();
@@ -60,7 +72,13 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         updateOdometry();
         SmartDashboard.putNumber("gyro", getAngleDegrees());
-        //TODO:set up readout of each module rotation and drive speed for testing purposes, use smartdashboard.
+        SmartDashboard.putNumber("Front Right Swerve Module Rotation", getModuleRotation(0));
+        SmartDashboard.putNumber("Front Left Swerve Module Rotation", getModuleRotation(1));
+        SmartDashboard.putNumber("Back Left Swerve Module Rotation", getModuleRotation(2));
+        SmartDashboard.putNumber("Back Right Swerve Module Rotation", getModuleRotation(3));
+        ChassisSpeeds speeds = kinematics.toChassisSpeeds(getModuleStates());
+        SmartDashboard.putNumber("Drive speed", Math.sqrt(speeds.vxMetersPerSecond * speeds.vyMetersPerSecond));
+        SmartDashboard.putNumber("Drive degrees per second", speeds.omegaRadiansPerSecond * (180 / Math.PI));
     }
 
     /**
@@ -69,6 +87,12 @@ public class Drive extends SubsystemBase {
     public void resetEncoders() {
         for (SwerveModule s : swerveModules) {
             s.resetEncoders();
+        }
+    }
+
+    public void zeroAllModulePosSensors() {
+        for (SwerveModule s : swerveModules) {
+            s.setRotationPosition(0);
         }
     }
 
@@ -138,9 +162,7 @@ public class Drive extends SubsystemBase {
      * Update's the Odometry based on current swerve module states
      */
     public void updateOdometry() {
-        odometry.update(getAngleRotation2d(), swerveModules[0].getSwerveModuleState(),
-                swerveModules[1].getSwerveModuleState(), swerveModules[2].getSwerveModuleState(),
-                swerveModules[3].getSwerveModuleState());
+        odometry.update(getAngleRotation2d(), getModuleStates());
     }
 
     /**
@@ -282,9 +304,28 @@ public class Drive extends SubsystemBase {
      * Resets the zeros of all swerve modules to their current positions
      */
     public void resetZeros() {
-        for (SwerveModule s : swerveModules) {
-            //TODO: current method needs to save said offfsets to prefferences https://docs.wpilib.org/en/stable/docs/software/dashboards/smartdashboard/setting-robot-preferences-from-smartdashboard.html
-            s.updateRotationOffset();
+        for (int i = 0; i < 4; i++) {
+            double angle = swerveModules[i].updateRotationOffset();
+            Preferences.setDouble(String.format("mod%nangle", i), angle);
         }
+    }
+
+    public SwerveModuleState[] getModuleStates() {
+        return new SwerveModuleState[] { swerveModules[0].getSwerveModuleState(),
+                swerveModules[1].getSwerveModuleState(), swerveModules[2].getSwerveModuleState(),
+                swerveModules[3].getSwerveModuleState() };
+    }
+
+    /**
+     * Sets the drive and rotation of one swerve module
+     * 
+     * @param index       The index of the swerve module
+     * @param angle       the angle to set the swerve module to
+     * @param value       the value to pass to the drive motor based on controlMode
+     * @param controlMode the {@link ControlMode} to run the motor with
+     */
+    public void driveOneModule(int index, double angle, double value, ControlMode controlMode) {
+        swerveModules[index].setDriveMotor(controlMode, value);
+        swerveModules[index].setRotationPosition(angle);
     }
 }

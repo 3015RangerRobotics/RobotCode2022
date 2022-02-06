@@ -3,13 +3,14 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 	private VictorSPX intakeMotor;
-	//TODO:add intake sensor, a digital sensor like in feeder used to detect ball. make acccessor too please
-	
+	private DigitalInput intakeSensor;
+
 	/**
 	 * Do not use
 	 */
@@ -31,5 +32,9 @@ public class Intake extends SubsystemBase {
 
 	public void stop() {
 		intakeMotor.set(ControlMode.PercentOutput, 0);
+	}
+
+	public boolean getIntakeSensor() {
+		return intakeSensor.get();
 	}
 }

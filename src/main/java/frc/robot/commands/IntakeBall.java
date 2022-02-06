@@ -30,11 +30,18 @@ public class IntakeBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //TODO:set intake to stop when BOTH feeder sensor is true and intake sensor is true
-    intake.intake();
 
-    //TODO:set feeder motor to stop when feeder sensor is tripped
-    feeder.setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
+    if (intake.getIntakeSensor() && feeder.getBallDetector()) {
+      intake.stop();
+    } else {
+      intake.intake();
+    }
+
+    if (feeder.getBallDetector()) {
+      feeder.setPercentOutput(0);
+    } else {
+      feeder.setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -47,6 +54,6 @@ public class IntakeBall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;//TODO:end command when both feeder sensor is true and intake sensor is true
+    return intake.getIntakeSensor() && feeder.getBallDetector();
   }
 }
