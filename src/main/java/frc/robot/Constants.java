@@ -50,6 +50,10 @@ public final class Constants {
     /* climber */
     public static final int CLIMBER_BOTTOM_SWITCH = 0;
     public static final int CLIMBER_BEAMBREAK_SENSOR = 1;
+    public static final int[] FEEDER_BALL_DETECTORS = { 2, 3 }; // { left, right }
+    public static final int[] INTAKE_BALL_DETECTORS = { 4, 5 }; // { left, right } 
+    public static final int ENCODER_INPUT_A = 6;
+    public static final int ENCODER_INPUT_B = 7;
 
     /* -------------- CONSTANTS -------------- */
     /* Drive Constants */
@@ -105,15 +109,15 @@ public final class Constants {
     public static final double SHOOTER_PULSES_PER_ROTATION = 0;
 
     /* Limelight Constants */
-    public static final double LL_TARGET_HEIGHT = 0;
+    public static final double LL_TARGET_HEIGHT = 0;//TODO: this is in the manual, please put it in
     public static final double LL_MOUNT_HEIGHT = 0;
     public static final double LL_MOUNT_ANGLE = 55;
 
     /* Climber Constants */
-    public static final double CLIMBER_METERS_PER_PULSE = 0;
+    public static final double CLIMBER_METERS_PER_PULSE = 0;//TODO: Ask the climber group for the gear ratio, Falcon500 has 2048 count per revolution. replace this note with the gear ratio
     public static final double CLIMBER_MAX_HEIGHT_METERS = 0;
-    public static final double CLIMBER_ARM_DEGREES_PER_PULSE = 0;
-
+    public static final double CLIMER_HEIGHT_TOLERANCE = .005;//TODO: Change the hardcoded .0005 in ClimberToBottom and ClimberToTop to this constant
+    
     public static final double CLIMBER_RAISE_P = 0;
     public static final double CLIMBER_RAISE_I = 0;
     public static final double CLIMBER_RAISE_D = 0;
@@ -124,25 +128,22 @@ public final class Constants {
     public static final double CLIMBER_LOWER_D = 0;
     public static final double CLIMBER_LOWER_F = 0;
 
-    public static final int ENCODER_INPUT_A = 0;
-    public static final int ENCODER_INPUT_B = 0;
-
-    public static final double CLIMBER_FLOPPY_BAR_TWO_TO_THREE = 0;
-    public static final double CLIMBER_FLOPPY_BAR_THREE_TO_FOUR = 0;
+    public static final double CLIMBER_ARM_DEGREES_PER_PULSE = 0;//TODO:this is a RevThroughBoreEncoder 2048 pulses per rev, Find this value
+    public static final double CLIMBER_FLOPPY_BAR_TWO_TO_THREE = 0;//TODO: Do math to find me
+    public static final double CLIMBER_FLOPPY_BAR_THREE_TO_FOUR = 0;//TODO: Do math to find me
     public static final double CLIMBER_FLOPPY_POSITION_TOLERANCE = 0;
     public static final double CLIMBER_FLOPPY_SPEED_TOLERANCE = 0;
-    public static final double CLIMBER_FLOPPY_ARM_OFFSET = 0;
+    public static final double CLIMBER_FLOPPY_ARM_OFFSET = 0;//TODO: Go to physical robot and find me, how many degrees am I from straight down?
 
     /* Hood Constants */
     public static final double HOOD_CONTROLLER_P = 0;
     public static final double HOOD_CONTROLLER_I = 0;
     public static final double HOOD_CONTROLLER_D = 0;
     public static final double HOOD_CONTROLLER_F = 0;
-    public static final double HOOD_DEGREES_PER_ROTATION = 1;
+    public static final double HOOD_DEGREES_PER_ROTATION = 1;//TODO: Get the gear ratios, put them here, NEO550 have 42 counts per rotation.
     public static final double HOOD_MAX_ANGLE = 0;
 
     /* Feeder Constants */
-    public static final int[] FEEDER_BALL_DETECTORS = { 2, 3 }; // { left, right }
     public static final double FEEDER_INTAKE_SPEED = 1;
     public static final double FEEDER_PURGE_SPEED = -1;
     public static final double FEEDER_SHOOT_SPEED = 1;

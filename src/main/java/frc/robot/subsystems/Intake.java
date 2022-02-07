@@ -20,6 +20,7 @@ public class Intake extends SubsystemBase {
 
 	public Intake(int id) {
 		intakeMotor = new VictorSPX(Constants.INTAKE_MOTORS[id]);
+		//TODO: Construct the intakeSensor values are in Constants already
 	}
 
 	public void intake() {

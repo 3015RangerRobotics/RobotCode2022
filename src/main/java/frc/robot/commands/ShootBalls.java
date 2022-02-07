@@ -5,48 +5,32 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.Constants;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
-public class PurgeBall extends CommandBase {
+public class ShootBalls extends CommandBase {
   public Intake intake;
   public Feeder feeder;
   public Shooter shooter;
-  //TODO:finish adding shooter. shooter subsytem might need to add a weak purge method. drive it w/percent output
-  /**
-   * Creates a new PurgeBall.
-   * Runs both the intake and feeder of a specified side in reverse
-   * runs indefinitely.
-   */
-  public PurgeBall(int side) {
+  //TODO: Make this work. try to fire one ball then the next, so delay the ball in Intake
+  /** Creates a new ShootBalls. */
+  public ShootBalls(int side) {
     // Use addRequirements() here to declare subsystem dependencies.
-    // addRequirements(RobotContainer.intake[side], RobotContainer.feeder[side],
-    // RobotContainer.shooter[side]);
-    intake = RobotContainer.intake[side];
-    feeder = RobotContainer.feeder[side];
     addRequirements(intake, feeder, shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    intake.purge();
-    feeder.setPercentOutput(Constants.FEEDER_PURGE_SPEED);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.stop();
-    feeder.setPercentOutput(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
