@@ -86,6 +86,7 @@ public class RobotContainer {
     feeder[1] = new Feeder(1);
     shooter[0] = new Shooter(0);
     shooter[1] = new Shooter(1);
+    //TODO: There is only one hood for both shooters now, fix everywhere
     hood[0] = new Hood(0);
     hood[1] = new Hood(1);
 
