@@ -7,8 +7,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class PurgeBall extends CommandBase {
   public Intake intake;
@@ -26,6 +28,7 @@ public class PurgeBall extends CommandBase {
     // RobotContainer.shooter[side]);
     intake = RobotContainer.intake[side];
     feeder = RobotContainer.feeder[side];
+    shooter = RobotContainer.shooter[side];
     addRequirements(intake, feeder, shooter);
   }
 
@@ -39,6 +42,7 @@ public class PurgeBall extends CommandBase {
   public void execute() {
     intake.purge();
     feeder.setPercentOutput(Constants.FEEDER_PURGE_SPEED);
+    shooter.purgeShooter();
   }
 
   // Called once the command ends or is interrupted.
@@ -46,6 +50,7 @@ public class PurgeBall extends CommandBase {
   public void end(boolean interrupted) {
     intake.stop();
     feeder.setPercentOutput(0);
+    shooter.stop();
   }
 
   // Returns true when the command should end.

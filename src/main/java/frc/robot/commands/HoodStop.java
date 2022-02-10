@@ -4,25 +4,23 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 
-public class HoodSetPosition extends InstantCommand {
-  double hoodPos;
+public class HoodStop extends InstantCommand {
+  //TODO: write me
   private Hood hood;
-
-  /** Creates a new HoodSetPosition. */
-  public HoodSetPosition(double hoodPos) {
-    this.hood = RobotContainer.hood;
+  /** Creates a new HoodStop. */
+  public HoodStop() {
     addRequirements(hood);
-    this.hoodPos = hoodPos;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    hood.setHoodPosition(hoodPos);
+    hood.setHoodOutputPercentage(0);
   }
-
 }

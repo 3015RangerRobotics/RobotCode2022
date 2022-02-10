@@ -33,16 +33,8 @@ public class Hood extends SubsystemBase {
 
     public State state = State.kNeutral;
 
-    /**
-     * Do not use
-     */
-    @Deprecated
     public Hood() {
-
-    }
-
-    public Hood(int id) {
-        hoodMotor = new CANSparkMax(Constants.HOOD_MOTORS[id], MotorType.kBrushless);
+        hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
         hoodMotor.restoreFactoryDefaults();
         hoodMotor.getEncoder().setPositionConversionFactor(Constants.HOOD_DEGREES_PER_ROTATION);
         hoodMotor.getPIDController().setP(Constants.HOOD_CONTROLLER_P);

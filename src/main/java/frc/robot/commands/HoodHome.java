@@ -12,9 +12,8 @@ public class HoodHome extends CommandBase {
   private Hood hood;
 
   /** Creates a new HoodHome. */
-  public HoodHome(int side) {
+  public HoodHome() {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.hood = RobotContainer.hood[side];
     addRequirements(this.hood);
   }
 

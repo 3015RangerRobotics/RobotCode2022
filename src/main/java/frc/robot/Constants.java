@@ -39,7 +39,7 @@ public final class Constants {
 
     /* REV ID's */
     /* Hood */
-    public static final int[] HOOD_MOTORS = { 11, 8 }; // { left, right }
+    public static final int HOOD_MOTOR = 11; // { left and right }
 
     /* Solenoid ID's */
     /* Climber */

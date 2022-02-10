@@ -69,7 +69,11 @@ public class Shooter extends SubsystemBase {
 		shooter.set(ControlMode.Velocity, rpm / 10 / 60 * Constants.SHOOTER_PULSES_PER_ROTATION);
 	}
 
-	public void stopRPM(double RPM) {
-		shooter.set(ControlMode.Velocity, 0);
+	public void stop() {
+		shooter.set(ControlMode.PercentOutput, 0);
+	}
+
+	public void purgeShooter() {
+		shooter.set(ControlMode.PercentOutput, -.2);
 	}
 }

@@ -32,7 +32,7 @@ public class RobotContainer {
   public static Intake[] intake = { new Intake(), new Intake() };
   public static Feeder[] feeder = { new Feeder(), new Feeder() };
   public static Shooter[] shooter = { new Shooter(), new Shooter() };
-  public static Hood[] hood = { new Hood(), new Hood() };
+  public static Hood hood;
   public static Climber climber;
   public static Compressor compressor;
 
@@ -86,9 +86,7 @@ public class RobotContainer {
     feeder[1] = new Feeder(1);
     shooter[0] = new Shooter(0);
     shooter[1] = new Shooter(1);
-    //TODO: There is only one hood for both shooters now, fix everywhere
-    hood[0] = new Hood(0);
-    hood[1] = new Hood(1);
+    hood = new Hood();
 
     // drive.setDefaultCommand(new DriveWithGamepad());
     // Configure the button bindings
