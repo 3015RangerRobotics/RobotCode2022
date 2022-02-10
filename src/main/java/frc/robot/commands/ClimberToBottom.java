@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class ClimberToBottom extends CommandBase {
@@ -37,6 +38,6 @@ public class ClimberToBottom extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.climber.getClimberPos() < 0.005; // 0.5 cm
+    return RobotContainer.climber.getClimberPos() < Constants.CLIMBER_HEIGHT_TOLERANCE; // 0.5 cm
   }
 }
