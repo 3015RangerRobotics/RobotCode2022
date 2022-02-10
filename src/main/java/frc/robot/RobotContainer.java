@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Compressor;
@@ -33,6 +32,7 @@ public class RobotContainer {
   public static Feeder[] feeder = { new Feeder(), new Feeder() };
   public static Shooter[] shooter = { new Shooter(), new Shooter() };
   public static Hood hood;
+  public static Limelight limelight;
   public static Climber climber;
   public static Compressor compressor;
 
@@ -80,6 +80,7 @@ public class RobotContainer {
     drive = new Drive();
     compressor = new Compressor();
     climber = new Climber();
+    limelight = new Limelight();
     intake[0] = new Intake(0);
     intake[1] = new Intake(1);
     feeder[0] = new Feeder(0);

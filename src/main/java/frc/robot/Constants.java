@@ -58,7 +58,8 @@ public final class Constants {
     /* -------------- CONSTANTS -------------- */
     /* Drive Constants */
 
-    public static final double SWERVE_MAX_VELOCITY_METERS = 4.5;
+    public static final double SWERVE_MAX_VELOCITY_METERS = 4.8; // 15.9 ft/s
+    public static final double SWERVE_MAX_ACCEL_METERS = 5;
     public static final double SWERVE_METERS_PER_PULSE = 0.00002226;
     public static final double SWERVE_DEGREES_PER_PULSE = 360.0 / 4096.0;
 
