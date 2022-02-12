@@ -26,7 +26,8 @@ public class Hood extends SubsystemBase {
     private Timer timer = new Timer();
 
     private enum State {
-        kSetPosition,
+        kSetPositionForward,
+        kSetPositionBackwards,
         kNeutral,
         kHoming
     }
@@ -36,7 +37,7 @@ public class Hood extends SubsystemBase {
     public Hood() {
         hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
         hoodMotor.restoreFactoryDefaults();
-        hoodMotor.getEncoder().setPositionConversionFactor(Constants.HOOD_DEGREES_PER_ROTATION);
+        hoodMotor.getEncoder().setPositionConversionFactor(Constants.HOOD_DEGREES_PER_PULSE);
         hoodMotor.getPIDController().setP(Constants.HOOD_CONTROLLER_P);
         hoodMotor.getPIDController().setI(Constants.HOOD_CONTROLLER_I);
         hoodMotor.getPIDController().setD(Constants.HOOD_CONTROLLER_D);
@@ -52,10 +53,19 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void periodic() {
+        switch (state) {
+            case kSetPositionForward:
+                setHoodPosition(5);
+                break;
+
+            case kSetPositionBackwards:
+                setHoodPosition(-5);
+                break;
+        }
     }
 
     public double getHoodPosition() {
-        return hoodMotor.getEncoder().getPosition();
+        return hoodMotor.getEncoder().getPosition() * Constants.HOOD_DEGREES_PER_PULSE;
     }
 
     public void setHoodPosition(double position) {

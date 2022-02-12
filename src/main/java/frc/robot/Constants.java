@@ -145,8 +145,10 @@ public final class Constants {
     public static final double HOOD_CONTROLLER_I = 0;
     public static final double HOOD_CONTROLLER_D = 0;
     public static final double HOOD_CONTROLLER_F = 0;
-    public static final double HOOD_DEGREES_PER_ROTATION = 1;// finding! 0.00856? TODO: Get the gear ratios- 18:36 ?,
-                                                             // NEO550 have 42 counts per rotation.
+    public static final double HOOD_DEGREES_PER_PULSE = (360 / 420) * (18 / 36) * (1 / 42);// finding! 0.00856? TODO:
+                                                                                           // Get the gear ratios- 18:36
+                                                                                           // ?,
+    // NEO550 have 42 counts per rotation.
     public static final double HOOD_MAX_ANGLE = 0;
 
     /* Feeder Constants */
