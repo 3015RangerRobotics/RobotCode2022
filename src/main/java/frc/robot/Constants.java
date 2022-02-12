@@ -20,22 +20,21 @@ public final class Constants {
 
     /* CTRE CAN IDs */
     /* Drive */;
-    public static final int[] SWERVE_DRIVE_CHANNELS = { 4, 15, 17, 2 }; // { FR, FL, BL, BR }
-    public static final int[] SWERVE_ROTATION_CHANNELS = { 3, 16, 18, 1 }; // { FR, FL, BL, BR }
-    public static final int DRIVE_PIGEON_CHANNEL = 0;
+    public static final int[] SWERVE_DRIVE_CHANNELS = { 11, 13, 15, 17 }; // { FR, FL, BL, BR }
+    public static final int[] SWERVE_ROTATION_CHANNELS = { 12, 14, 16, 18 }; // { FR, FL, BL, BR }
+    public static final int DRIVE_PIGEON_CHANNEL = 1;
 
     /* Intake */
-    public static final int[] INTAKE_MOTORS = { 14, 5 }; // { left, right }
+    public static final int[] INTAKE_MOTORS = { 24, 26 }; // { left, right }
 
     /* Feeder */
-    public static final int[] FEEDER_TOP_MOTORS = { 12, 7 }; // { left, right }
-    public static final int[] FEEDER_BOTTOM_MOTORS = { 13, 6 }; // { left, right }
+    public static final int[] FEEDER_TOP_MOTORS = { 25, 27 }; // { left, right }
 
     /* Shooter */
-    public static final int[] SHOOTER_MOTORS = { 10, 9 }; // { left, right }
+    public static final int[] SHOOTER_MOTORS = { 22, 23 }; // { left, right }
 
     /* Climber */
-    public static final int CLIMBER_MOTOR = 19;
+    public static final int CLIMBER_MOTOR = 31;
 
     /* REV ID's */
     /* Hood */
@@ -62,11 +61,12 @@ public final class Constants {
     public static final double SWERVE_MAX_ACCEL_METERS = 5;
     public static final double SWERVE_METERS_PER_PULSE = 0.00002226;
     public static final double SWERVE_DEGREES_PER_PULSE = 360.0 / 4096.0;
+    public static final double DRIVE_DEADZONE = 0.15;
 
     public static final double DRIVE_MAX_ANGULAR_ACCEL = 0;
-    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 0;
+    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 300;
 
-    public static final double SWERVE_CENTER_DISTANCE = 0;
+    public static final double SWERVE_CENTER_DISTANCE = .345;
 
     public static final double SWERVE_DRIVE_P = -1000;
     public static final double SWERVE_DRIVE_I = 0;
@@ -119,7 +119,7 @@ public final class Constants {
                                                                        // 12T on fal to 84T on same shaft w/ 12T sprock
                                                                        // to 15T sprock to Unknown diameter sprock
                                                                        // (rememner 16 Tooth sprock)
-    public static final double CLIMBER_MAX_HEIGHT_METERS = .7;
+    public static final double CLIMBER_MAX_HEIGHT_METERS = .7266;
     public static final double CLIMBER_HEIGHT_TOLERANCE = .005;
 
     public static final double CLIMBER_RAISE_P = 1;

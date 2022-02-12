@@ -37,7 +37,7 @@ public class Climber extends SubsystemBase {
         climberMotor = new TalonFX(Constants.CLIMBER_MOTOR);
         climberMotor.configVoltageCompSaturation(12.5);
         climberMotor.enableVoltageCompensation(true);
-        climberMotor.setInverted(false);
+        climberMotor.setInverted(true);
         climberMotor.setSensorPhase(false);
         climberMotor.setNeutralMode(NeutralMode.Brake);
         climberMotor.config_kP(0, Constants.CLIMBER_RAISE_P);
@@ -62,7 +62,7 @@ public class Climber extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putBoolean("Bottom climber switch", getBottomLimit());
         SmartDashboard.putBoolean("Beam break sensor", getBeamBreakSensor());
-        //TODO: push both encoder values to SmartDashboard for testing
+        // TODO: push both encoder values to SmartDashboard for testing
         SmartDashboard.putNumber("Climber position", getClimberPos());
     }
 
@@ -87,8 +87,8 @@ public class Climber extends SubsystemBase {
      * @param position the position to move to
      */
     public void setClimberPos(double position) {
-        position = Math.max(Math.min(position, 0),
-                Constants.CLIMBER_MAX_HEIGHT_METERS / Constants.CLIMBER_METERS_PER_PULSE);
+        // position = Math.max(Math.min(position, 0),
+        // Constants.CLIMBER_MAX_HEIGHT_METERS / Constants.CLIMBER_METERS_PER_PULSE);
         climberMotor.set(ControlMode.Position, position / Constants.CLIMBER_METERS_PER_PULSE);
     }
 

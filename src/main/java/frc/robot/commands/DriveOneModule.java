@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.Hashtable;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -39,7 +41,11 @@ public class DriveOneModule extends CommandBase {
   public void execute() {
     int hat = RobotContainer.getDriverDPad();
     if (hat != -1) {
-      rotatePos = hat - 180;
+      if (hat > 180) {
+        rotatePos = hat - 360;
+      } else {
+        rotatePos = hat;
+      }
     }
 
     SwerveModuleState[] states = RobotContainer.drive.getModuleStates();

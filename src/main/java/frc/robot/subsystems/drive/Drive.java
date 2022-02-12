@@ -55,7 +55,7 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             swerveModules[i] = new SwerveModule(Constants.SWERVE_DRIVE_CHANNELS[i],
                     Constants.SWERVE_ROTATION_CHANNELS[i],
-                    Preferences.getDouble(String.format("mod%nangle", i), 0));
+                    Preferences.getDouble("mod" + i + "angle", 0));
         }
 
         resetEncoders();
@@ -72,10 +72,15 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         updateOdometry();
         SmartDashboard.putNumber("gyro", getAngleDegrees());
-        SmartDashboard.putNumber("Front Right Swerve Module Rotation", getModuleRotation(0));
-        SmartDashboard.putNumber("Front Left Swerve Module Rotation", getModuleRotation(1));
-        SmartDashboard.putNumber("Back Left Swerve Module Rotation", getModuleRotation(2));
-        SmartDashboard.putNumber("Back Right Swerve Module Rotation", getModuleRotation(3));
+        SmartDashboard.putNumber("Front Right Swerve Module Relative", getModuleRotation(0));
+        SmartDashboard.putNumber("Front Left Swerve Module Relative", getModuleRotation(1));
+        SmartDashboard.putNumber("Back Left Swerve Module Relative", getModuleRotation(2));
+        SmartDashboard.putNumber("Back Right Swerve Module Relative", getModuleRotation(3));
+        SmartDashboard.putNumber("Front Right Swerve Module Absolute", getModuleAbsoluteRotation(0));
+        SmartDashboard.putNumber("Front Left Swerve Module Absolute", getModuleAbsoluteRotation(1));
+        SmartDashboard.putNumber("Back Left Swerve Module Absolute", getModuleAbsoluteRotation(2));
+        SmartDashboard.putNumber("Back Right Swerve Module Absolute", getModuleAbsoluteRotation(3));
+
         ChassisSpeeds speeds = kinematics.toChassisSpeeds(getModuleStates());
         SmartDashboard.putNumber("Drive speed", Math.sqrt(speeds.vxMetersPerSecond * speeds.vyMetersPerSecond));
         SmartDashboard.putNumber("Drive degrees per second", speeds.omegaRadiansPerSecond * (180 / Math.PI));
@@ -227,6 +232,10 @@ public class Drive extends SubsystemBase {
         return swerveModules[index].getRelativeRotation();
     }
 
+    public double getModuleAbsoluteRotation(int index) {
+        return swerveModules[index].getAbsoluteRotation();
+    }
+
     /**
      * Sets the states of all swerve modules based on input
      * <code>ChassisSpeeds</code>
@@ -306,7 +315,7 @@ public class Drive extends SubsystemBase {
     public void resetZeros() {
         for (int i = 0; i < 4; i++) {
             double angle = swerveModules[i].updateRotationOffset();
-            Preferences.setDouble(String.format("mod%nangle", i), angle);
+            Preferences.setDouble("mod" + i + "angle", angle);
         }
     }
 

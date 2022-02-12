@@ -7,11 +7,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ClimberToBottom;
+import frc.robot.commands.ClimberToTop;
+import frc.robot.commands.DriveFeedbackWhileDisabled;
+import frc.robot.commands.DriveMakeAllCurrentModuleAnglesZero;
+import frc.robot.commands.DriveOneModule;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.commands.DriveZeroGyro;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.drive.Drive;
@@ -78,18 +85,24 @@ public class RobotContainer {
    */
   public RobotContainer() {
     drive = new Drive();
-    compressor = new Compressor();
-    climber = new Climber();
-    limelight = new Limelight();
-    intake[0] = new Intake(0);
-    intake[1] = new Intake(1);
-    feeder[0] = new Feeder(0);
-    feeder[1] = new Feeder(1);
-    shooter[0] = new Shooter(0);
-    shooter[1] = new Shooter(1);
-    hood = new Hood();
+    SmartDashboard.putData("Rotate Module", new DriveFeedbackWhileDisabled());
+    SmartDashboard.putData("Zero Modules", new DriveMakeAllCurrentModuleAnglesZero());
 
-    // drive.setDefaultCommand(new DriveWithGamepad());
+    // compressor = new Compressor();
+    climber = new Climber();
+    // limelight = new Limelight();
+    // intake[0] = new Intake(0);
+    // intake[1] = new Intake(1);
+    // feeder[0] = new Feeder(0);
+    // feeder[1] = new Feeder(1);
+    // shooter[0] = new Shooter(0);
+    // shooter[1] = new Shooter(1);
+    // hood = new Hood();
+    SmartDashboard.putData("Front Right Control", new DriveOneModule(0));
+    SmartDashboard.putData("Front Left Control", new DriveOneModule(1));
+    SmartDashboard.putData("Back Left Control", new DriveOneModule(2));
+    SmartDashboard.putData("Back Right Control", new DriveOneModule(3));
+    drive.setDefaultCommand(new DriveWithGamepad(true, false));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -103,6 +116,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    driverLB.whenActive(new DriveZeroGyro());
+    driverY.whileActiveContinuous(new ClimberToTop());
+    driverA.whileActiveContinuous(new ClimberToBottom());
   }
 
   /**
@@ -124,19 +140,19 @@ public class RobotContainer {
   }
 
   public static double getDriverLeftStickX() {
-    return driver.getLeftX();
+    return Math.abs(driver.getLeftX()) < 0.1 ? 0 : driver.getLeftX();
   }
 
   public static double getDriverLeftStickY() {
-    return driver.getLeftY();
+    return Math.abs(driver.getLeftY()) < 0.1 ? 0 : driver.getLeftY();
   }
 
   public static double getDriverRightStickX() {
-    return driver.getRightX();
+    return Math.abs(driver.getRightX()) < 0.1 ? 0 : driver.getRightX();
   }
 
   public static double getDriverRightStickY() {
-    return driver.getRightY();
+    return Math.abs(driver.getRightY()) < 0.1 ? 0 : driver.getRightY();
   }
 
   public static int getDriverDPad() {

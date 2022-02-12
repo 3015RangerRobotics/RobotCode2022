@@ -174,7 +174,7 @@ public class SwerveModule {
      * @return the new offset in degrees
      */
     public double updateRotationOffset() {
-        rotationOffset = getAbsoluteRotation();
+        rotationOffset += getAbsoluteRotation();
         return rotationOffset;
     }
 

@@ -49,11 +49,12 @@ public class DriveWithGamepad extends CommandBase {
     double leftStickX = RobotContainer.getDriverLeftStickX();
 
     double rotationOutput = rightStickX;
+
     if (isCounterRotationOn && Math.abs(rotationOutput) < 0.05) {
       rotationOutput = rotationController.calculate(RobotContainer.drive.getAngleDegrees(), currentAngle);
       if ((Math.abs(leftStickX) == 0 && Math.abs(leftStickY) == 0) && RobotContainer.getDriverLeftTrigger() <= 0.5)
         rotationOutput = 0;
-        
+
       // SmartDashboard.putNumber("PIDTarget", currentAngle);
       // SmartDashboard.putNumber("PIDActual",
       // RobotContainer.drive.getAngleDegrees());
@@ -62,7 +63,7 @@ public class DriveWithGamepad extends CommandBase {
       rotationController.reset(currentAngle);
       rotationOutput *= Constants.DRIVE_MAX_ANGULAR_VELOCITY;
     }
-
+    System.out.println("rotation:" + rotationOutput);
     double xVel = -leftStickY * Constants.SWERVE_MAX_VELOCITY_METERS * trainingWheels;
     double yVel = leftStickX * Constants.SWERVE_MAX_VELOCITY_METERS * trainingWheels;
 
