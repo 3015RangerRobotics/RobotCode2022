@@ -13,6 +13,8 @@ import frc.robot.RobotContainer;
 
 public class DriveWithGamepad extends CommandBase {
 
+  private boolean isFieldRelative;
+  private boolean isCounterRotationOn;
   ProfiledPIDController rotationController;
   double currentAngle;
   final double trainingWheels = 0.6;
@@ -22,12 +24,14 @@ public class DriveWithGamepad extends CommandBase {
    * 
    * Runs indefinitely.
    */
-  public DriveWithGamepad() {
+  public DriveWithGamepad(boolean isFieldRelative, boolean isCounterRotationOn) {
     addRequirements(RobotContainer.drive);
     rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P,
         Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,
         new TrapezoidProfile.Constraints(Constants.DRIVE_MAX_ANGULAR_VELOCITY, Constants.DRIVE_MAX_ANGULAR_ACCEL));
     rotationController.enableContinuousInput(-180, 180);
+    this.isFieldRelative = isFieldRelative;
+    this.isCounterRotationOn = isCounterRotationOn;
   }
 
   // Called when the command is initially scheduled.
@@ -45,10 +49,11 @@ public class DriveWithGamepad extends CommandBase {
     double leftStickX = RobotContainer.getDriverLeftStickX();
 
     double rotationOutput = rightStickX;
-    if (Math.abs(rotationOutput) == 0) {
+    if (isCounterRotationOn && Math.abs(rotationOutput) < 0.05) {
       rotationOutput = rotationController.calculate(RobotContainer.drive.getAngleDegrees(), currentAngle);
       if ((Math.abs(leftStickX) == 0 && Math.abs(leftStickY) == 0) && RobotContainer.getDriverLeftTrigger() <= 0.5)
         rotationOutput = 0;
+        
       // SmartDashboard.putNumber("PIDTarget", currentAngle);
       // SmartDashboard.putNumber("PIDActual",
       // RobotContainer.drive.getAngleDegrees());
@@ -63,7 +68,7 @@ public class DriveWithGamepad extends CommandBase {
 
     Translation2d corrections = new Translation2d(xVel, yVel);
 
-    RobotContainer.drive.drive(corrections.getX(), corrections.getY(), rotationOutput, true);
+    RobotContainer.drive.drive(corrections.getX(), corrections.getY(), rotationOutput, isFieldRelative);
   }
 
   // Called once the command ends or is interrupted.

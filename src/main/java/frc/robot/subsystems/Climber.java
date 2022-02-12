@@ -63,6 +63,7 @@ public class Climber extends SubsystemBase {
         SmartDashboard.putBoolean("Bottom climber switch", getBottomLimit());
         SmartDashboard.putBoolean("Beam break sensor", getBeamBreakSensor());
         //TODO: push both encoder values to SmartDashboard for testing
+        SmartDashboard.putNumber("Climber position", getClimberPos());
     }
 
     /**

@@ -117,9 +117,9 @@ public final class Constants {
     /* Climber Constants */
     public static final double CLIMBER_METERS_PER_PULSE = 0.0000056696;// Did: Falcon500 has 2048 count per revolution.
                                                                        // 12T on fal to 84T on same shaft w/ 12T sprock
-                                                                       // to 15T sprock to Unknoown diameter sprock
+                                                                       // to 15T sprock to Unknown diameter sprock
                                                                        // (rememner 16 Tooth sprock)
-    public static final double CLIMBER_MAX_HEIGHT_METERS = 0;
+    public static final double CLIMBER_MAX_HEIGHT_METERS = .7;
     public static final double CLIMBER_HEIGHT_TOLERANCE = .005;
 
     public static final double CLIMBER_RAISE_P = 1;
