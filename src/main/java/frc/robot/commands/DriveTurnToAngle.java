@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -13,6 +14,7 @@ import frc.robot.RobotContainer;
 public class DriveTurnToAngle extends CommandBase {
   double targetAngle;
   ProfiledPIDController rotationController;
+
   /** Creates a new DriveTurnToAngle. */
   public DriveTurnToAngle(double targetAngle) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,13 +28,18 @@ public class DriveTurnToAngle extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double rotationOutput = rotationController.calculate(RobotContainer.drive.getAngleDegrees(), targetAngle);
     RobotContainer.drive.drive(0, 0, rotationOutput, false);
+
+    SmartDashboard.putNumber("PIDTarget", targetAngle);
+    SmartDashboard.putNumber("PIDActual", RobotContainer.drive.getAngleDegrees());
+
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +51,6 @@ public class DriveTurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(targetAngle - RobotContainer.drive.getAngleDegrees()) < 2;
+    return false;
   }
 }

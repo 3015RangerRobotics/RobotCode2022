@@ -12,13 +12,24 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ClimberStop;
 import frc.robot.commands.ClimberToBottom;
 import frc.robot.commands.ClimberToTop;
+import frc.robot.commands.CompressorSetEnabled;
 import frc.robot.commands.DriveFeedbackWhileDisabled;
 import frc.robot.commands.DriveMakeAllCurrentModuleAnglesZero;
 import frc.robot.commands.DriveOneModule;
+import frc.robot.commands.DriveTurnToAngle;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.DriveZeroGyro;
+import frc.robot.commands.FloppyArmDown;
+import frc.robot.commands.FloppyArmUp;
+import frc.robot.commands.HoodDPad;
+import frc.robot.commands.HoodHome;
+import frc.robot.commands.IntakeBall;
+import frc.robot.commands.PurgeBall;
+import frc.robot.commands.ShooterSetSpeed;
+import frc.robot.commands.ShooterStop;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.drive.Drive;
@@ -88,21 +99,31 @@ public class RobotContainer {
     SmartDashboard.putData("Rotate Module", new DriveFeedbackWhileDisabled());
     SmartDashboard.putData("Zero Modules", new DriveMakeAllCurrentModuleAnglesZero());
 
-    // compressor = new Compressor();
+    compressor = new Compressor();
+    // new CompressorSetEnabled(true);
     climber = new Climber();
     // limelight = new Limelight();
-    // intake[0] = new Intake(0);
-    // intake[1] = new Intake(1);
-    // feeder[0] = new Feeder(0);
-    // feeder[1] = new Feeder(1);
-    // shooter[0] = new Shooter(0);
-    // shooter[1] = new Shooter(1);
-    // hood = new Hood();
+    intake[0] = new Intake(0);
+    intake[1] = new Intake(1);
+    feeder[0] = new Feeder(0);
+    feeder[1] = new Feeder(1);
+    shooter[0] = new Shooter(0);
+    shooter[1] = new Shooter(1);
+    hood = new Hood();
     SmartDashboard.putData("Front Right Control", new DriveOneModule(0));
     SmartDashboard.putData("Front Left Control", new DriveOneModule(1));
     SmartDashboard.putData("Back Left Control", new DriveOneModule(2));
     SmartDashboard.putData("Back Right Control", new DriveOneModule(3));
-    drive.setDefaultCommand(new DriveWithGamepad(true, false));
+    SmartDashboard.putData("Turn to 0", new DriveTurnToAngle(0));
+    SmartDashboard.putData("Turn to 90", new DriveTurnToAngle(90));
+    SmartDashboard.putData("Hood home", new HoodHome());
+    SmartDashboard.putData("Enable Compressor", new CompressorSetEnabled(true));
+    SmartDashboard.putData("Disable Compressor", new CompressorSetEnabled(false));
+    SmartDashboard.putData("Floppy Arm Down", new FloppyArmDown());
+    SmartDashboard.putData("Floppy Arm Up", new FloppyArmUp());
+    drive.setDefaultCommand(new DriveWithGamepad(true, true));
+    // hood.setDefaultCommand(new HoodDPad());
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -116,9 +137,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverLB.whenActive(new DriveZeroGyro());
-    driverY.whileActiveContinuous(new ClimberToTop());
-    driverA.whileActiveContinuous(new ClimberToBottom());
+    // driverLB.whenActive(new DriveZeroGyro());
+    // driverA.whileActiveContinuous(new IntakeBall(1));
+    // driverB.whileActiveContinuous(new PurgeBall(1));
+    driverLT.whileActiveContinuous(new ShooterSetSpeed(1, 4000)).whenInactive(new ShooterStop());
+    driverY.whenActive(new ClimberToTop());
+    driverX.whenActive(new ClimberStop());
+    driverA.whenActive(new ClimberToBottom());
+    driverLB.whenActive(new FloppyArmDown());
+    driverRB.whenActive(new FloppyArmUp());
   }
 
   /**
@@ -140,19 +167,19 @@ public class RobotContainer {
   }
 
   public static double getDriverLeftStickX() {
-    return Math.abs(driver.getLeftX()) < 0.1 ? 0 : driver.getLeftX();
+    return Math.abs(driver.getLeftX()) < Constants.DRIVE_DEADZONE ? 0 : driver.getLeftX();
   }
 
   public static double getDriverLeftStickY() {
-    return Math.abs(driver.getLeftY()) < 0.1 ? 0 : driver.getLeftY();
+    return Math.abs(driver.getLeftY()) < Constants.DRIVE_DEADZONE ? 0 : driver.getLeftY();
   }
 
   public static double getDriverRightStickX() {
-    return Math.abs(driver.getRightX()) < 0.1 ? 0 : driver.getRightX();
+    return Math.abs(driver.getRightX()) < Constants.DRIVE_DEADZONE ? 0 : driver.getRightX();
   }
 
   public static double getDriverRightStickY() {
-    return Math.abs(driver.getRightY()) < 0.1 ? 0 : driver.getRightY();
+    return Math.abs(driver.getRightY()) < Constants.DRIVE_DEADZONE ? 0 : driver.getRightY();
   }
 
   public static int getDriverDPad() {

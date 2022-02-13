@@ -7,27 +7,28 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Compressor extends SubsystemBase {
   PneumaticHub pneumaticHub;
-  edu.wpi.first.wpilibj.Compressor compressor;
+  // edu.wpi.first.wpilibj.Compressor compressor;
 
   /** Creates a new Compressor. */
   public Compressor() {
     pneumaticHub = new PneumaticHub();
-    compressor = pneumaticHub.makeCompressor();
+    // compressor = pneumaticHub.makeCompressor();
     setCompressorEnabled(true);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // SmartDashboard.putNumber("Pressure (psi)", (int) getPressure());
+    SmartDashboard.putNumber("Pressure (psi)", (int) getPressure());
   }
 
   public void setCompressorEnabled(boolean enabled) {
     if (enabled) {
-      pneumaticHub.enableCompressorAnalog(95, 120);
+      pneumaticHub.enableCompressorAnalog(95, 110);
     } else {
       pneumaticHub.disableCompressor();
     }

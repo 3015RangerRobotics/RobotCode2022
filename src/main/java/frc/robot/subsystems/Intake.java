@@ -1,14 +1,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-	private VictorSPX intakeMotor;
+	private TalonSRX intakeMotor;
 	private DigitalInput intakeSensor;
 
 	/**
@@ -19,8 +19,8 @@ public class Intake extends SubsystemBase {
 	}
 
 	public Intake(int id) {
-		intakeMotor = new VictorSPX(Constants.INTAKE_MOTORS[id]);
-		//TODO: Construct the intakeSensor values are in Constants already
+		intakeMotor = new TalonSRX(Constants.INTAKE_MOTORS[id]);
+		intakeSensor = new DigitalInput(Constants.INTAKE_BALL_DETECTORS[id]);
 	}
 
 	public void intake() {

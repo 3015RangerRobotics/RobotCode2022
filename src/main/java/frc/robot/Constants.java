@@ -36,23 +36,26 @@ public final class Constants {
     /* Climber */
     public static final int CLIMBER_MOTOR = 31;
 
-    /* REV ID's */
     /* Hood */
-    public static final int HOOD_MOTOR = 11; // { left and right }
+    public static final int HOOD_MOTOR = 28;
+
+    /* Compressor */
+    public static final int PNEUMATIC_HUB = 1;
 
     /* Solenoid ID's */
     /* Climber */
-    public static final int CLIMBER_SOLENOID_UP = 1; // TEMP
-    public static final int CLIMBER_SOLENOID_DOWN = 2; // TEMP
+    public static final int CLIMBER_SOLENOID_UP = 0;
+    public static final int CLIMBER_SOLENOID_DOWN = 1;
 
     /* Digital IO ID's */
     /* climber */
     public static final int CLIMBER_BOTTOM_SWITCH = 0;
     public static final int CLIMBER_BEAMBREAK_SENSOR = 1;
+    public static final int HOOD_SWITCH_CHANNEL = 4;
     public static final int[] FEEDER_BALL_DETECTORS = { 2, 3 }; // { left, right }
-    public static final int[] INTAKE_BALL_DETECTORS = { 4, 5 }; // { left, right }
-    public static final int ENCODER_INPUT_A = 6;
-    public static final int ENCODER_INPUT_B = 7;
+    public static final int[] INTAKE_BALL_DETECTORS = { 5, 6 }; // { left, right }
+    public static final int ENCODER_INPUT_A = 7;
+    public static final int ENCODER_INPUT_B = 8;
 
     /* -------------- CONSTANTS -------------- */
     /* Drive Constants */
@@ -63,7 +66,7 @@ public final class Constants {
     public static final double SWERVE_DEGREES_PER_PULSE = 360.0 / 4096.0;
     public static final double DRIVE_DEADZONE = 0.15;
 
-    public static final double DRIVE_MAX_ANGULAR_ACCEL = 0;
+    public static final double DRIVE_MAX_ANGULAR_ACCEL = 600;
     public static final double DRIVE_MAX_ANGULAR_VELOCITY = 300;
 
     public static final double SWERVE_CENTER_DISTANCE = .345;
@@ -73,15 +76,15 @@ public final class Constants {
     public static final double SWERVE_DRIVE_D = -25;
     public static final double SWERVE_DRIVE_F = 0;
 
-    public static final double SWERVE_ROTATION_P = 16;
-    public static final double SWERVE_ROTATION_I = .04;
+    public static final double SWERVE_ROTATION_P = 8;
+    public static final double SWERVE_ROTATION_I = 0.2;
     public static final double SWERVE_ROTATION_I_ZONE = 10 / SWERVE_DEGREES_PER_PULSE;
-    public static final double SWERVE_ROTATION_D = 1600;
+    public static final double SWERVE_ROTATION_D = 2500;
     public static final double SWERVE_ROTATION_F = 0;
 
-    public static final double DRIVE_ROTATION_CONTROLLER_P = 0;
+    public static final double DRIVE_ROTATION_CONTROLLER_P = 8;
     public static final double DRIVE_ROTATION_CONTROLLER_I = 0;
-    public static final double DRIVE_ROTATION_CONTROLLER_D = 0;
+    public static final double DRIVE_ROTATION_CONTROLLER_D = 0.5;
     public static final double DRIVE_ROTATION_CONTROLLER_F = 0;
 
     public static final double DRIVE_POS_ERROR_CONTROLLER_P = 0;
@@ -97,10 +100,10 @@ public final class Constants {
     /* Shooter Constants */
     public static final double SHOOTER_MOTOR_SPEED = 10;
 
-    public static final double SHOOTER_P = 1;
+    public static final double SHOOTER_P = 0.5;
     public static final double SHOOTER_I = 0;
-    public static final double SHOOTER_D = 0;
-    public static final double SHOOTER_F = 0;
+    public static final double SHOOTER_D = 5;
+    public static final double SHOOTER_F = 0.0468;
 
     public static final double SHOOTER_SHOOT_P = 1;
     public static final double SHOOTER_SHOOT_I = 0;
@@ -130,7 +133,7 @@ public final class Constants {
     public static final double CLIMBER_LOWER_P = 1;
     public static final double CLIMBER_LOWER_I = 0;
     public static final double CLIMBER_LOWER_D = 0;
-    public static final double CLIMBER_LOWER_F = 0;
+    public static final double CLIMBER_LOWER_F = 3;
 
     public static final double CLIMBER_ARM_DEGREES_PER_PULSE = 0.17578;// found! TODO:this is a RevThroughBoreEncoder
                                                                        // 2048 pulses per rev, Find this value
@@ -145,19 +148,18 @@ public final class Constants {
     public static final double HOOD_CONTROLLER_I = 0;
     public static final double HOOD_CONTROLLER_D = 0;
     public static final double HOOD_CONTROLLER_F = 0;
-    public static final double HOOD_DEGREES_PER_PULSE = (360 / 420) * (18 / 36) * (1 / 42);// finding! 0.00856? TODO:
-                                                                                           // Get the gear ratios- 18:36
-                                                                                           // ?,
-    // NEO550 have 42 counts per rotation.
-    public static final double HOOD_MAX_ANGLE = 0;
+
+    public static final double HOOD_DEGREES_PER_PULSE = .82 * (24.0 / 18.0) * (1.0 / 40.0);// * (1.0 / 42.0);//(360.0 /
+                                                                                           // 420.0)
+    public static final double HOOD_MAX_ANGLE = 47 * 0.82;// (360.0 / 420.0);
 
     /* Feeder Constants */
-    public static final double FEEDER_INTAKE_SPEED = 1;
-    public static final double FEEDER_PURGE_SPEED = -1;
-    public static final double FEEDER_SHOOT_SPEED = 1;
+    public static final double FEEDER_INTAKE_SPEED = 0.8;
+    public static final double FEEDER_PURGE_SPEED = -0.8;
+    public static final double FEEDER_SHOOT_SPEED = 0.8;
 
     /* Intake Constants */
-    public static final double INTAKE_INTAKE_SPEED = 1;
-    public static final double INTAKE_PURGE_SPEED = -1;
+    public static final double INTAKE_INTAKE_SPEED = 0.8;
+    public static final double INTAKE_PURGE_SPEED = -0.8;
 
 }

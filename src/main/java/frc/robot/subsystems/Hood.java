@@ -5,34 +5,18 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxLimitSwitch;
-import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.ControlType;
-// import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxLimitSwitch.Type;
 
-import edu.wpi.first.wpilibj.Timer;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-// import frc.robot.RobotContainer;
 
 public class Hood extends SubsystemBase {
     private CANSparkMax hoodMotor;
-    private SparkMaxLimitSwitch reverseLimitSwitch;
-    private double setPos = 0;
-    private Timer timer = new Timer();
-
-    private enum State {
-        kSetPositionForward,
-        kSetPositionBackwards,
-        kNeutral,
-        kHoming
-    }
-
-    public State state = State.kNeutral;
+    private DigitalInput limitSwitch;
 
     public Hood() {
         hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
@@ -44,24 +28,19 @@ public class Hood extends SubsystemBase {
         hoodMotor.getPIDController().setOutputRange(-1, 1);
         // hoodMotor.setInverted(true);
         // hoodMotor.getEncoder().setInverted(true);
-        hoodMotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.HOOD_MAX_ANGLE);
+        hoodMotor.setSoftLimit(SoftLimitDirection.kForward,
+                (float) (Constants.HOOD_MAX_ANGLE / Constants.HOOD_DEGREES_PER_PULSE));
         hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
         hoodMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-        reverseLimitSwitch = hoodMotor.getReverseLimitSwitch(Type.kNormallyOpen);
+        limitSwitch = new DigitalInput(Constants.HOOD_SWITCH_CHANNEL);
         enableForwardSoftLimit(true);
+        setReverseLimit(true);
     }
 
     @Override
     public void periodic() {
-        switch (state) {
-            case kSetPositionForward:
-                setHoodPosition(5);
-                break;
-
-            case kSetPositionBackwards:
-                setHoodPosition(-5);
-                break;
-        }
+        SmartDashboard.putBoolean("Hood Limit Switch", getReverseLimit());
+        SmartDashboard.putNumber("Hood Angle", getHoodPosition());
     }
 
     public double getHoodPosition() {
@@ -73,11 +52,19 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean getReverseLimit() {
-        return hoodMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen).isPressed();
+        return limitSwitch.get();
+    }
+
+    public void setReverseLimit(boolean enable) {
+        hoodMotor.enableSoftLimit(SoftLimitDirection.kReverse, enable);
     }
 
     public void setHoodOutputPercentage(double percentage) {
+        // if (percentage < 0 && getReverseLimit()) {
+        // hoodMotor.set(0);
+        // } else {
         hoodMotor.set(percentage);
+        // }
     }
 
     public void enableForwardSoftLimit(boolean enabled) {

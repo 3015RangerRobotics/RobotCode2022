@@ -4,27 +4,20 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Shooter;
 
-public class ShooterSetSpeed extends InstantCommand {
-  double rpm;
-  private Shooter shooter;
-
-  /** Creates a new ShooterSetSpeed. */
-  public ShooterSetSpeed(int side, double rpm) {
+public class ClimberStop extends InstantCommand {
+  /** Creates a new ClimberStop. */
+  public ClimberStop() {
+    addRequirements(RobotContainer.climber);
     // Use addRequirements() here to declare subsystem dependencies.
-    this.shooter = RobotContainer.shooter[side];
-    addRequirements(shooter);
-    this.rpm = rpm;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setRPM(rpm);
+    RobotContainer.climber.setOutput(0);
   }
 
   // Called once the command ends or is interrupted.

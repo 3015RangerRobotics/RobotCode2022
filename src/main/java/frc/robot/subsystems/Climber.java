@@ -44,6 +44,10 @@ public class Climber extends SubsystemBase {
         climberMotor.config_kI(0, Constants.CLIMBER_RAISE_I);
         climberMotor.config_kD(0, Constants.CLIMBER_RAISE_D);
         climberMotor.config_kF(0, Constants.CLIMBER_RAISE_F);
+        climberMotor.config_kP(1, Constants.CLIMBER_LOWER_P);
+        climberMotor.config_kI(1, Constants.CLIMBER_LOWER_I);
+        climberMotor.config_kD(1, Constants.CLIMBER_LOWER_D);
+        climberMotor.config_kF(1, Constants.CLIMBER_LOWER_F);
         // climberMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
         // LimitSwitchNormal.NormallyOpen, deviceID)
 
@@ -177,5 +181,9 @@ public class Climber extends SubsystemBase {
 
     public void resetArmAngle() {
         armEncoder.reset();
+    }
+
+    public void setPIDSlot(int slot) {
+        climberMotor.selectProfileSlot(0, slot);
     }
 }

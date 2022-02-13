@@ -9,37 +9,38 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 
 public class HoodHome extends CommandBase {
-  private Hood hood;
 
   /** Creates a new HoodHome. */
   public HoodHome() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.hood);
+    addRequirements(RobotContainer.hood);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.hood.setReverseLimit(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    hood.setHoodOutputPercentage(-0.05);
+    RobotContainer.hood.setHoodOutputPercentage(-0.1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    hood.setHoodOutputPercentage(0);
+    RobotContainer.hood.setHoodOutputPercentage(0);
+    RobotContainer.hood.setReverseLimit(true);
     if (!interrupted) {
-      hood.resetZero();
+      RobotContainer.hood.resetZero();
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return hood.getReverseLimit();
+    return RobotContainer.hood.getReverseLimit();
   }
 }

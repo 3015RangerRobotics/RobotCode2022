@@ -1,16 +1,17 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
-    public VictorSPX topMotor;
-    public VictorSPX bottomMotor;
+    public TalonSRX topMotor;
     public DigitalInput ballDetector;
     boolean doPeriodic = false;
     private double id;
@@ -24,8 +25,9 @@ public class Feeder extends SubsystemBase {
     }
 
     public Feeder(int id) {
-        topMotor = new VictorSPX(Constants.FEEDER_TOP_MOTORS[id]);
+        topMotor = new TalonSRX(Constants.FEEDER_TOP_MOTORS[id]);
         ballDetector = new DigitalInput(Constants.FEEDER_BALL_DETECTORS[id]);
+        topMotor.setInverted(true);
         this.id = id;
         doPeriodic = true;
     }

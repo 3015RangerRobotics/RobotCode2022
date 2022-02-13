@@ -21,6 +21,7 @@ public class ClimberToBottom extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.climber.setPIDSlot(1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,12 +33,13 @@ public class ClimberToBottom extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.climber.setOutput(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.climber.getClimberPos() < Constants.CLIMBER_HEIGHT_TOLERANCE; // 0.5 cm
+    // return RobotContainer.climber.getClimberPos() <
+    // Constants.CLIMBER_HEIGHT_TOLERANCE; // 0.5 cm
+    return false;
   }
 }

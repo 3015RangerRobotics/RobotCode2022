@@ -69,6 +69,9 @@ public class DriveOneModule extends CommandBase {
     SmartDashboard.putNumber("Back Right Swerve Module Velocity",
         states[Drive.ModuleIndices.kBackRight.index].speedMetersPerSecond);
 
+    SmartDashboard.putNumber("PIDTarget", rotatePos);
+    SmartDashboard.putNumber("PIDActual", RobotContainer.drive.getModuleAbsoluteRotation(index));
+
     RobotContainer.drive.driveOneModule(index, rotatePos, RobotContainer.getDriverLeftStickY(),
         ControlMode.PercentOutput);
   }

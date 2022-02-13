@@ -16,7 +16,6 @@ public class HoodDPad extends CommandBase {
   public HoodDPad() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.hood);
-    this.hoodPos = hoodPos;
   }
 
   // Called when the command is initially scheduled.
@@ -31,10 +30,10 @@ public class HoodDPad extends CommandBase {
     double speed = 0;
     switch (hat) {
       case 0:
-        speed = 0.05;
+        speed = 0.2;
         break;
       case 180:
-        speed = -0.05;
+        speed = -0.2;
         break;
       default:
         break;

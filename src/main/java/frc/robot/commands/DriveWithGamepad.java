@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -17,7 +18,7 @@ public class DriveWithGamepad extends CommandBase {
   private boolean isCounterRotationOn;
   ProfiledPIDController rotationController;
   double currentAngle;
-  final double trainingWheels = 0.6;
+  final double trainingWheels = 0.75;
 
   /**
    * Command for controlling the robot with the gamepad.

@@ -12,6 +12,8 @@ import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
 	public TalonFX shooter;
+	public boolean doPeriodic = false;
+	public double lastSetpoint = 0;
 
 	/**
 	 * Do not use
@@ -47,12 +49,16 @@ public class Shooter extends SubsystemBase {
 		shooter.config_kD(1, Constants.SHOOTER_SHOOT_D);
 		shooter.config_kF(1, Constants.SHOOTER_SHOOT_F);
 
-		// should a switch statement be used?
+		doPeriodic = true;
 	}
 
 	@Override
 	public void periodic() {
-		// DO NOT PUT ANYTHING HERE EVER
+		if (doPeriodic) {
+			SmartDashboard.putNumber("Shooter RPM", getRPM());
+			SmartDashboard.putNumber("PIDTarget", lastSetpoint);
+			SmartDashboard.putNumber("PIDActual", getRPM());
+		}
 	}
 
 	/**
@@ -67,10 +73,12 @@ public class Shooter extends SubsystemBase {
 	 */
 	public void setRPM(double rpm) {
 		shooter.set(ControlMode.Velocity, rpm / 10 / 60 * Constants.SHOOTER_PULSES_PER_ROTATION);
+		lastSetpoint = rpm;
 	}
 
 	public void stop() {
 		shooter.set(ControlMode.PercentOutput, 0);
+		lastSetpoint = 0;
 	}
 
 	public void purgeShooter() {
