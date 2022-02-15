@@ -35,7 +35,7 @@ public class Shooter extends SubsystemBase {
 		shooter.enableVoltageCompensation(true);
 		shooter.configVoltageCompSaturation(12.5);
 
-		shooter.setInverted(false);
+		shooter.setInverted(id == 0);
 		shooter.setSelectedSensorPosition(0);
 		shooter.setSensorPhase(false);
 

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -28,6 +29,7 @@ import frc.robot.commands.HoodDPad;
 import frc.robot.commands.HoodHome;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.PurgeBall;
+import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
 import frc.robot.subsystems.*;
@@ -122,7 +124,7 @@ public class RobotContainer {
     SmartDashboard.putData("Floppy Arm Down", new FloppyArmDown());
     SmartDashboard.putData("Floppy Arm Up", new FloppyArmUp());
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
-    // hood.setDefaultCommand(new HoodDPad());
+    hood.setDefaultCommand(new HoodDPad());
 
     // Configure the button bindings
     configureButtonBindings();
@@ -137,15 +139,18 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // driverLB.whenActive(new DriveZeroGyro());
+    double staticSpeed = 3500;
+    driverLB.whenActive(new DriveZeroGyro());
     // driverA.whileActiveContinuous(new IntakeBall(1));
     // driverB.whileActiveContinuous(new PurgeBall(1));
-    driverLT.whileActiveContinuous(new ShooterSetSpeed(1, 4000)).whenInactive(new ShooterStop());
-    driverY.whenActive(new ClimberToTop());
-    driverX.whenActive(new ClimberStop());
-    driverA.whenActive(new ClimberToBottom());
-    driverLB.whenActive(new FloppyArmDown());
-    driverRB.whenActive(new FloppyArmUp());
+    driverLT.whileActiveContinuous( new ParallelCommandGroup(new ShooterSetSpeed(0, staticSpeed), new ShooterSetSpeed(1, staticSpeed))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    // driverY.and(driverX.negate()).whenActive(new ClimberToTop(true));
+    // driverY.and(driverX).whenActive(new ClimberToTop(false));
+    driverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
+    driverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
+    // driverLB.whenActive(new FloppyArmDown());
+    // driverRB.whenActive(new FloppyArmUp());
+    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, staticSpeed, 0.5, 0), new ShootBalls(1, staticSpeed, 0.5, 0.25)));
   }
 
   /**

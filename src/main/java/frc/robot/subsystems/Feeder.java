@@ -27,19 +27,19 @@ public class Feeder extends SubsystemBase {
     public Feeder(int id) {
         topMotor = new TalonSRX(Constants.FEEDER_TOP_MOTORS[id]);
         ballDetector = new DigitalInput(Constants.FEEDER_BALL_DETECTORS[id]);
-        topMotor.setInverted(true);
+        topMotor.setInverted(id != 0);
         this.id = id;
         doPeriodic = true;
     }
 
     public boolean getBallDetector() {
-        return ballDetector.get();
+        return !ballDetector.get();
     }
 
     @Override
     public void periodic() {
         if (doPeriodic) {
-            SmartDashboard.putBoolean(String.format("Ball Detector $d", id), getBallDetector());
+            SmartDashboard.putBoolean("Feeder Sensor " + (id == 0 ? "Left" : "Right"), getBallDetector());
         }
     }
 

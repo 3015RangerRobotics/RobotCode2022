@@ -25,10 +25,10 @@ public final class Constants {
     public static final int DRIVE_PIGEON_CHANNEL = 1;
 
     /* Intake */
-    public static final int[] INTAKE_MOTORS = { 24, 26 }; // { left, right }
+    public static final int[] INTAKE_MOTORS = { 25, 26 }; // { left, right }
 
     /* Feeder */
-    public static final int[] FEEDER_TOP_MOTORS = { 25, 27 }; // { left, right }
+    public static final int[] FEEDER_TOP_MOTORS = { 24, 27 }; // { left, right }
 
     /* Shooter */
     public static final int[] SHOOTER_MOTORS = { 22, 23 }; // { left, right }
@@ -52,10 +52,10 @@ public final class Constants {
     public static final int CLIMBER_BOTTOM_SWITCH = 0;
     public static final int CLIMBER_BEAMBREAK_SENSOR = 1;
     public static final int HOOD_SWITCH_CHANNEL = 4;
-    public static final int[] FEEDER_BALL_DETECTORS = { 2, 3 }; // { left, right }
-    public static final int[] INTAKE_BALL_DETECTORS = { 5, 6 }; // { left, right }
-    public static final int ENCODER_INPUT_A = 7;
-    public static final int ENCODER_INPUT_B = 8;
+    public static final int[] FEEDER_BALL_DETECTORS = { 8, 7 }; // { left, right }
+    public static final int[] INTAKE_BALL_DETECTORS = { 9, 6 }; // { left, right }
+    public static final int ENCODER_INPUT_A = 2;
+    public static final int ENCODER_INPUT_B = 3;
 
     /* -------------- CONSTANTS -------------- */
     /* Drive Constants */
@@ -154,7 +154,7 @@ public final class Constants {
     public static final double HOOD_MAX_ANGLE = 47 * 0.82;// (360.0 / 420.0);
 
     /* Feeder Constants */
-    public static final double FEEDER_INTAKE_SPEED = 0.8;
+    public static final double FEEDER_INTAKE_SPEED = 0.5;
     public static final double FEEDER_PURGE_SPEED = -0.8;
     public static final double FEEDER_SHOOT_SPEED = 0.8;
 

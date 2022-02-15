@@ -6,19 +6,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter;
 
 public class ShooterStop extends CommandBase {
+  private Shooter shooter;
+
   /** Creates a new ShooterStop. */
 
-  public ShooterStop() {
+  public ShooterStop(int id) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.shooter);
+    this.shooter = RobotContainer.shooter[id];
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter[1].stop();
+    shooter.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

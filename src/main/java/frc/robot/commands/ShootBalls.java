@@ -17,21 +17,22 @@ public class ShootBalls extends CommandBase {
   private Feeder feeder;
   private Shooter shooter;
   double rpm;
-  double delay;
+  double loopDelay;
+  double initialDelay;
   Timer timer;
 
   public ShootBalls(int side, double rpm) {
-    this(side, rpm, 0);
+    this(side, rpm, 0, 0);
   }
 
   /** Creates a new ShootBalls. */
-  public ShootBalls(int side, double rpm, double delay) {
+  public ShootBalls(int side, double rpm, double loopDelay, double initialDelay) {
     this.intake = RobotContainer.intake[side];
     this.feeder = RobotContainer.feeder[side];
     this.shooter = RobotContainer.shooter[side];
     this.rpm = rpm;
     this.timer = new Timer();
-    this.delay = delay < 0.25 ? 0.25 : delay;
+    this.loopDelay = loopDelay < 0.25 ? 0.25 : loopDelay;
     addRequirements(intake, feeder, shooter);
   }
 
@@ -46,13 +47,18 @@ public class ShootBalls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.intake();
     shooter.setRPM(rpm);
-    double cycle = timer.get() % delay;
+    double time = timer.get() - initialDelay;
+    if (time < 0) {
+      return;
+    }
+    double cycle = timer.get() % loopDelay;
     if (cycle < 0.25) {
       feeder.setPercentOutput(Constants.FEEDER_SHOOT_SPEED);
+      intake.intake();
     } else {
       feeder.setPercentOutput(0);
+      intake.stop();
     }
   }
 
@@ -60,7 +66,7 @@ public class ShootBalls extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     intake.stop();
-    shooter.setRPM(0);
+    shooter.stop();
     feeder.setPercentOutput(0);
   }
 

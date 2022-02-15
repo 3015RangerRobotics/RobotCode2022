@@ -10,11 +10,18 @@ import frc.robot.RobotContainer;
 
 public class ClimberToTop extends CommandBase {
 
+  boolean isLoaded = false;
+
+  public ClimberToTop() {
+    this(false);
+  }
+
   /**
    * Creates a new ClimberToTop. Moves the climber to its top position. Finishes
    * when the climber is within 0.5cm of the top position.
    */
-  public ClimberToTop() {
+  public ClimberToTop(boolean isLoaded) {
+    this.isLoaded = isLoaded;
     addRequirements(RobotContainer.climber);
   }
 
@@ -27,7 +34,11 @@ public class ClimberToTop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.climber.setClimberPos(Constants.CLIMBER_MAX_HEIGHT_METERS);
+    if (isLoaded) {
+      RobotContainer.climber.setOutput(0.005);
+    } else {
+      RobotContainer.climber.setClimberPos(Constants.CLIMBER_MAX_HEIGHT_METERS);
+    }
   }
 
   // Called once the command ends or is interrupted.
