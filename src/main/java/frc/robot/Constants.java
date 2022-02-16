@@ -150,9 +150,8 @@ public final class Constants {
     public static final double HOOD_CONTROLLER_D = 0;
     public static final double HOOD_CONTROLLER_F = 0;
 
-    public static final double HOOD_DEGREES_PER_PULSE = .82 * (24.0 / 18.0) * (1.0 / 40.0);// * (1.0 / 42.0);//(360.0 /
-                                                                                           // 420.0)
-    public static final double HOOD_MAX_ANGLE = 47 * 0.82;// (360.0 / 420.0);
+    public static final double HOOD_DEGREES_PER_ROTATION = (1 / 933.333) * 360;
+    public static final double HOOD_MAX_ANGLE = 45;
 
     /* Feeder Constants */
     public static final double FEEDER_INTAKE_SPEED = 0.5;
@@ -162,5 +161,4 @@ public final class Constants {
     /* Intake Constants */
     public static final double INTAKE_INTAKE_SPEED = 0.8;
     public static final double INTAKE_PURGE_SPEED = -0.8;
-
 }

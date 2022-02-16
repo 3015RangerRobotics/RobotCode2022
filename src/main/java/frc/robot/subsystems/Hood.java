@@ -21,7 +21,6 @@ public class Hood extends SubsystemBase {
     public Hood() {
         hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
         hoodMotor.restoreFactoryDefaults();
-        hoodMotor.getEncoder().setPositionConversionFactor(Constants.HOOD_DEGREES_PER_PULSE);
         hoodMotor.getPIDController().setP(Constants.HOOD_CONTROLLER_P);
         hoodMotor.getPIDController().setI(Constants.HOOD_CONTROLLER_I);
         hoodMotor.getPIDController().setD(Constants.HOOD_CONTROLLER_D);
@@ -29,7 +28,7 @@ public class Hood extends SubsystemBase {
         // hoodMotor.setInverted(true);
         // hoodMotor.getEncoder().setInverted(true);
         hoodMotor.setSoftLimit(SoftLimitDirection.kForward,
-                (float) (Constants.HOOD_MAX_ANGLE / Constants.HOOD_DEGREES_PER_PULSE));
+                (float) (Constants.HOOD_MAX_ANGLE / Constants.HOOD_DEGREES_PER_ROTATION));
         hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
         hoodMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
         limitSwitch = new DigitalInput(Constants.HOOD_SWITCH_CHANNEL);
@@ -44,7 +43,7 @@ public class Hood extends SubsystemBase {
     }
 
     public double getHoodPosition() {
-        return hoodMotor.getEncoder().getPosition() * Constants.HOOD_DEGREES_PER_PULSE;
+        return hoodMotor.getEncoder().getPosition() * Constants.HOOD_DEGREES_PER_ROTATION;
     }
 
     public void setHoodPosition(double position) {

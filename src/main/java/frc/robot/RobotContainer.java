@@ -30,6 +30,8 @@ import frc.robot.commands.HoodHome;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.PurgeBall;
 import frc.robot.commands.ShootBalls;
+import frc.robot.commands.ShootBallsByNetwork;
+import frc.robot.commands.ShooterSetByNetwork;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
 import frc.robot.subsystems.*;
@@ -139,21 +141,21 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    double staticSpeed = 3500;
+    double staticSpeed = 4000;
     driverLB.whenActive(new DriveZeroGyro());
-    // driverA.whileActiveContinuous(new IntakeBall(1));
-    // driverB.whileActiveContinuous(new PurgeBall(1));
-    driverLT.whileActiveContinuous( new ParallelCommandGroup(new ShooterSetSpeed(0, staticSpeed), new ShooterSetSpeed(1, staticSpeed))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    // driverY.and(driverX.negate()).whenActive(new ClimberToTop(true));
-    // driverY.and(driverX).whenActive(new ClimberToTop(false));
-    driverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
+    driverLT.whileActiveContinuous( new ParallelCommandGroup(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    driverRB.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
     driverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
-    // driverLB.whenActive(new FloppyArmDown());
-    // driverRB.whenActive(new FloppyArmUp());
-    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, staticSpeed, 0.5, 0), new ShootBalls(1, staticSpeed, 0.5, 0.25)));
+    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
+    coDriverLT.whileActiveContinuous( new ParallelCommandGroup(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
+    coDriverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
+    coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
+    SmartDashboard.putNumber("shooter speed", staticSpeed);
   }
 
   /**
+   * 
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
