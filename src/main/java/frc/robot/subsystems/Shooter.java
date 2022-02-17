@@ -14,6 +14,7 @@ public class Shooter extends SubsystemBase {
 	public TalonFX shooter;
 	public boolean doPeriodic = false;
 	public double lastSetpoint = 0;
+	public double speed;
 
 	/**
 	 * Do not use
@@ -83,5 +84,14 @@ public class Shooter extends SubsystemBase {
 
 	public void purgeShooter() {
 		shooter.set(ControlMode.PercentOutput, -.2);
+	}
+	/*
+	public boolean isPrimed() {
+        double pos = RobotContainer.hood.getHoodPosition() + RobotContainer.limelight.getTargetAngleY();
+        return Math.abs(speed + (2 * Math.abs(pos)) - getRPM()) <= Constants.SHOOTER_TOLERANCE;
+    }
+	*/
+	public boolean isPrimed() {
+		return (Math.abs(speed - getRPM()) <= Constants.SHOOTER_TOLERANCE);
 	}
 }

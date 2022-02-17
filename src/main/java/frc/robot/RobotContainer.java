@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ClimbAllTheWay;
 import frc.robot.commands.ClimberStop;
 import frc.robot.commands.ClimberToBottom;
 import frc.robot.commands.ClimberToTop;
@@ -151,6 +152,9 @@ public class RobotContainer {
     coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
     coDriverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
     coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
+
+    driverStart.and(driverBack).whenActive(new ClimbAllTheWay());
+    
     SmartDashboard.putNumber("shooter speed", staticSpeed);
   }
 

@@ -18,7 +18,8 @@ public class DriveWithGamepad extends CommandBase {
   private boolean isCounterRotationOn;
   ProfiledPIDController rotationController;
   double currentAngle;
-  final double trainingWheels = 0.8;
+  double previousGyroAngle;
+  final double trainingWheels = 0.6;
 
   /**
    * Command for controlling the robot with the gamepad.
@@ -39,6 +40,7 @@ public class DriveWithGamepad extends CommandBase {
   @Override
   public void initialize() {
     currentAngle = RobotContainer.drive.getAngleDegrees();
+    previousGyroAngle = currentAngle;
     rotationController.reset(currentAngle);
   }
 
@@ -52,9 +54,14 @@ public class DriveWithGamepad extends CommandBase {
     double rotationOutput = rightStickX;
 
     if (isCounterRotationOn && Math.abs(rotationOutput) < 0.05) {
-      rotationOutput = rotationController.calculate(RobotContainer.drive.getAngleDegrees(), currentAngle);
-      if ((Math.abs(leftStickX) == 0 && Math.abs(leftStickY) == 0) && RobotContainer.getDriverLeftTrigger() <= 0.5)
-        rotationOutput = 0;
+      if (Math.abs(RobotContainer.drive.getAngleDegrees() - previousGyroAngle) < 1.8) {
+        rotationOutput = rotationController.calculate(RobotContainer.drive.getAngleDegrees(), currentAngle);
+      } else {
+        currentAngle = RobotContainer.drive.getAngleDegrees();
+        rotationController.reset(currentAngle);
+      }
+      // if ((Math.abs(leftStickX) == 0 && Math.abs(leftStickY) == 0) && RobotContainer.getDriverLeftTrigger() <= 0.5)
+      //   rotationOutput = 0;
 
       // SmartDashboard.putNumber("PIDTarget", currentAngle);
       // SmartDashboard.putNumber("PIDActual",
@@ -64,7 +71,7 @@ public class DriveWithGamepad extends CommandBase {
       rotationController.reset(currentAngle);
       rotationOutput *= Constants.DRIVE_MAX_ANGULAR_VELOCITY;
     }
-    System.out.println("rotation:" + rotationOutput);
+    previousGyroAngle = RobotContainer.drive.getAngleDegrees();
     double xVel = -leftStickY * Constants.SWERVE_MAX_VELOCITY_METERS * trainingWheels;
     double yVel = leftStickX * Constants.SWERVE_MAX_VELOCITY_METERS * trainingWheels;
 

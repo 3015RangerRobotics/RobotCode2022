@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -19,18 +21,27 @@ public class ClimbAllTheWay extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ClimberHomePosition(),
+        new WaitUntilCommand(RobotContainer.driverA::get),
         new ClimberToTop().withName("prepareToGrabBarTwo"),
-        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToPullRobotUpToBarTwo"),
+        // new PrintCommand("a"),
+        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToPullRobotUpToBarTwo"),
+        // new PrintCommand("b"),
         new ClimberToBottom().withName("pullRobotUpToBarTwo"),
-        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToReachToBarThree"),
-        new FloppyArmUp(Constants.CLIMBER_FLOPPY_BAR_TWO_TO_THREE).withName("reachToBarThree"),
-        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToGrabBarThree"),
+        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToReachToBarThree"),
+        new FloppyArmUp(),//Constants.CLIMBER_FLOPPY_BAR_TWO_TO_THREE).withName("reachToBarThree"),
+        new WaitCommand(2),
+        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToGrabBarThree"),
+        new ClimberToBarRelease(),
+        new WaitUntilCommand(RobotContainer.driverA::get),
         new ClimberToTop().withName("grabBarThree"),
-        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToPullUpToBarThree"),
+        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToPullUpToBarThree"),
         new ClimberToBottom().withName("pullUpToBarThree"),
-        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToDropToGrabBarFour"),
-        new FloppyArmDown(Constants.CLIMBER_FLOPPY_BAR_THREE_TO_FOUR).withName("dropToGrabBarFour"),
-        new WaitUntilCommand(RobotContainer.coDriverA).withName("waitToGrabBarFour"),
-        new ClimberToTop().withName("grabBarFour"));
+        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToDropToGrabBarFour"),
+        new FloppyArmDown(),//Constants.CLIMBER_FLOPPY_BAR_THREE_TO_FOUR).withName("dropToGrabBarFour"),
+        new WaitCommand(2),
+        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToGrabBarFour"),
+        new ClimberToBarRelease().withName("grabBarFour"),
+        new FloppyArmUp()
+    );
   }
 }

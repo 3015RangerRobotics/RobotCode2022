@@ -38,8 +38,8 @@ public class ClimberToBottom extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return RobotContainer.climber.getClimberPos() <
-    // Constants.CLIMBER_HEIGHT_TOLERANCE; // 0.5 cm
-    return false;
+    return RobotContainer.climber.getClimberPos() <
+    Constants.CLIMBER_HEIGHT_TOLERANCE; // 0.5 cm
+    // return false;
   }
 }

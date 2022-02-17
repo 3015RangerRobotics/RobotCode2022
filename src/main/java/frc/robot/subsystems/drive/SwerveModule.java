@@ -15,7 +15,7 @@ public class SwerveModule {
     private TalonSRX rotationMotor;
     private double rotationOffset;
 
-    SwerveModule(int driveChannel, int rotationChannel, double rotationOffset) {
+    SwerveModule(int driveChannel, int rotationChannel, double rotationOffset, int id) {
         this.rotationOffset = rotationOffset;
         driveMotor = new TalonFX(driveChannel);
         driveMotor.configFactoryDefault();
@@ -45,16 +45,16 @@ public class SwerveModule {
         rotationMotor.configFeedbackNotContinuous(true, 10);
         rotationMotor.setInverted(true);
         rotationMotor.setSensorPhase(true);
-        rotationMotor.config_kP(0, Constants.SWERVE_ROTATION_P);
-        rotationMotor.config_kI(0, Constants.SWERVE_ROTATION_I);
+        rotationMotor.config_kP(0, Constants.SWERVE_ROTATION_P[id]);
+        rotationMotor.config_kI(0, Constants.SWERVE_ROTATION_I[id]);
         rotationMotor.config_IntegralZone(0, Constants.SWERVE_ROTATION_I_ZONE);
-        rotationMotor.config_kD(0, Constants.SWERVE_ROTATION_D);
+        rotationMotor.config_kD(0, Constants.SWERVE_ROTATION_D[id]);
         // rotationMotor.config_kF(0, Constants.SWERVE_ROTATION_KV);
         // rotationMotor.configMotionCruiseVelocity(Constants.SWERVE_ROTATION_MAX_VELOCITY);
         // rotationMotor.configMotionAcceleration(Constants.SWERVE_ROTATION_MAX_ACCEL);
         rotationMotor.configPeakCurrentLimit(0);
         rotationMotor.configPeakCurrentDuration(0);
-        rotationMotor.configAllowableClosedloopError(0, 1 / Constants.SWERVE_DEGREES_PER_PULSE);
+        rotationMotor.configAllowableClosedloopError(0, 2.5 / Constants.SWERVE_DEGREES_PER_PULSE);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 10);
@@ -161,8 +161,10 @@ public class SwerveModule {
     public void setSwerveModuleState(SwerveModuleState state) {
         SwerveModuleState optimizedState = SwerveModuleState.optimize(state,
                 Rotation2d.fromDegrees(getAbsoluteRotation()));
-        if (Math.abs(optimizedState.speedMetersPerSecond) > 0) {
+        if (Math.abs(optimizedState.speedMetersPerSecond) > 0.1 * Constants.SWERVE_MAX_VELOCITY_METERS) {
             setRotationPosition(optimizedState.angle.getDegrees());
+        }else{
+            setStopRotation();
         }
         setDriveMotor(ControlMode.Velocity, optimizedState.speedMetersPerSecond / Constants.SWERVE_METERS_PER_PULSE);
     }
@@ -192,6 +194,10 @@ public class SwerveModule {
      */
     public void setStopMotor() {
         driveMotor.set(ControlMode.PercentOutput, 0);
+        rotationMotor.set(ControlMode.PercentOutput, 0);
+    }
+
+    public void setStopRotation() {
         rotationMotor.set(ControlMode.PercentOutput, 0);
     }
 

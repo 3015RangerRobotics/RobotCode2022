@@ -44,14 +44,15 @@ public class ClimberToTop extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.climber.setOutput(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return Math.abs(Constants.CLIMBER_MAX_HEIGHT_METERS
-    // - RobotContainer.climber.getClimberPos()) <
-    // Constants.CLIMBER_HEIGHT_TOLERANCE; // 0.5 cm
-    return false;
+    return Math.abs(Constants.CLIMBER_MAX_HEIGHT_METERS
+    - RobotContainer.climber.getClimberPos()) <
+    Constants.CLIMBER_HEIGHT_TOLERANCE; // 0.5 cm
+    // return false;
   }
 }

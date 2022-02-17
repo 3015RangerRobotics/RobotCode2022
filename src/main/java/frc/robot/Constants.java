@@ -76,15 +76,15 @@ public final class Constants {
     public static final double SWERVE_DRIVE_D = -25;
     public static final double SWERVE_DRIVE_F = 0;
 
-    public static final double SWERVE_ROTATION_P = 8;
-    public static final double SWERVE_ROTATION_I = 0.2;
+    public static final double[] SWERVE_ROTATION_P = {8, 8, 8, 8};
+    public static final double[] SWERVE_ROTATION_I = {0.2, 0.2, 0.2, 0.2};
+    public static final double[] SWERVE_ROTATION_D = {2500, 2500, 2500, 2500};
     public static final double SWERVE_ROTATION_I_ZONE = 10 / SWERVE_DEGREES_PER_PULSE;
-    public static final double SWERVE_ROTATION_D = 2500;
     public static final double SWERVE_ROTATION_F = 0;
 
     public static final double DRIVE_ROTATION_CONTROLLER_P = 8;
     public static final double DRIVE_ROTATION_CONTROLLER_I = 0;
-    public static final double DRIVE_ROTATION_CONTROLLER_D = 0.5;
+    public static final double DRIVE_ROTATION_CONTROLLER_D = 0.2;
     public static final double DRIVE_ROTATION_CONTROLLER_F = 0;
 
     public static final double DRIVE_POS_ERROR_CONTROLLER_P = 0;
@@ -112,6 +112,8 @@ public final class Constants {
 
     public static final double SHOOTER_PULSES_PER_ROTATION = 2048;
 
+    public static final double SHOOTER_TOLERANCE = .05; //??
+
     /* Limelight Constants */
     public static final double LL_TARGET_HEIGHT = 2.64;// in meters
     public static final double LL_MOUNT_HEIGHT = 0;
@@ -123,7 +125,8 @@ public final class Constants {
                                                                        // 12T on fal to 84T on same shaft w/ 12T sprock
                                                                        // to 15T sprock to Unknown diameter sprock
                                                                        // (rememner 16 Tooth sprock)
-    public static final double CLIMBER_MAX_HEIGHT_METERS = .7266;
+    public static final double CLIMBER_MAX_HEIGHT_METERS = .70;
+    public static final double CLIMBER_RELEASE_HEIGHT_METERS = CLIMBER_MAX_HEIGHT_METERS - .15;
     public static final double CLIMBER_HEIGHT_TOLERANCE = .005;
 
     public static final double CLIMBER_RAISE_P = 1;
@@ -152,6 +155,8 @@ public final class Constants {
 
     public static final double HOOD_DEGREES_PER_ROTATION = (1 / 933.333) * 360;
     public static final double HOOD_MAX_ANGLE = 45;
+
+    public static final double HOOD_TOLERANCE = .5;
 
     /* Feeder Constants */
     public static final double FEEDER_INTAKE_SPEED = 0.5;

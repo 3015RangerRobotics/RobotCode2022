@@ -4,21 +4,20 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ClimberStop extends InstantCommand {
-  public ClimberStop() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.climber);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    RobotContainer.climber.setOutput(0.0);
+public class ClimberResetClimber extends SequentialCommandGroup {
+  /** Creates a new ClimberResetClimber. */
+  public ClimberResetClimber() {
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+    addCommands(
+      new FloppyArmDown(),
+      new ClimberToBottom(),
+      new ClimberStop()
+    );
   }
 }

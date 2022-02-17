@@ -17,6 +17,7 @@ import frc.robot.Constants;
 public class Hood extends SubsystemBase {
     private CANSparkMax hoodMotor;
     private DigitalInput limitSwitch;
+    public double pos;
 
     public Hood() {
         hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
@@ -72,5 +73,9 @@ public class Hood extends SubsystemBase {
 
     public void resetZero() {
         hoodMotor.getEncoder().setPosition(0);
+    }
+
+    public boolean isPrimed() {
+	    return (Math.abs(pos - getHoodPosition()) <= Constants.HOOD_TOLERANCE);
     }
 }

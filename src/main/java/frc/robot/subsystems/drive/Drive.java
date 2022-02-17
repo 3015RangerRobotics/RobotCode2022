@@ -55,7 +55,7 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             swerveModules[i] = new SwerveModule(Constants.SWERVE_DRIVE_CHANNELS[i],
                     Constants.SWERVE_ROTATION_CHANNELS[i],
-                    Preferences.getDouble("mod" + i + "angle", 0));
+                    Preferences.getDouble("mod" + i + "angle", 0), i);
         }
 
         resetEncoders();
@@ -121,7 +121,7 @@ public class Drive extends SubsystemBase {
      */
     public void resetIMU() {
         imu.setFusedHeading(0);
-        imu.setYaw(0);
+        imu.setYaw(0,20);
     }
 
     /**
