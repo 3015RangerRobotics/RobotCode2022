@@ -101,6 +101,19 @@ public class Limelight extends SubsystemBase {
 		return limelight.getEntry("tx").getDouble(0);
 	}
 
+	public double getCorrectedAngleX() {
+		if (Constants.LL_OFFSET == 0) {
+			return getTargetAngleX();
+		}
+		double angle = Math.toRadians(getTargetAngleX());
+		double distToTar = (getRobotToTargetDistance() + Constants.LL_ROBOT_TO_TARGET);
+		double output = (distToTar * distToTar) + (Constants.LL_OFFSET * Constants.LL_OFFSET) + 
+		(2*distToTar * Constants.LL_OFFSET * Math.sin(angle));
+		output = -1 * output / (2* Constants.LL_OFFSET * Math.sqrt(output));
+		output = Math.asin(output);
+		return Math.toDegrees(output);
+	}
+
 	/**
 	 * @return The Y angle to the target
 	 */

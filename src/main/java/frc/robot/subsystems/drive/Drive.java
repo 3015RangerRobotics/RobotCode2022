@@ -150,6 +150,11 @@ public class Drive extends SubsystemBase {
         return -angle;
     }
 
+    public double getTotalAngleInDegrees() {
+        return imu.getFusedHeading();
+    }
+    
+
     public double getYAngle() {
         return imu.getPitch();
     }

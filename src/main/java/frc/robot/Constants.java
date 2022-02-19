@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -97,6 +99,10 @@ public final class Constants {
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_F = 0;
 
+    public static final double DRIVE_ROTATION_MIN_VELOCITY = 1; // place holder
+
+    public static final Translation2d DRIVE_GOAL_POSITION = new Translation2d(8.2296, 4.1148);
+
     /* Shooter Constants */
     public static final double SHOOTER_MOTOR_SPEED = 10;
 
@@ -119,6 +125,7 @@ public final class Constants {
     public static final double LL_MOUNT_HEIGHT = 0;
     public static final double LL_MOUNT_ANGLE = 25;
     public static final double LL_ROBOT_TO_TARGET = .183;
+    public static final double LL_OFFSET = 0; //add real
 
     /* Climber Constants */
     public static final double CLIMBER_METERS_PER_PULSE = 0.0000056696;// Did: Falcon500 has 2048 count per revolution.
