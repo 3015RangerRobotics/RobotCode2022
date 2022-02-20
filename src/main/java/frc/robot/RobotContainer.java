@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClimbAllTheWay;
+import frc.robot.commands.ClimberHomePosition;
 import frc.robot.commands.ClimberStop;
 import frc.robot.commands.ClimberToBottom;
 import frc.robot.commands.ClimberToTop;
@@ -126,6 +127,7 @@ public class RobotContainer {
     SmartDashboard.putData("Disable Compressor", new CompressorSetEnabled(false));
     SmartDashboard.putData("Floppy Arm Down", new FloppyArmDown());
     SmartDashboard.putData("Floppy Arm Up", new FloppyArmUp());
+    SmartDashboard.putData("Climber Home", new ClimberHomePosition());
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
     hood.setDefaultCommand(new HoodDPad());
 

@@ -17,7 +17,6 @@ public class Climber extends SubsystemBase {
     private TalonFX climberMotor;
     private DoubleSolenoid secondaryArm;
     private DigitalInput bottomLimit;
-    private DigitalInput beamBreakSensor;
     private Encoder armEncoder;
     private boolean hasBeenHomed;
 
@@ -56,7 +55,6 @@ public class Climber extends SubsystemBase {
                 Constants.CLIMBER_SOLENOID_UP);
 
         bottomLimit = new DigitalInput(Constants.CLIMBER_BOTTOM_SWITCH);
-        beamBreakSensor = new DigitalInput(Constants.CLIMBER_BEAMBREAK_SENSOR);
 
         armEncoder = new Encoder(Constants.ENCODER_INPUT_A, Constants.ENCODER_INPUT_B);
         armEncoder.setDistancePerPulse(Constants.CLIMBER_ARM_DEGREES_PER_PULSE);
@@ -65,7 +63,6 @@ public class Climber extends SubsystemBase {
 
     public void periodic() {
         SmartDashboard.putBoolean("Bottom climber switch", getBottomLimit());
-        SmartDashboard.putBoolean("Beam break sensor", getBeamBreakSensor());
         // TODO: push both encoder values to SmartDashboard for testing
         SmartDashboard.putNumber("Climber position", getClimberPos());
     }
@@ -112,13 +109,14 @@ public class Climber extends SubsystemBase {
         return climberMotor.getSelectedSensorPosition() * Constants.CLIMBER_METERS_PER_PULSE;
     }
 
+    
     /**
      * Gets the bottom limit switch's current state
      * 
      * @return boolean representing the bottom limit's current state
      */
     public boolean getBottomLimit() {
-        return bottomLimit.get();
+        return !bottomLimit.get();
     }
 
     /**
@@ -160,15 +158,6 @@ public class Climber extends SubsystemBase {
      */
     public double getClimberCurrent() {
         return climberMotor.getSupplyCurrent();
-    }
-
-    /**
-     * Gets the state of the beam break sensor
-     * 
-     * @return the state of the beam break sensor
-     */
-    public boolean getBeamBreakSensor() {
-        return beamBreakSensor.get();
     }
 
     public double getArmAngle() {

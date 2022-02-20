@@ -95,9 +95,9 @@ public class Drive extends SubsystemBase {
         }
     }
 
-    public void zeroAllModulePosSensors() {
+    public void setAllModulePosSensors(double angle) {
         for (SwerveModule s : swerveModules) {
-            s.setRotationPosition(0);
+            s.setRotationPosition(angle);
         }
     }
 
@@ -319,7 +319,19 @@ public class Drive extends SubsystemBase {
      */
     public void resetZeros() {
         for (int i = 0; i < 4; i++) {
-            double angle = swerveModules[i].updateRotationOffset();
+            double angle = swerveModules[i].updateRotationOffset(0);
+            Preferences.setDouble("mod" + i + "angle", angle);
+        }
+    }
+
+    /**
+     * Sets the current absolute angle of all modules to a specified offset
+     * 
+     * @param offset the angle to set the modules to
+     */
+    public void setRotationOffsets(double offset) {
+        for (int i = 0; i < 4; i++) {
+            double angle = swerveModules[i].updateRotationOffset(offset);
             Preferences.setDouble("mod" + i + "angle", angle);
         }
     }

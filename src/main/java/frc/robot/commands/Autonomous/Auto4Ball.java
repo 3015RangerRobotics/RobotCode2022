@@ -32,14 +32,23 @@ public class Auto4Ball extends SequentialCommandGroup {
         new ShooterSetSpeed(0, firstSpeed),
         new ShooterSetSpeed(1, firstSpeed),
         new HoodSetPosition(firstAngle)),
+        new DriveFollowPath("4BallAutopt2"),
       //shoots the 2 balls
       new ParallelCommandGroup(
         new ShootBalls(1, firstSpeed),
         new ShootBalls(2, firstSpeed)),
      // Move to human player station to grab balls
       new ParallelDeadlineGroup(
-        new DriveFollowPath("4BallAutopt2"),
+        new DriveFollowPath("4BallAutopt3"),
+        new IntakeBall(0)), // Right Intake
+      //Drive to shooting position
+      new ParallelDeadlineGroup(
+        new DriveFollowPath("4BallAutopt4"), 
         new ShooterSetSpeed(0, firstSpeed),
         new ShooterSetSpeed(1, firstSpeed)));
-}
+      //shoot the balls
+      new ParallelCommandGroup(
+      new ShootBalls(1, firstSpeed),
+      new ShootBalls(0, firstSpeed));
   }
+}

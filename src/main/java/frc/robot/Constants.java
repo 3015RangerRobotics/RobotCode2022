@@ -27,10 +27,10 @@ public final class Constants {
     public static final int DRIVE_PIGEON_CHANNEL = 1;
 
     /* Intake */
-    public static final int[] INTAKE_MOTORS = { 25, 26 }; // { left, right }
+    public static final int[] INTAKE_MOTORS = { 24, 26 }; // { left, right }
 
     /* Feeder */
-    public static final int[] FEEDER_TOP_MOTORS = { 24, 27 }; // { left, right }
+    public static final int[] FEEDER_TOP_MOTORS = { 25, 27 }; // { left, right }
 
     /* Shooter */
     public static final int[] SHOOTER_MOTORS = { 22, 23 }; // { left, right }
@@ -51,13 +51,12 @@ public final class Constants {
 
     /* Digital IO ID's */
     /* climber */
-    public static final int CLIMBER_BOTTOM_SWITCH = 0;
-    public static final int CLIMBER_BEAMBREAK_SENSOR = 1;
+    public static final int CLIMBER_BOTTOM_SWITCH = 5;
     public static final int HOOD_SWITCH_CHANNEL = 4;
-    public static final int[] FEEDER_BALL_DETECTORS = { 8, 7 }; // { left, right }
-    public static final int[] INTAKE_BALL_DETECTORS = { 9, 6 }; // { left, right }
-    public static final int ENCODER_INPUT_A = 2;
-    public static final int ENCODER_INPUT_B = 3;
+    public static final int[] FEEDER_BALL_DETECTORS = { 7, 6 }; // { left, right }
+    public static final int[] INTAKE_BALL_DETECTORS = { 9, 8 }; // { left, right }
+    public static final int ENCODER_INPUT_A = 1;
+    public static final int ENCODER_INPUT_B = 2;
 
     /* -------------- CONSTANTS -------------- */
     /* Drive Constants */
@@ -132,7 +131,7 @@ public final class Constants {
                                                                        // 12T on fal to 84T on same shaft w/ 12T sprock
                                                                        // to 15T sprock to Unknown diameter sprock
                                                                        // (rememner 16 Tooth sprock)
-    public static final double CLIMBER_MAX_HEIGHT_METERS = .70;
+    public static final double CLIMBER_MAX_HEIGHT_METERS = .72;
     public static final double CLIMBER_RELEASE_HEIGHT_METERS = CLIMBER_MAX_HEIGHT_METERS - .15;
     public static final double CLIMBER_HEIGHT_TOLERANCE = .005;
 

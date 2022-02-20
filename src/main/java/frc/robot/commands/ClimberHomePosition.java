@@ -37,17 +37,18 @@ public class ClimberHomePosition extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.climber.setOutput(0);
-    if (!interrupted) {
+    if (!interrupted && (RobotContainer.climber.getBottomLimit() || RobotContainer.climber.getClimberCurrent() > threshold)) {
       RobotContainer.climber.setSensorZero();
       RobotContainer.climber.setHasBeenHomed();
     }
+    RobotContainer.climber.setOutput(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;//.climber.getBottomLimit() || RobotContainer.climber.getClimberCurrent() > threshold
-        // || RobotContainer.climber.hasBeenHomed();
+    return RobotContainer.climber.getBottomLimit() || RobotContainer.climber.getClimberCurrent() > threshold
+       || RobotContainer.climber.hasBeenHomed();
+
   }
 }

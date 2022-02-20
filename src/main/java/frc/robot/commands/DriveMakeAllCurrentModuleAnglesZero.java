@@ -35,7 +35,7 @@ public class DriveMakeAllCurrentModuleAnglesZero extends CommandBase {
   public void end(boolean interrupted) {
     timer.stop();
     if (!interrupted && DriverStation.isDisabled()) {
-      RobotContainer.drive.resetZeros();
+      RobotContainer.drive.setRotationOffsets(90);
     }
   }
 

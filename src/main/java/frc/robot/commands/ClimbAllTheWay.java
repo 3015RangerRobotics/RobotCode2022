@@ -29,7 +29,7 @@ public class ClimbAllTheWay extends SequentialCommandGroup {
         new ClimberToBottom().withName("pullRobotUpToBarTwo"),
         new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToReachToBarThree"),
         new FloppyArmUp(),//Constants.CLIMBER_FLOPPY_BAR_TWO_TO_THREE).withName("reachToBarThree"),
-        new WaitCommand(2),
+        new WaitCommand(1.5),
         new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToGrabBarThree"),
         new ClimberToBarRelease(),
         new WaitUntilCommand(RobotContainer.driverA::get),
@@ -38,7 +38,7 @@ public class ClimbAllTheWay extends SequentialCommandGroup {
         new ClimberToBottom().withName("pullUpToBarThree"),
         new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToDropToGrabBarFour"),
         new FloppyArmDown(),//Constants.CLIMBER_FLOPPY_BAR_THREE_TO_FOUR).withName("dropToGrabBarFour"),
-        new WaitCommand(2),
+        new WaitCommand(1.5),
         new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToGrabBarFour"),
         new ClimberToBarRelease().withName("grabBarFour"),
         new FloppyArmUp()

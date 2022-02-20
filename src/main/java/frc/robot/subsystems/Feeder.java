@@ -28,6 +28,8 @@ public class Feeder extends SubsystemBase {
         topMotor = new TalonSRX(Constants.FEEDER_TOP_MOTORS[id]);
         ballDetector = new DigitalInput(Constants.FEEDER_BALL_DETECTORS[id]);
         topMotor.setInverted(id != 0);
+        topMotor.enableVoltageCompensation(true);
+        topMotor.configVoltageCompSaturation(12.5);
         this.id = id;
         doPeriodic = true;
     }

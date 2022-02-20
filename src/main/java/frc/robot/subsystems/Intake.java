@@ -25,6 +25,8 @@ public class Intake extends SubsystemBase {
 		intakeMotor = new TalonSRX(Constants.INTAKE_MOTORS[id]);
 		intakeSensor = new DigitalInput(Constants.INTAKE_BALL_DETECTORS[id]);
 		intakeMotor.setInverted(id == 0);
+		intakeMotor.enableVoltageCompensation(true);
+		intakeMotor.configVoltageCompSaturation(12.5);
 		this.id = id;
 		doPeriodic = true;
 	}
