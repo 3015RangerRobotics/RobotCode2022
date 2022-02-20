@@ -18,11 +18,13 @@ public class DriveAutoRotate extends CommandBase {
   PIDController rotationController;
   Timer timer = new Timer();
   boolean hasHadTarget;
+
   /** Creates a new driveAutoRotate. */
   public DriveAutoRotate() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.drive);
-    rotationController = new PIDController(Constants.DRIVE_ROTATION_CONTROLLER_P, Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D);
+    rotationController = new PIDController(Constants.DRIVE_ROTATION_CONTROLLER_P, Constants.DRIVE_ROTATION_CONTROLLER_I,
+        Constants.DRIVE_ROTATION_CONTROLLER_D);
     rotationController.setTolerance(0.5);
   }
 
@@ -38,45 +40,51 @@ public class DriveAutoRotate extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      double leftStickY = RobotContainer.getDriverLeftStickY();
-      double leftStickX = RobotContainer.getDriverLeftStickX();
-      double rightStickX = RobotContainer.getDriverRightStickX() * 0.75;
+    double leftStickY = RobotContainer.getDriverLeftStickY();
+    double leftStickX = RobotContainer.getDriverLeftStickX();
+    double rightStickX = RobotContainer.getDriverRightStickX() * 0.75;
 
-      SmartDashboard.putNumber("Targeting Error", rotationController.getPositionError());
-      if (RobotContainer.limelight.hasTarget()) {
-        setPoint = RobotContainer.drive.getTotalAngleInDegrees()-RobotContainer.limelight.getCorrectedAngleX();
+    SmartDashboard.putNumber("Targeting Error", rotationController.getPositionError());
+    if (RobotContainer.limelight.hasTarget()) {
+      setPoint = RobotContainer.drive.getTotalAngleInDegrees() - RobotContainer.limelight.getCorrectedAngleX();
+    } else if (!hasHadTarget && timer.hasElapsed(.2) && !timer.hasElapsed(1)) {
+      Translation2d relativePos = Constants.DRIVE_GOAL_POSITION
+          .minus(RobotContainer.drive.getPoseMeters().getTranslation());
+      setPoint = -1 * Math.toDegrees(Math.atan2(relativePos.getY(), relativePos.getX()))
+          + (RobotContainer.drive.getTotalAngleInDegrees() - (RobotContainer.drive.getTotalAngleInDegrees() % 360));
+    }
+
+    // if(Math.abs(rotationController.getPositionError()) <=
+    // Constants.DRIVE_TARGETING_I_ZONE){
+    // rotationController.setI(Constants.DRIVE_TARGETING_CONTROLLER_I);
+    // }else{
+    // rotationController.setI(0);
+    // }
+    double output;
+    if (Math.abs(rightStickX) > .1) {
+      output = rightStickX * Constants.DRIVE_MAX_ANGULAR_VELOCITY;
+    } else {
+      output = rotationController.calculate(RobotContainer.drive.getTotalAngleInDegrees(), setPoint);
+      SmartDashboard.putNumber("Targeting Output", output);
+      if (!rotationController.atSetpoint() && leftStickX == 0 && leftStickY == 0) {
+        if (output < 0)
+          output = Math.min(-Constants.DRIVE_ROTATION_MIN_VELOCITY, output);
+        else
+          output = Math.max(Constants.DRIVE_ROTATION_MIN_VELOCITY, output);
       }
-      else if(!hasHadTarget && timer.hasElapsed(.2) && !timer.hasElapsed(1)) {
-        Translation2d relativePos = Constants.DRIVE_GOAL_POSITION.minus(RobotContainer.drive.getPoseMeters().getTranslation());
-        setPoint = -1*Math.toDegrees(Math.atan2(relativePos.getY(), relativePos.getX()));
-      }
-      
-    //        if(Math.abs(rotationController.getPositionError()) <= Constants.DRIVE_TARGETING_I_ZONE){
-    //            rotationController.setI(Constants.DRIVE_TARGETING_CONTROLLER_I);
-    //        }else{
-    //            rotationController.setI(0);
-    //        }
-      double output;
-      if(Math.abs(rightStickX) > .1){
-        output = rightStickX * Constants.DRIVE_MAX_ANGULAR_VELOCITY;
-      }else{
-        output = rotationController.calculate(RobotContainer.drive.getTotalAngleInDegrees(), setPoint);
-        SmartDashboard.putNumber("Targeting Output", output);
-        if(!rotationController.atSetpoint() && leftStickX == 0 && leftStickY == 0) {
-            if(output < 0) output = Math.min(-Constants.DRIVE_ROTATION_MIN_VELOCITY, output);
-            else output = Math.max(Constants.DRIVE_ROTATION_MIN_VELOCITY, output);
-        }
-      }
-        
-//        System.out.println(output);
-      RobotContainer.drive.drive(-leftStickY * Constants.SWERVE_MAX_VELOCITY_METERS, leftStickX * Constants.SWERVE_MAX_VELOCITY_METERS, output, true);
-      hasHadTarget = RobotContainer.limelight.hasTarget();
+    }
+
+    // System.out.println(output);
+    RobotContainer.drive.drive(-leftStickY * Constants.SWERVE_MAX_VELOCITY_METERS,
+        leftStickX * Constants.SWERVE_MAX_VELOCITY_METERS, output, true);
+    hasHadTarget = RobotContainer.limelight.hasTarget();
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
