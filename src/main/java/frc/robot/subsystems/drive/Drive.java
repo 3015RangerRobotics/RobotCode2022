@@ -121,7 +121,7 @@ public class Drive extends SubsystemBase {
      */
     public void resetIMU() {
         imu.setFusedHeading(0);
-        imu.setYaw(0,20);
+        imu.setYaw(0, 20);
     }
 
     /**
@@ -153,7 +153,6 @@ public class Drive extends SubsystemBase {
     public double getTotalAngleInDegrees() {
         return imu.getFusedHeading();
     }
-    
 
     public double getYAngle() {
         return imu.getPitch();

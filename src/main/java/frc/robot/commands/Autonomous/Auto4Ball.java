@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveFollowPath;
+import frc.robot.commands.DriveTurnToLimelight;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShootBalls;
@@ -25,30 +26,36 @@ public class Auto4Ball extends SequentialCommandGroup {
     double firstSpeed = 3500;
     double firstAngle = 30;
     addCommands(
-      // Move to and intake first ball while revving shooters
-      new ParallelDeadlineGroup(
-        new DriveFollowPath("4BallAutopt1"),
-        new IntakeBall(1), // Left Intake
-        new ShooterSetSpeed(0, firstSpeed),
-        new ShooterSetSpeed(1, firstSpeed),
-        new HoodSetPosition(firstAngle)),
-        new DriveFollowPath("4BallAutopt2"),
-      //shoots the 2 balls
-      new ParallelCommandGroup(
-        new ShootBalls(1, firstSpeed),
-        new ShootBalls(2, firstSpeed)),
-     // Move to human player station to grab balls
-      new ParallelDeadlineGroup(
-        new DriveFollowPath("4BallAutopt3"),
-        new IntakeBall(0)), // Right Intake
-      //Drive to shooting position
-      new ParallelDeadlineGroup(
-        new DriveFollowPath("4BallAutopt4"), 
-        new ShooterSetSpeed(0, firstSpeed),
-        new ShooterSetSpeed(1, firstSpeed)));
-      //shoot the balls
-      new ParallelCommandGroup(
-      new ShootBalls(1, firstSpeed),
-      new ShootBalls(0, firstSpeed));
+        // Move to and intake first ball
+        new ParallelDeadlineGroup(
+            new DriveFollowPath("4BallAutopt1"),
+            new IntakeBall(1), // Left Intake
+            new HoodSetPosition(firstAngle)),
+        // move to shooting pos while reving shooter
+        new ParallelDeadlineGroup(
+            new DriveFollowPath("4BallAutopt2"),
+            new ShooterSetSpeed(0, firstSpeed),
+            new ShooterSetSpeed(1, firstSpeed)),
+        // ensures robot is on target
+        new DriveTurnToLimelight(),
+        // shoots the 2 balls
+        new ParallelCommandGroup(
+            new ShootBalls(1, firstSpeed),
+            new ShootBalls(2, firstSpeed)),
+        // Move to human player station to grab balls
+        new ParallelDeadlineGroup(
+            new DriveFollowPath("4BallAutopt3"),
+            new IntakeBall(0)), // Right Intake
+        // Drive to shooting position while reving shooter
+        new ParallelDeadlineGroup(
+            new DriveFollowPath("4BallAutopt4"),
+            new ShooterSetSpeed(0, firstSpeed),
+            new ShooterSetSpeed(1, firstSpeed)),
+        // ensures robot is on target
+        new DriveTurnToLimelight(),
+        // shoot the balls
+        new ParallelCommandGroup(
+            new ShootBalls(1, firstSpeed),
+            new ShootBalls(0, firstSpeed)));
   }
 }

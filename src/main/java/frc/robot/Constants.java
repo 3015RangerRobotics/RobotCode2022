@@ -126,6 +126,7 @@ public final class Constants {
     public static final double LL_ROBOT_TO_TARGET = .183;
     public static final double LL_OFFSET = 0.178; // add real
     public static final double LL_BACK_OFFSET = 0.605; // add real
+    public static final double LL_TOLERANCE = 1;
 
     /* Climber Constants */
     public static final double CLIMBER_METERS_PER_PULSE = 0.0000056696;// Did: Falcon500 has 2048 count per revolution.
