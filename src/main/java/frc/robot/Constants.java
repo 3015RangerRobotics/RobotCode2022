@@ -77,9 +77,9 @@ public final class Constants {
     public static final double SWERVE_DRIVE_D = -25;
     public static final double SWERVE_DRIVE_F = 0;
 
-    public static final double[] SWERVE_ROTATION_P = {8, 8, 8, 8};
-    public static final double[] SWERVE_ROTATION_I = {0.2, 0.2, 0.2, 0.2};
-    public static final double[] SWERVE_ROTATION_D = {2500, 2500, 2500, 2500};
+    public static final double[] SWERVE_ROTATION_P = { 8, 8, 8, 8 };
+    public static final double[] SWERVE_ROTATION_I = { 0.2, 0.2, 0.2, 0.2 };
+    public static final double[] SWERVE_ROTATION_D = { 2500, 2500, 2500, 2500 };
     public static final double SWERVE_ROTATION_I_ZONE = 10 / SWERVE_DEGREES_PER_PULSE;
     public static final double SWERVE_ROTATION_F = 0;
 
@@ -117,14 +117,15 @@ public final class Constants {
 
     public static final double SHOOTER_PULSES_PER_ROTATION = 2048;
 
-    public static final double SHOOTER_TOLERANCE = .05; //??
+    public static final double SHOOTER_TOLERANCE = .05; // ??
 
     /* Limelight Constants */
     public static final double LL_TARGET_HEIGHT = 2.64;// in meters
     public static final double LL_MOUNT_HEIGHT = 0;
-    public static final double LL_MOUNT_ANGLE = 25;
+    public static final double LL_MOUNT_ANGLE = 30;
     public static final double LL_ROBOT_TO_TARGET = .183;
-    public static final double LL_OFFSET = 0; //add real
+    public static final double LL_OFFSET = 0.178; // add real
+    public static final double LL_BACK_OFFSET = 0.605; // add real
 
     /* Climber Constants */
     public static final double CLIMBER_METERS_PER_PULSE = 0.0000056696;// Did: Falcon500 has 2048 count per revolution.
