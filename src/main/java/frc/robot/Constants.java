@@ -121,7 +121,7 @@ public final class Constants {
 
     /* Limelight Constants */
     public static final double LL_TARGET_HEIGHT = 2.64;// in meters
-    public static final double LL_MOUNT_HEIGHT = 0;
+    public static final double LL_MOUNT_HEIGHT = 0.8001;
     public static final double LL_MOUNT_ANGLE = 30;
     public static final double LL_ROBOT_TO_TARGET = .183;
     public static final double LL_OFFSET = 0.178; // add real
