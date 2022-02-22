@@ -4,13 +4,9 @@
 
 package frc.robot.commands.Autonomous;
 
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.RobotContainer;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.HoodSetPosition;
@@ -34,7 +30,7 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new WaitCommand(0.5),
                         // Move to and intake first ball while revving shooters
                         new ParallelDeadlineGroup(
-                                new PPSwerveControllerCommand(PathPlanner.loadPath("5BallAutopt1", 2.4, 2.5), RobotContainer.drive::getPoseMeters, RobotContainer.drive.getKinematics(), DriveFollowPath.xPositionController, DriveFollowPath.yPositionController, DriveFollowPath.thetaController, RobotContainer.drive::setAllModuleStates, RobotContainer.drive),
+                                new DriveFollowPath("5BallAutopt1"),
                                 new IntakeBall(0)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.5), 

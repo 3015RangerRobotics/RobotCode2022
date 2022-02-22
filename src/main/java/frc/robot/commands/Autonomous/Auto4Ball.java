@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveFollowPath;
-import frc.robot.commands.DriveFollowPathOld;
 import frc.robot.commands.DriveTurnToLimelight;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
