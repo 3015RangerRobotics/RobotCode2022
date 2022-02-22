@@ -88,12 +88,12 @@ public final class Constants {
     public static final double DRIVE_ROTATION_CONTROLLER_D = 0.2;
     public static final double DRIVE_ROTATION_CONTROLLER_F = 0;
 
-    public static final double DRIVE_POS_ERROR_CONTROLLER_P = 0.1;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_P = 0;
     public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0;
     public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0;
     public static final double DRIVE_POS_ERROR_CONTROLLER_F = 0;
 
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0.03;
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_F = 0;

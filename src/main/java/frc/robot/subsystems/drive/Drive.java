@@ -49,10 +49,11 @@ public class Drive extends SubsystemBase {
      */
     public Drive() {
 
-        moduleLocations[0] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // FR
-        moduleLocations[1] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // FL
-        moduleLocations[2] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // BL
-        moduleLocations[3] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // BR
+        // Inverted to Left is Positive (this doesn't work)
+        moduleLocations[0] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // FR
+        moduleLocations[1] = new Translation2d(Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // FL
+        moduleLocations[2] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, Constants.SWERVE_CENTER_DISTANCE); // BL
+        moduleLocations[3] = new Translation2d(-Constants.SWERVE_CENTER_DISTANCE, -Constants.SWERVE_CENTER_DISTANCE); // BR
 
         for (int i = 0; i < 4; i++) {
             swerveModules[i] = new SwerveModule(Constants.SWERVE_DRIVE_CHANNELS[i],
@@ -155,6 +156,7 @@ public class Drive extends SubsystemBase {
         } else if (angle <= -180) {
             angle += 360;
         }
+        // Inverted to negative angle again to make stuff un-broke
         return -angle;
     }
 
@@ -366,5 +368,15 @@ public class Drive extends SubsystemBase {
     public void driveOneModule(int index, double angle, double value, ControlMode controlMode) {
         swerveModules[index].setDriveMotor(controlMode, value);
         swerveModules[index].setRotationPosition(angle);
+    }
+
+    public SwerveDriveKinematics getKinematics() {
+        return kinematics;
+    }
+
+    public void setAllModuleStates(SwerveModuleState[] states) {
+        for(int i = 0; i < 4; i++) {
+            swerveModules[i].setSwerveModuleState(states[i]);
+        }
     }
 }
