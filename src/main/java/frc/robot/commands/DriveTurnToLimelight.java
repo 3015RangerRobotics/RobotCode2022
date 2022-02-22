@@ -46,12 +46,21 @@ public class DriveTurnToLimelight extends CommandBase {
     SmartDashboard.putNumber("Targeting Error", rotationController.getPositionError());
     if (RobotContainer.limelight.hasTarget()) {
       setPoint = RobotContainer.drive.getAngleDegrees() - RobotContainer.limelight.getCorrectedAngleX();
-    } else if (!hasHadTarget && timer.hasElapsed(.2) && !timer.hasElapsed(1)) {
-      Translation2d relativePos = Constants.DRIVE_GOAL_POSITION
-          .minus(RobotContainer.drive.getPoseMeters().getTranslation());
+    } else if (RobotContainer.drive.hasOdometryBeenSet() &&
+        !hasHadTarget && timer.hasElapsed(.2) && !timer.hasElapsed(1)) {
+      Translation2d relativePos = RobotContainer.drive.getPoseMeters().getTranslation()
+          .minus(Constants.DRIVE_GOAL_POSITION);
       setPoint = -1 * Math.toDegrees(Math.atan2(relativePos.getY(), relativePos.getX()))
-          + (RobotContainer.drive.getTotalAngleInDegrees() - (RobotContainer.drive.getTotalAngleInDegrees() % 360));
+          + RobotContainer.drive.getAngleDegrees();
+      if (setPoint > 180) {
+        setPoint -= 360;
+      } else if (setPoint <= -180) {
+        setPoint += 360;
+      }
     }
+
+    // SmartDashboard.putBoolean("hasOdometryBeenSet",
+    // RobotContainer.drive.hasOdometryBeenSet());
 
     double output = rotationController.calculate(RobotContainer.drive.getAngleDegrees(), setPoint);
     // if (Math.abs(output) < Constants.DRIVE_ROTATION_MIN_VELOCITY) {
