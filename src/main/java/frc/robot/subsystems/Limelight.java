@@ -77,6 +77,12 @@ public class Limelight extends SubsystemBase {
 		// if(avgDistance.size() == 10){ //??
 		// avgDistance.remove(0);
 		// }
+		SmartDashboard.putNumber("Target Distance", getRobotToTargetDistance());
+		SmartDashboard.putNumber("Corrected Distance", getRobotCorrectedDistance());
+		SmartDashboard.putNumber("Distance from LL", getDistanceFromLLPlane());
+		SmartDashboard.putNumber("Corrected Distance from LL", getCorrectedDistanceFromLLPlane());
+		SmartDashboard.putNumber("Target Angle X", getTargetAngleX());
+		SmartDashboard.putNumber("Corrected Angle X", getCorrectedAngleX());
 	}
 
 	public double getAvgDistance() { // ??
@@ -102,24 +108,38 @@ public class Limelight extends SubsystemBase {
 	}
 
 	// public double getCorrectedAngleX() {
-	// 	if (Constants.LL_OFFSET == 0) {
-	// 		return getTargetAngleX();
-	// 	}
-	// 	double angle = Math.toRadians(getTargetAngleX());
-	// 	double distToTar = (getRobotToTargetDistance() + Constants.LL_ROBOT_TO_TARGET);
-	// 	double output = (distToTar * distToTar) + (Constants.LL_OFFSET * Constants.LL_OFFSET) +
-	// 			(2 * distToTar * Constants.LL_OFFSET * Math.sin(angle));
-	// 	output = -1 * output / (2 * Constants.LL_OFFSET * Math.sqrt(output));
-	// 	output = Math.asin(output);
-	// 	return Math.toDegrees(output);
+	// if (Constants.LL_OFFSET == 0) {
+	// return getTargetAngleX();
+	// }
+	// double angle = Math.toRadians(getTargetAngleX());
+	// double distToTar = (getRobotToTargetDistance() +
+	// Constants.LL_ROBOT_TO_TARGET);
+	// double output = (distToTar * distToTar) + (Constants.LL_OFFSET *
+	// Constants.LL_OFFSET) +
+	// (2 * distToTar * Constants.LL_OFFSET * Math.sin(angle));
+	// output = -1 * output / (2 * Constants.LL_OFFSET * Math.sqrt(output));
+	// output = Math.asin(output);
+	// return Math.toDegrees(output);
+	// }
+
+	// public double getCorrectedAngleX() {
+	// double angle = Math.toRadians(90 - getTargetAngleX());
+	// double targetDistance = getRobotToTargetDistance() +
+	// Constants.LL_ROBOT_TO_TARGET;
+	// double thirdSide = Math.pow(targetDistance, 2) +
+	// Math.pow(Constants.LL_OFFSET, 2)
+	// - (2 * targetDistance * Constants.LL_OFFSET * Math.cos(angle));
+	// double correctedAngle = Math.asin(targetDistance * (Math.sin(angle) /
+	// thirdSide));
+	// return Math.toDegrees(correctedAngle);
 	// }
 
 	public double getCorrectedAngleX() {
-		double angle = Math.toRadians(90 - getTargetAngleX());
-		double targetDistance = getRobotToTargetDistance() + Constants.LL_ROBOT_TO_TARGET;
-		double thirdSide = Math.pow(targetDistance, 2) + Math.pow(Constants.LL_OFFSET, 2) - (2 * targetDistance * Constants.LL_OFFSET * Math.cos(angle));
-		double correctedAngle = Math.asin(targetDistance * (Math.sin(angle) / thirdSide));
-		return Math.toDegrees(correctedAngle);
+		double distance = getDistanceFromLLPlane();
+		double correctedDistance = getCorrectedDistanceFromLLPlane();
+		return Math.toDegrees(Math.acos(((distance * distance) + (correctedDistance * correctedDistance)
+				- (Constants.LL_OFFSET * Constants.LL_OFFSET)) /
+				(2.0 * correctedDistance * Constants.LL_OFFSET))) - 90;
 	}
 
 	/**
@@ -250,6 +270,18 @@ public class Limelight extends SubsystemBase {
 				-
 				(Constants.LL_OFFSET * Constants.LL_OFFSET)) - Constants.LL_BACK_OFFSET - Constants.LL_ROBOT_TO_TARGET);
 	}
+
+	public double getDistanceFromLLPlane() {
+		return (Constants.LL_TARGET_HEIGHT - Constants.LL_MOUNT_HEIGHT)
+				/ Math.tan(Math.toRadians(Constants.LL_MOUNT_ANGLE + getTargetAngleY())) + Constants.LL_GOAL_RADIUS;
+	}
+
+	public double getCorrectedDistanceFromLLPlane() {
+		double distance = getDistanceFromLLPlane();
+		return (Math.sqrt((Constants.LL_OFFSET * Constants.LL_OFFSET) + (distance * distance)
+				- (2.0 * distance * Constants.LL_OFFSET * Math.sin(getTargetAngleX()))));
+	}
+
 	/*
 	 * public double getRobotToTargetDistance() {
 	 * return (Constants.LL_TARGET_HEIGHT - Constants.LL_MOUNT_HEIGHT) /
