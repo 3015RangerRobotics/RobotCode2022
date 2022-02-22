@@ -15,6 +15,7 @@ public class Shooter extends SubsystemBase {
 	public boolean doPeriodic = false;
 	public double lastSetpoint = 0;
 	public double speed;
+	private double id;
 
 	/**
 	 * Do not use
@@ -51,14 +52,15 @@ public class Shooter extends SubsystemBase {
 		shooter.config_kF(1, Constants.SHOOTER_SHOOT_F);
 
 		doPeriodic = true;
+		this.id = id;
 	}
 
 	@Override
 	public void periodic() {
 		if (doPeriodic) {
-			SmartDashboard.putNumber("Shooter RPM", getRPM());
-			SmartDashboard.putNumber("PIDTarget", lastSetpoint);
-			SmartDashboard.putNumber("PIDActual", getRPM());
+			SmartDashboard.putNumber((id == 0 ? "Left " : "Right ") + "Shooter RPM", getRPM());
+			// SmartDashboard.putNumber("PIDTarget", lastSetpoint);
+			// SmartDashboard.putNumber("PIDActual", getRPM());
 		}
 	}
 

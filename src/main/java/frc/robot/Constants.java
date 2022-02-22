@@ -88,17 +88,17 @@ public final class Constants {
     public static final double DRIVE_ROTATION_CONTROLLER_D = 0.2;
     public static final double DRIVE_ROTATION_CONTROLLER_F = 0;
 
-    public static final double DRIVE_POS_ERROR_CONTROLLER_P = 0;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_P = 0.1;
     public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0;
     public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0;
     public static final double DRIVE_POS_ERROR_CONTROLLER_F = 0;
 
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0;
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0.03;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_F = 0;
 
-    public static final double DRIVE_ROTATION_MIN_VELOCITY = 1; // place holder
+    public static final double DRIVE_ROTATION_MIN_VELOCITY = 0; // place holder
 
     public static final Translation2d DRIVE_GOAL_POSITION = new Translation2d(8.2296, 4.1148);
 
@@ -121,7 +121,7 @@ public final class Constants {
 
     /* Limelight Constants */
     public static final double LL_TARGET_HEIGHT = 2.64;// in meters
-    public static final double LL_MOUNT_HEIGHT = 0;
+    public static final double LL_MOUNT_HEIGHT = 0.8001; //31.5 inches
     public static final double LL_MOUNT_ANGLE = 30;
     public static final double LL_ROBOT_TO_TARGET = .183;
     public static final double LL_OFFSET = 0.178; // add real
@@ -161,7 +161,7 @@ public final class Constants {
     public static final double HOOD_CONTROLLER_F = 0;
 
     public static final double HOOD_DEGREES_PER_ROTATION = (1 / 933.333) * 360;
-    public static final double HOOD_MAX_ANGLE = 45;
+    public static final double HOOD_MAX_ANGLE = 32;
 
     public static final double HOOD_TOLERANCE = .5;
 

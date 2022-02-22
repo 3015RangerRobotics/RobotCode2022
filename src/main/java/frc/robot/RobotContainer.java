@@ -19,7 +19,9 @@ import frc.robot.commands.ClimberStop;
 import frc.robot.commands.ClimberToBottom;
 import frc.robot.commands.ClimberToTop;
 import frc.robot.commands.CompressorSetEnabled;
+import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveFeedbackWhileDisabled;
+import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveMakeAllCurrentModuleAnglesZero;
 import frc.robot.commands.DriveOneModule;
 import frc.robot.commands.DriveTurnToAngle;
@@ -36,6 +38,7 @@ import frc.robot.commands.ShootBallsByNetwork;
 import frc.robot.commands.ShooterSetByNetwork;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
+import frc.robot.commands.Autonomous.Auto5Ball;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.drive.Drive;
@@ -108,7 +111,7 @@ public class RobotContainer {
     compressor = new Compressor();
     // new CompressorSetEnabled(true);
     climber = new Climber();
-    // limelight = new Limelight();
+    limelight = new Limelight();
     intake[0] = new Intake(0);
     intake[1] = new Intake(1);
     feeder[0] = new Feeder(0);
@@ -128,6 +131,7 @@ public class RobotContainer {
     SmartDashboard.putData("Floppy Arm Down", new FloppyArmDown());
     SmartDashboard.putData("Floppy Arm Up", new FloppyArmUp());
     SmartDashboard.putData("Climber Home", new ClimberHomePosition());
+    SmartDashboard.putData("Zero 202", new DriveZeroGyro(158));
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
     hood.setDefaultCommand(new HoodDPad());
 
@@ -156,6 +160,10 @@ public class RobotContainer {
     coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
 
     driverStart.and(driverBack).whenActive(new ClimbAllTheWay());
+
+    //TEMP
+    // driverA.whileActiveContinuous(new DriveAutoRotate());
+    driverA.whenActive(new DriveFollowPath("New Path"));
     
     SmartDashboard.putNumber("shooter speed", staticSpeed);
   }
@@ -168,7 +176,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return new Auto5Ball();
   }
 
   public static double getDriverLeftTrigger() {

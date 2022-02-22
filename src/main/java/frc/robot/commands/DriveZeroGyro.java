@@ -6,15 +6,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 
 public class DriveZeroGyro extends CommandBase {
   Timer timer = new Timer();
+  double angle;
 
   public DriveZeroGyro() {
+    this(0);
+  }
+
+  public DriveZeroGyro(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.drive);
+    this.angle = angle;
   }
 
   // Called when the command is initially scheduled.
@@ -22,7 +27,7 @@ public class DriveZeroGyro extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
-    RobotContainer.drive.resetIMU();
+    RobotContainer.drive.setIMU(angle);
   }
 
   public boolean isFinished() {

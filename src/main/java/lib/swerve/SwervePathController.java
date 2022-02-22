@@ -90,10 +90,10 @@ public class SwervePathController {
         this.currentHeading = new Rotation2d(Math.atan2(yV, xV));
 
         double vel = goalState.velocityMetersPerSecond;
-        Rotation2d heading = goalState.holonomicRotation;
+        Rotation2d heading = goalState.poseMeters.getRotation();
         double rotSpeed = (rotationController != null)
                 ? rotationController.calculate(currentRotation.getDegrees(),
-                        goalState.poseMeters.getRotation().getDegrees())
+                        goalState.holonomicRotation.getDegrees())
                 : 0;
 
         vel += posErrorController.calculate(0,

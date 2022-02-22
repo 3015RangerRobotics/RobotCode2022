@@ -31,7 +31,7 @@ public class DriveAutoRotate extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.limelight.setLEDMode(LEDMode.LED_ON);
+    setPoint = RobotContainer.drive.getAngleDegrees();
     timer.start();
     timer.reset();
     hasHadTarget = false;
@@ -45,15 +45,16 @@ public class DriveAutoRotate extends CommandBase {
     double rightStickX = RobotContainer.getDriverRightStickX() * 0.75;
 
     SmartDashboard.putNumber("Targeting Error", rotationController.getPositionError());
+    SmartDashboard.putNumber("Target Distance", RobotContainer.limelight.getRobotToTargetDistance());
     if (RobotContainer.limelight.hasTarget()) {
-      setPoint = RobotContainer.drive.getTotalAngleInDegrees() - RobotContainer.limelight.getCorrectedAngleX();
+      setPoint = RobotContainer.drive.getAngleDegrees() + RobotContainer.limelight.getCorrectedAngleX();
     } else if (!hasHadTarget && timer.hasElapsed(.2) && !timer.hasElapsed(1)) {
-      Translation2d relativePos = Constants.DRIVE_GOAL_POSITION
-          .minus(RobotContainer.drive.getPoseMeters().getTranslation());
-      setPoint = -1 * Math.toDegrees(Math.atan2(relativePos.getY(), relativePos.getX()))
-          + (RobotContainer.drive.getTotalAngleInDegrees() - (RobotContainer.drive.getTotalAngleInDegrees() % 360));
+      // Translation2d relativePos = Constants.DRIVE_GOAL_POSITION
+      //     .minus(RobotContainer.drive.getPoseMeters().getTranslation());
+      // setPoint = -1 * Math.toDegrees(Math.atan2(relativePos.getY(), relativePos.getX()))
+      //     + (RobotContainer.drive.getTotalAngleInDegrees() - (RobotContainer.drive.getTotalAngleInDegrees() % 360));
     }
-
+    SmartDashboard.putNumber("Targeting Error", rotationController.getPositionError());
     // if(Math.abs(rotationController.getPositionError()) <=
     // Constants.DRIVE_TARGETING_I_ZONE){
     // rotationController.setI(Constants.DRIVE_TARGETING_CONTROLLER_I);
@@ -64,7 +65,7 @@ public class DriveAutoRotate extends CommandBase {
     if (Math.abs(rightStickX) > .1) {
       output = rightStickX * Constants.DRIVE_MAX_ANGULAR_VELOCITY;
     } else {
-      output = rotationController.calculate(RobotContainer.drive.getTotalAngleInDegrees(), setPoint);
+      output = rotationController.calculate(RobotContainer.drive.getAngleDegrees(), setPoint);
       SmartDashboard.putNumber("Targeting Output", output);
       if (!rotationController.atSetpoint() && leftStickX == 0 && leftStickY == 0) {
         if (output < 0)
@@ -84,6 +85,7 @@ public class DriveAutoRotate extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.limelight.setLEDMode(LEDMode.LED_OFF);
   }
 
   // Returns true when the command should end.

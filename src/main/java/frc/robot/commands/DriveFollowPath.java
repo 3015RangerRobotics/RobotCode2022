@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import javax.print.attribute.standard.Destination;
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 
@@ -11,7 +13,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
@@ -29,6 +33,8 @@ public class DriveFollowPath extends CommandBase {
     SwervePathController pathController;
     double lastTime;
     boolean ignoreHeading;
+    Pose2d intialPathPose;
+    Pose2d initialPose;
 
     /**
      * Drives the robot according to generated path. Ends according to the duration
@@ -54,8 +60,7 @@ public class DriveFollowPath extends CommandBase {
     public DriveFollowPath(String pathname, boolean ignoreHeading) {
         addRequirements(RobotContainer.drive);
         this.timer = new Timer();
-        this.path = PathPlanner.loadPath(pathname, Constants.SWERVE_MAX_VELOCITY_METERS,
-                Constants.SWERVE_MAX_ACCEL_METERS);
+        this.path = PathPlanner.loadPath(pathname, 2, 2.5);
 
         PIDController posController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P,
                 Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
@@ -66,7 +71,7 @@ public class DriveFollowPath extends CommandBase {
                 new TrapezoidProfile.Constraints(Constants.DRIVE_MAX_ANGULAR_VELOCITY,
                         Constants.DRIVE_MAX_ANGULAR_ACCEL));
         this.pathController = new SwervePathController(posController, headingController, rotationController);
-        this.ignoreHeading = ignoreHeading;
+        this.ignoreHeading = ignoreHeading;            
     }
 
     // Called when the command is initially scheduled.
@@ -74,9 +79,10 @@ public class DriveFollowPath extends CommandBase {
     public void initialize() {
         timer.reset();
         timer.start();
-        Pose2d initialState = path.getInitialPose();
+        intialPathPose = path.getInitialPose();
+        initialPose = RobotContainer.drive.getPoseMeters();
         RobotContainer.drive.resetOdometry(
-                new Pose2d(RobotContainer.drive.getPoseMeters().getTranslation(), initialState.getRotation()));
+                new Pose2d(RobotContainer.drive.getPoseMeters().getTranslation(), intialPathPose.getRotation()));
         pathController.reset(RobotContainer.drive.getPoseMeters());
         lastTime = 0;
     }
@@ -86,6 +92,8 @@ public class DriveFollowPath extends CommandBase {
     public void execute() {
         double time = timer.get();
         PathPlannerState desiredState = (PathPlannerState) path.sample(time);
+        desiredState.holonomicRotation = new Rotation2d(-desiredState.holonomicRotation.getRadians());
+        desiredState.poseMeters = new Pose2d(desiredState.poseMeters.getTranslation(), new Rotation2d(-desiredState.poseMeters.getRotation().getRadians()));
 
         if (ignoreHeading)
             desiredState.poseMeters = new Pose2d(desiredState.poseMeters.getTranslation(), new Rotation2d());
@@ -93,6 +101,18 @@ public class DriveFollowPath extends CommandBase {
         ChassisSpeeds targetSpeeds = pathController.calculate(RobotContainer.drive.getPoseMeters(), desiredState,
                 time - lastTime, timer.hasElapsed(0.1));
         RobotContainer.drive.drive(targetSpeeds);
+
+        // Position PID
+        // SmartDashboard.putNumber("PIDTarget", 0);
+        // SmartDashboard.putNumber("PIDActual", pathController.getPosError());
+
+        // Rotation PID
+        // SmartDashboard.putNumber("PIDTarget", desiredState.holonomicRotation.getDegrees());
+        // SmartDashboard.putNumber("PIDACtual", RobotContainer.drive.getAngleDegrees());
+
+        // Heading PID
+        SmartDashboard.putNumber("PIDTarget", desiredState.poseMeters.getRotation().getDegrees());
+        SmartDashboard.putNumber("PIDActual", pathController.getCurrentHeading().getDegrees());
 
         lastTime = time;
     }

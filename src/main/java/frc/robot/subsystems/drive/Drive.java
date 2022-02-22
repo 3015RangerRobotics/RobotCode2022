@@ -124,6 +124,11 @@ public class Drive extends SubsystemBase {
         imu.setYaw(0,20);
     }
 
+    public void setIMU(double angle) {
+        imu.setFusedHeading(angle * 64);
+        imu.setYaw(angle * 64, 20);
+    }
+
     /**
      * Sets the IMU's position to a specified angle such that the current heading
      * will read as the input angle
