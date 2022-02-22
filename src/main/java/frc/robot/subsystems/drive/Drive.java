@@ -29,6 +29,8 @@ public class Drive extends SubsystemBase {
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
 
+    boolean hasOdometryBeenSet;
+
     public enum ModuleIndices {
         kFrontRight(0),
         kFrontLeft(1),
@@ -66,6 +68,7 @@ public class Drive extends SubsystemBase {
 
         kinematics = new SwerveDriveKinematics(moduleLocations);
         odometry = new SwerveDriveOdometry(kinematics, getAngleRotation2d());
+        hasOdometryBeenSet = false;
     }
 
     @Override
@@ -121,7 +124,7 @@ public class Drive extends SubsystemBase {
      */
     public void resetIMU() {
         imu.setFusedHeading(0);
-        imu.setYaw(0,20);
+        imu.setYaw(0, 20);
     }
 
     public void setIMU(double angle) {
@@ -158,7 +161,6 @@ public class Drive extends SubsystemBase {
     public double getTotalAngleInDegrees() {
         return imu.getFusedHeading();
     }
-    
 
     public double getYAngle() {
         return imu.getPitch();
@@ -188,6 +190,11 @@ public class Drive extends SubsystemBase {
      */
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(pose, getAngleRotation2d());
+        hasOdometryBeenSet = true;
+    }
+
+    public boolean hasOdometryBeenSet() {
+        return hasOdometryBeenSet;
     }
 
     /**
@@ -287,6 +294,7 @@ public class Drive extends SubsystemBase {
         } else {
             drive(new ChassisSpeeds(xVelMeters, yVelMeters, Math.toRadians(degreesPerSecond)));
         }
+
     }
 
     /**
