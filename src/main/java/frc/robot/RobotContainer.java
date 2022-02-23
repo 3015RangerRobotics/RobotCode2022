@@ -154,16 +154,16 @@ public class RobotContainer {
     driverRB.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
     driverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
     driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
-    coDriverLT.whileActiveContinuous( new ParallelCommandGroup(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
-    coDriverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
-    coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
+    // coDriverLT.whileActiveContinuous( new ParallelCommandGroup(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    // coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
+    // coDriverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
+    // coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
 
-    driverStart.and(driverBack).whenActive(new ClimbAllTheWay());
+    //driverStart.and(driverBack).whenActive(new ClimbAllTheWay());
 
     //TEMP
-    // driverA.whileActiveContinuous(new DriveAutoRotate());
-    driverA.whenActive(new DriveFollowPath("New Path"));
+    driverA.whileActiveContinuous(new DriveAutoRotate());
+    //driverA.whenActive(new DriveFollowPath("forwardMoveRight"));
     
     SmartDashboard.putNumber("shooter speed", staticSpeed);
   }

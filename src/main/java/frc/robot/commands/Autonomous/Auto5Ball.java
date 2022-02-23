@@ -7,7 +7,9 @@ package frc.robot.commands.Autonomous;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveFollowPath;
+import frc.robot.commands.DriveTurnToLimelight;
 import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
@@ -27,19 +29,18 @@ public class Auto5Ball extends SequentialCommandGroup {
                 double secondAngle = 30;
                 addCommands(
                         // new DriveZeroGyro(158),
-                        new WaitCommand(0.5),
                         // Move to and intake first ball while revving shooters
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt1"),
                                 new IntakeBall(0)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.5), 
-                                new IntakeBall(0)));
+                                new IntakeBall(0)),
                         // Move just shy of second ball while keeping shooter running
-                        // new ParallelDeadlineGroup(
-                        //                 new DriveFollowPath("5BallAutopt2"),
-                        //                 new ShooterSetSpeed(0, firstSpeed),00
-                        //                 new ShooterSetSpeed(1, firstSpeed)),
+                        new ParallelDeadlineGroup(
+                                        new DriveFollowPath("5BallAutopt2")),
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(1)));
                         // // Once at position, shoot balls while moving slightly to pickup second ball
                         // new ParallelDeadlineGroup(
                         //                 new WaitCommand(1.5),

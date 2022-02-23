@@ -144,10 +144,6 @@ public class Limelight extends SubsystemBase {
 		} else {
 			return Math.toDegrees(Math.asin(sinAngle * distance / correctedDistance)) - 90;
 		}
-		// return Math.toDegrees(Math.acos(((distance * distance) + (correctedDistance *
-		// correctedDistance)
-		// - (Constants.LL_OFFSET * Constants.LL_OFFSET)) /
-		// (2.0 * correctedDistance * Constants.LL_OFFSET))) - 90;
 	}
 
 	/**

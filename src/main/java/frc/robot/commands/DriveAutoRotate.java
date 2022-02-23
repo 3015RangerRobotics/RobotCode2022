@@ -32,6 +32,7 @@ public class DriveAutoRotate extends CommandBase {
   @Override
   public void initialize() {
     setPoint = RobotContainer.drive.getAngleDegrees();
+    RobotContainer.limelight.setLEDMode(LEDMode.LED_ON);
     timer.start();
     timer.reset();
     hasHadTarget = false;
@@ -47,7 +48,7 @@ public class DriveAutoRotate extends CommandBase {
     SmartDashboard.putNumber("Targeting Error", rotationController.getPositionError());
     SmartDashboard.putNumber("Target Distance", RobotContainer.limelight.getRobotToTargetDistance());
     if (RobotContainer.limelight.hasTarget()) {
-      setPoint = RobotContainer.drive.getTotalAngleInDegrees() - RobotContainer.limelight.getCorrectedAngleX();
+      setPoint = RobotContainer.drive.getAngleDegrees() + RobotContainer.limelight.getCorrectedAngleX();
     } else if (RobotContainer.drive.hasOdometryBeenSet() &&
         !hasHadTarget && timer.hasElapsed(.2) && !timer.hasElapsed(1)) {
       Translation2d relativePos = RobotContainer.drive.getPoseMeters().getTranslation()
