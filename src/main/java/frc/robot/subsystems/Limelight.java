@@ -137,9 +137,17 @@ public class Limelight extends SubsystemBase {
 	public double getCorrectedAngleX() {
 		double distance = getDistanceFromLLPlane();
 		double correctedDistance = getCorrectedDistanceFromLLPlane();
-		return Math.toDegrees(Math.acos(((distance * distance) + (correctedDistance * correctedDistance)
-				- (Constants.LL_OFFSET * Constants.LL_OFFSET)) /
-				(2.0 * correctedDistance * Constants.LL_OFFSET))) - 90;
+		double angleX = getTargetAngleX();
+		double sinAngle = Math.sin(Math.toRadians(90 - angleX));
+		if (angleX > 0) {
+			return -Math.toDegrees(Math.asin(sinAngle * distance / correctedDistance)) + 90;
+		} else {
+			return Math.toDegrees(Math.asin(sinAngle * distance / correctedDistance)) - 90;
+		}
+		// return Math.toDegrees(Math.acos(((distance * distance) + (correctedDistance *
+		// correctedDistance)
+		// - (Constants.LL_OFFSET * Constants.LL_OFFSET)) /
+		// (2.0 * correctedDistance * Constants.LL_OFFSET))) - 90;
 	}
 
 	/**
@@ -279,7 +287,7 @@ public class Limelight extends SubsystemBase {
 	public double getCorrectedDistanceFromLLPlane() {
 		double distance = getDistanceFromLLPlane();
 		return (Math.sqrt((Constants.LL_OFFSET * Constants.LL_OFFSET) + (distance * distance)
-				- (2.0 * distance * Constants.LL_OFFSET * Math.sin(getTargetAngleX()))));
+				- (2.0 * distance * Constants.LL_OFFSET * Math.sin(Math.toRadians(getTargetAngleX())))));
 	}
 
 	/*
