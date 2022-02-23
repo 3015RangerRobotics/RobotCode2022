@@ -32,7 +32,6 @@ public class DriveAutoRotate extends CommandBase {
   public void initialize() {
     RobotContainer.limelight.checkout();
     setPoint = RobotContainer.drive.getAngleDegrees();
-    RobotContainer.limelight.setLEDMode(LEDMode.LED_ON);
     timer.start();
     timer.reset();
     hasHadTarget = false;

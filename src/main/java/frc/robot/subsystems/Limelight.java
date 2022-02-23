@@ -153,13 +153,18 @@ public class Limelight extends SubsystemBase {
 	// }
 
 	public double getShooterSpeed() {
-		return Constants.SHOOTER_LOOKUP_TABLE
-				.lookup((getCorrectedDistanceFromLLPlane() - Constants.LL_BACK_OFFSET) * 39.37008);
+		double distance = (getCorrectedDistanceFromLLPlane() - Constants.LL_GOAL_RADIUS) * 37.39008;
+		double lookupRPM = Constants.SHOOTER_LOOKUP_TABLE.lookup(distance);
+		SmartDashboard.putNumber("Lookup Distance Inches", distance);
+		SmartDashboard.putNumber("Shooter Lookup", lookupRPM);
+		return lookupRPM;
 	}
 
 	public double getHoodPos() {
-		return Constants.HOOD_POSITION_TABLE
-				.lookup((getCorrectedDistanceFromLLPlane() - Constants.LL_BACK_OFFSET) * 39.37008);
+		double distance = (getCorrectedDistanceFromLLPlane() - Constants.LL_GOAL_RADIUS) * 37.39008;
+		double lookupAngle = Constants.HOOD_POSITION_TABLE.lookup(distance);
+		SmartDashboard.putNumber("Hood Lookup", lookupAngle);
+		return lookupAngle;
 	}
 
 	public double getCorrectedAngleX() {

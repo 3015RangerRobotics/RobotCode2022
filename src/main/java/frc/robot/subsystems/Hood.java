@@ -25,7 +25,7 @@ public class Hood extends SubsystemBase {
         hoodMotor.getPIDController().setP(Constants.HOOD_CONTROLLER_P);
         hoodMotor.getPIDController().setI(Constants.HOOD_CONTROLLER_I);
         hoodMotor.getPIDController().setD(Constants.HOOD_CONTROLLER_D);
-        hoodMotor.getPIDController().setOutputRange(-1, 1);
+        // hoodMotor.getPIDController().setOutputRange(-1, 1);
         // hoodMotor.setInverted(true);
         // hoodMotor.getEncoder().setInverted(true);
         hoodMotor.setSoftLimit(SoftLimitDirection.kForward,
@@ -48,7 +48,7 @@ public class Hood extends SubsystemBase {
     }
 
     public void setHoodPosition(double position) {
-        hoodMotor.getPIDController().setReference(position, ControlType.kPosition);
+        hoodMotor.getPIDController().setReference(position / Constants.HOOD_DEGREES_PER_ROTATION, ControlType.kPosition);
     }
 
     public boolean getReverseLimit() {

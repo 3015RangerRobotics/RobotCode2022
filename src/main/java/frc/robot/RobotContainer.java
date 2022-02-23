@@ -31,6 +31,7 @@ import frc.robot.commands.FloppyArmDown;
 import frc.robot.commands.FloppyArmUp;
 import frc.robot.commands.HoodDPad;
 import frc.robot.commands.HoodHome;
+import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.PurgeBall;
 import frc.robot.commands.ShootBalls;
@@ -134,8 +135,10 @@ public class RobotContainer {
     SmartDashboard.putData("Floppy Arm Up", new FloppyArmUp());
     SmartDashboard.putData("Climber Home", new ClimberHomePosition());
     SmartDashboard.putData("Zero 202", new DriveZeroGyro(158));
+    SmartDashboard.putData("Hood 0", new HoodSetPosition(0));
+    SmartDashboard.putData("Hood 20", new HoodSetPosition(20));
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
-    hood.setDefaultCommand(new HoodDPad());
+    // hood.setDefaultCommand(new HoodDPad());
 
     // Configure the button bindings
     configureButtonBindings();
@@ -168,10 +171,10 @@ public class RobotContainer {
     // coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0),
     // new PurgeBall(1)));
 
-    // driverStart.and(driverBack).whenActive(new ClimbAllTheWay());
-
+    driverStart.and(driverBack).whenActive(new ClimbAllTheWay());
     // TEMP
-    driverA.whileActiveContinuous(new DriveAutoRotate());
+    // driverA.whileActiveContinuous(new DriveAutoRotate());
+    // driverX.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 4000), new ShooterSetSpeed(1, 4000)));
     // driverA.whenActive(new DriveFollowPath("forwardMoveRight"));
 
     SmartDashboard.putNumber("shooter speed", staticSpeed);
