@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import lib.LookupTable;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -118,6 +119,23 @@ public final class Constants {
     public static final double SHOOTER_PULSES_PER_ROTATION = 2048;
 
     public static final double SHOOTER_TOLERANCE = .05; // ??
+    public static final LookupTable SHOOTER_LOOKUP_TABLE = new LookupTable();
+
+    static {
+        SHOOTER_LOOKUP_TABLE.put(2.5, 3000.0);
+        SHOOTER_LOOKUP_TABLE.put(11.0, 3200.0);
+        SHOOTER_LOOKUP_TABLE.put(27.0, 3200.0);
+        SHOOTER_LOOKUP_TABLE.put(45.0, 3300.0);
+        SHOOTER_LOOKUP_TABLE.put(62.0, 3400.0);
+        SHOOTER_LOOKUP_TABLE.put(77.0, 3400.0);
+        SHOOTER_LOOKUP_TABLE.put(96.0, 3550.0);
+        SHOOTER_LOOKUP_TABLE.put(110.0, 3650.0);
+        SHOOTER_LOOKUP_TABLE.put(124.0, 3750.0);
+        SHOOTER_LOOKUP_TABLE.put(136.0, 4000.0);
+        SHOOTER_LOOKUP_TABLE.put(158.0, 4100.0);
+        SHOOTER_LOOKUP_TABLE.put(178.0, 4200.0);
+        SHOOTER_LOOKUP_TABLE.put(192.0, 4500.0);
+    }
 
     /* Limelight Constants */
     public static final double LL_TARGET_HEIGHT = 2.64;// in meters
@@ -166,6 +184,22 @@ public final class Constants {
     public static final double HOOD_MAX_ANGLE = 32;
 
     public static final double HOOD_TOLERANCE = .5;
+    public static final LookupTable HOOD_POSITION_TABLE = new LookupTable();
+    static {
+        HOOD_POSITION_TABLE.put(2.5, 4.2);
+        HOOD_POSITION_TABLE.put(11.0, 4.75);
+        HOOD_POSITION_TABLE.put(27.0, 8.0);
+        HOOD_POSITION_TABLE.put(45.0, 12.5);
+        HOOD_POSITION_TABLE.put(62.0, 14.8);
+        HOOD_POSITION_TABLE.put(77.0, 17.0);
+        HOOD_POSITION_TABLE.put(96.0, 18.1);
+        HOOD_POSITION_TABLE.put(110.0, 18.1);
+        HOOD_POSITION_TABLE.put(124.0, 19.1);
+        HOOD_POSITION_TABLE.put(136.0, 19.8);
+        HOOD_POSITION_TABLE.put(158.0, 22.2);
+        HOOD_POSITION_TABLE.put(178.0, 23.8);
+        HOOD_POSITION_TABLE.put(192.0, 27.0);
+    }
 
     /* Feeder Constants */
     public static final double FEEDER_INTAKE_SPEED = 0.5;

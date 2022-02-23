@@ -35,6 +35,8 @@ import frc.robot.commands.IntakeBall;
 import frc.robot.commands.PurgeBall;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShootBallsByNetwork;
+import frc.robot.commands.ShooterAutoPrep;
+import frc.robot.commands.ShooterAutoShoot;
 import frc.robot.commands.ShooterSetByNetwork;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
@@ -150,21 +152,28 @@ public class RobotContainer {
   private void configureButtonBindings() {
     double staticSpeed = 4000;
     driverLB.whenActive(new DriveZeroGyro());
-    driverLT.whileActiveContinuous( new ParallelCommandGroup(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    driverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep()))
+        .whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     driverRB.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
     driverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
-    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
-    // coDriverLT.whileActiveContinuous( new ParallelCommandGroup(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    // coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
-    // coDriverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
-    // coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
+    driverRT.whileActiveContinuous(
+        new ParallelCommandGroup(new ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
+    // coDriverLT.whileActiveContinuous( new ParallelCommandGroup(new
+    // ShooterSetByNetwork(0), new ShooterSetByNetwork(1))).whenInactive(new
+    // ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    // coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new
+    // ShootBallsByNetwork(0, 0.5, 0), new ShootBallsByNetwork(1, 0.5, 0.25)));
+    // coDriverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0),
+    // new IntakeBall(1)));
+    // coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0),
+    // new PurgeBall(1)));
 
-    //driverStart.and(driverBack).whenActive(new ClimbAllTheWay());
+    // driverStart.and(driverBack).whenActive(new ClimbAllTheWay());
 
-    //TEMP
+    // TEMP
     driverA.whileActiveContinuous(new DriveAutoRotate());
-    //driverA.whenActive(new DriveFollowPath("forwardMoveRight"));
-    
+    // driverA.whenActive(new DriveFollowPath("forwardMoveRight"));
+
     SmartDashboard.putNumber("shooter speed", staticSpeed);
   }
 

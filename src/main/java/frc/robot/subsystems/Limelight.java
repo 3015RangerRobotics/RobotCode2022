@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Limelight extends SubsystemBase {
 	NetworkTable limelight;
 	ArrayList<Double> avgDistance = new ArrayList<>();
+	double users = 0;
 
 	public enum LEDMode {
 		PIPELINE(0),
@@ -83,6 +84,23 @@ public class Limelight extends SubsystemBase {
 		SmartDashboard.putNumber("Corrected Distance from LL", getCorrectedDistanceFromLLPlane());
 		SmartDashboard.putNumber("Target Angle X", getTargetAngleX());
 		SmartDashboard.putNumber("Corrected Angle X", getCorrectedAngleX());
+		SmartDashboard.putNumber("Limelight Users", users);
+
+		if (users > 0) {
+			setLEDMode(LEDMode.LED_ON);
+		} else if (users == 0) {
+			setLEDMode(LEDMode.LED_OFF);
+		} else { // users is negative, which should never happen
+			setLEDMode(LEDMode.LED_BLINK);
+		}
+	}
+
+	public void checkout() {
+		users++;
+	}
+
+	public void uncheckout() {
+		users--;
 	}
 
 	public double getAvgDistance() { // ??
@@ -133,6 +151,16 @@ public class Limelight extends SubsystemBase {
 	// thirdSide));
 	// return Math.toDegrees(correctedAngle);
 	// }
+
+	public double getShooterSpeed() {
+		return Constants.SHOOTER_LOOKUP_TABLE
+				.lookup((getCorrectedDistanceFromLLPlane() - Constants.LL_BACK_OFFSET) * 39.37008);
+	}
+
+	public double getHoodPos() {
+		return Constants.HOOD_POSITION_TABLE
+				.lookup((getCorrectedDistanceFromLLPlane() - Constants.LL_BACK_OFFSET) * 39.37008);
+	}
 
 	public double getCorrectedAngleX() {
 		double distance = getDistanceFromLLPlane();

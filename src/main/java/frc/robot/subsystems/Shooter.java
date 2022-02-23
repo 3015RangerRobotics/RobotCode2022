@@ -87,13 +87,8 @@ public class Shooter extends SubsystemBase {
 	public void purgeShooter() {
 		shooter.set(ControlMode.PercentOutput, -.2);
 	}
-	/*
-	public boolean isPrimed() {
-        double pos = RobotContainer.hood.getHoodPosition() + RobotContainer.limelight.getTargetAngleY();
-        return Math.abs(speed + (2 * Math.abs(pos)) - getRPM()) <= Constants.SHOOTER_TOLERANCE;
-    }
-	*/
-	public boolean isPrimed() {
-		return (Math.abs(speed - getRPM()) <= Constants.SHOOTER_TOLERANCE);
+
+	public boolean isPrimed(double speed) {
+		return (Math.abs(speed - getRPM()) / speed < Constants.SHOOTER_TOLERANCE);
 	}
 }

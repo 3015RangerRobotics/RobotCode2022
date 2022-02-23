@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Limelight.LEDMode;
 
 public class DriveAutoRotate extends CommandBase {
   double setPoint;
@@ -31,6 +30,7 @@ public class DriveAutoRotate extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.limelight.checkout();
     setPoint = RobotContainer.drive.getAngleDegrees();
     RobotContainer.limelight.setLEDMode(LEDMode.LED_ON);
     timer.start();
@@ -93,7 +93,7 @@ public class DriveAutoRotate extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.limelight.setLEDMode(LEDMode.LED_OFF);
+    RobotContainer.limelight.uncheckout();
   }
 
   // Returns true when the command should end.
