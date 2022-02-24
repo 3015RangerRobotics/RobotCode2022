@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+/* uses the limelight to shoot */
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -47,24 +49,10 @@ public class ShooterAutoShoot extends CommandBase {
     RobotContainer.hood.setHoodPosition(angle);
     RobotContainer.shooter[0].setRPM(speed);
     RobotContainer.shooter[1].setRPM(speed);
+    RobotContainer.feeder[0].setPercentOutput(Constants.FEEDER_SHOOT_SPEED);
+    RobotContainer.feeder[1].setPercentOutput(Constants.FEEDER_SHOOT_SPEED);
     RobotContainer.intake[0].intake();
     RobotContainer.intake[1].intake();
-    if (RobotContainer.limelight.hasTarget() && RobotContainer.shooter[0].isPrimed(speed)
-        && RobotContainer.shooter[1].isPrimed(speed)) {
-
-      double time = timer.get() - initialDelay;
-      if (time < 0) {
-        return;
-      }
-      double cycle = timer.get() % loopDelay;
-      if (cycle < 0.25) {
-        RobotContainer.feeder[0].setPercentOutput(Constants.FEEDER_SHOOT_SPEED);
-        RobotContainer.feeder[1].setPercentOutput(Constants.FEEDER_SHOOT_SPEED);
-      } else {
-        RobotContainer.feeder[0].setPercentOutput(0);
-        RobotContainer.feeder[1].setPercentOutput(0);
-      }
-    }
 
   }
 
@@ -75,7 +63,7 @@ public class ShooterAutoShoot extends CommandBase {
     RobotContainer.shooter[0].stop();
     RobotContainer.shooter[1].stop();
     RobotContainer.feeder[0].setPercentOutput(0);
-    RobotContainer.feeder[1].setPercentOutput(1);
+    RobotContainer.feeder[1].setPercentOutput(0);
     RobotContainer.intake[0].stop();
     RobotContainer.intake[1].stop();
   }

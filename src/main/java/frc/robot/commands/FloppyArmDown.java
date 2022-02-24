@@ -2,6 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+/* Brings the Floppy arm of the climber down */
+/* Part of the climbing sequential command group */
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;

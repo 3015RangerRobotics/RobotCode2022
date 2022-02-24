@@ -7,8 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -20,6 +22,7 @@ import frc.robot.commands.ClimberToBottom;
 import frc.robot.commands.ClimberToTop;
 import frc.robot.commands.CompressorSetEnabled;
 import frc.robot.commands.DriveAutoRotate;
+import frc.robot.commands.DriveCoast;
 import frc.robot.commands.DriveFeedbackWhileDisabled;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveMakeAllCurrentModuleAnglesZero;
@@ -33,6 +36,7 @@ import frc.robot.commands.HoodDPad;
 import frc.robot.commands.HoodHome;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
+import frc.robot.commands.LimelightManualOn;
 import frc.robot.commands.PurgeBall;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShootBallsByNetwork;
@@ -103,6 +107,8 @@ public class RobotContainer {
 
   public static final Timer timer = new Timer();
 
+  SendableChooser<CommandBase> autoChooser = new SendableChooser<>();
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -136,9 +142,16 @@ public class RobotContainer {
     SmartDashboard.putData("Climber Home", new ClimberHomePosition());
     SmartDashboard.putData("Zero 202", new DriveZeroGyro(158));
     SmartDashboard.putData("Hood 0", new HoodSetPosition(0));
+    SmartDashboard.putData("Hood 5", new HoodSetPosition(5));
+    SmartDashboard.putData("Hood 15", new HoodSetPosition(15));
     SmartDashboard.putData("Hood 20", new HoodSetPosition(20));
+    SmartDashboard.putData("Hood Home Fast", new HoodHome(0.4));
+    SmartDashboard.putData("Limelight manual on", new LimelightManualOn());
+    SmartDashboard.putData("Drive Coast", new DriveCoast());
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
     // hood.setDefaultCommand(new HoodDPad());
+
+    autoChooser.setDefaultOption("5 Ball Auto", new Auto5Ball());
 
     // Configure the button bindings
     configureButtonBindings();
@@ -175,8 +188,10 @@ public class RobotContainer {
     // TEMP
     // driverA.whileActiveContinuous(new DriveAutoRotate());
     // driverX.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 4000), new ShooterSetSpeed(1, 4000)));
-    // driverA.whenActive(new DriveFollowPath("forwardMoveRight"));
-
+    // driverA.whenActive(new DriveFollowPath("yPath", 3, 4));
+    // driverX.whenActive(new DriveFollowPath("forwardMoveRight", 3, 4));
+    // driverY.whenActive(new DriveFollowPath("forwardRotateLeft", 3, 4));
+    driverA.whileActiveContinuous(new DriveAutoRotate());
     SmartDashboard.putNumber("shooter speed", staticSpeed);
   }
 
@@ -188,7 +203,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new Auto5Ball();
+    return autoChooser.getSelected();
   }
 
   public static double getDriverLeftTrigger() {

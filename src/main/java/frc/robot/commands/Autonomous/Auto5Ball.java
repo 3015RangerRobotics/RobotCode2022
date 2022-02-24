@@ -2,19 +2,27 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+/* 5 Ball Autonomous */
+
 package frc.robot.commands.Autonomous;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveTurnToLimelight;
 import frc.robot.commands.DriveZeroGyro;
+import frc.robot.commands.HoodHome;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.ShootBalls;
+import frc.robot.commands.ShooterAutoPrep;
+import frc.robot.commands.ShooterAutoShoot;
 import frc.robot.commands.ShooterSetSpeed;
+import frc.robot.commands.ShooterStop;
 import frc.robot.subsystems.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -23,48 +31,69 @@ import frc.robot.subsystems.Intake;
 public class Auto5Ball extends SequentialCommandGroup {
         /** Creates a new Auto5Ball. */
         public Auto5Ball() {
-                double firstSpeed = 5000;
-                double secondSpeed = 5000;
-                double firstAngle = 30;
-                double secondAngle = 30;
+                double firstSpeed = 3600;
+                double secondSpeed = 3600;
+                double firstAngle = 24.5;
+                double secondAngle = 24.5;
                 addCommands(
-                        // new DriveZeroGyro(158),
-                        // Move to and intake first ball while revving shooters
+                        new DriveZeroGyro(158),
                         new ParallelDeadlineGroup(
-                                new DriveFollowPath("5BallAutopt1"),
+                                new DriveFollowPath("5BallAutopt1", 3, 4),
+                                new HoodHome(0.3),
+                                new IntakeBall(0)),
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(0.8), 
+                                new HoodHome(0.3),
+                                new IntakeBall(0)),
+                        new ParallelDeadlineGroup(
+                                new DriveFollowPath("5BallAutopt2", 3, 4, false),
+                                new IntakeBall(0),
+                                new HoodHome(0.3),
+                                new ShooterSetSpeed(0, firstSpeed),
+                                new ShooterSetSpeed(1, firstSpeed)),
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(0.6),
+                                new DriveTurnToLimelight(),
+                                new ShooterSetSpeed(0, firstSpeed),
+                                new ShooterSetSpeed(1, firstSpeed),
+                                new HoodSetPosition(firstAngle)),
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(0.5), 
+                                new ShootBalls(0, firstSpeed),
+                                new ShootBalls(1, firstSpeed)),
+                        new ParallelDeadlineGroup(
+                                new DriveFollowPath("5BallAutopt3", 2.5, 3, false), 
+                                new IntakeBall(0)),
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(0.3),
+                                new DriveTurnToLimelight(),
+                                new ShooterSetSpeed(0, firstSpeed), 
                                 new IntakeBall(0)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.5), 
+                                new DriveTurnToLimelight(),
+                                new ShootBalls(0, firstSpeed)),
+                        new ShooterStop(0),
+                        new ShooterStop(1),
+                        new ParallelDeadlineGroup(
+                                new DriveFollowPath("5BallAutopt4", 3, 4, false), 
                                 new IntakeBall(0)),
-                        // Move just shy of second ball while keeping shooter running
                         new ParallelDeadlineGroup(
-                                        new DriveFollowPath("5BallAutopt2")),
+                                new WaitCommand(2), 
+                                new IntakeBall(0)),
                         new ParallelDeadlineGroup(
-                                new WaitCommand(1)));
-                        // // Once at position, shoot balls while moving slightly to pickup second ball
-                        // new ParallelDeadlineGroup(
-                        //                 new WaitCommand(1.5),
-                        //                 new SequentialCommandGroup(
-                        //                                 new WaitCommand(0.5),
-                        //                                 new DriveFollowPath("5BallAutopt3")),
-                        //                 new ShootBalls(0, firstSpeed),
-                        //                 new ShootBalls(1, firstSpeed)),
-                        // // Move to station for 4th and 5th balls
-                        // new ParallelDeadlineGroup(
-                        //                 new DriveFollowPath("5BallAutopt4"),
-                        //                 new IntakeBall(0)),
-                        // // At station wait for ball from human player (may need to increase wait time)
-                        // new ParallelDeadlineGroup(
-                        //                 new WaitCommand(2),
-                        //                 new ShooterSetSpeed(0, secondSpeed)),
-                        // // Move to final shooting position while revving shooter and setting hood
-                        // new ParallelDeadlineGroup(
-                        //                 new DriveFollowPath("5BallAutopt5"),
-                        //                 new ShooterSetSpeed(0, secondSpeed),
-                        //                 new HoodSetPosition(secondAngle)),
-                        // // Fire final two balls, which will both be in the left side
-                        // new ParallelDeadlineGroup(
-                        //                 new WaitCommand(1),
-                        //                 new ShootBalls(0, secondSpeed, 0.75, 0)));
-        }
+                                new DriveFollowPath("5BallAutopt5", 3, 4, false), 
+                                new ShooterSetSpeed(0, secondSpeed),
+                                new HoodSetPosition(secondAngle)),
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(0.8), 
+                                new ShooterSetSpeed(0, secondSpeed),
+                                new DriveTurnToLimelight()),
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(1), 
+                                new DriveTurnToLimelight(),
+                                new ShootBalls(0, secondSpeed)),
+                        new ShooterStop(0));
+                System.out.println("===============================================\nAUTO HAS BEEN CREATED\n===============================================");
+        }         
 }

@@ -166,7 +166,7 @@ public class Limelight extends SubsystemBase {
 		SmartDashboard.putNumber("Hood Lookup", lookupAngle);
 		return lookupAngle;
 	}
-
+	  
 	public double getCorrectedAngleX() {
 		double distance = getDistanceFromLLPlane();
 		double correctedDistance = getCorrectedDistanceFromLLPlane();

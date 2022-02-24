@@ -94,10 +94,10 @@ public final class Constants {
     public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0;
     public static final double DRIVE_POS_ERROR_CONTROLLER_F = 0;
 
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0.03;
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0;
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_F = 0;
+    public static final double DRIVE_AUTO_ROTATE_CONTROLLER_P = 2.4;
+    public static final double DRIVE_AUTO_ROTATE_CONTROLLER_I = 0;
+    public static final double DRIVE_AUTO_ROTATE_CONTROLLER_D = 0;
+    
 
     public static final double DRIVE_ROTATION_MIN_VELOCITY = 0; // place holder
 
@@ -193,7 +193,7 @@ public final class Constants {
         HOOD_POSITION_TABLE.put(62.0, 14.8);
         HOOD_POSITION_TABLE.put(77.0, 17.0);
         HOOD_POSITION_TABLE.put(96.0, 18.1);
-        HOOD_POSITION_TABLE.put(110.0, 18.1);
+        HOOD_POSITION_TABLE.put(110.0, 18.6);
         HOOD_POSITION_TABLE.put(124.0, 19.1);
         HOOD_POSITION_TABLE.put(136.0, 19.8);
         HOOD_POSITION_TABLE.put(158.0, 22.2);
@@ -207,6 +207,6 @@ public final class Constants {
     public static final double FEEDER_SHOOT_SPEED = 0.8;
 
     /* Intake Constants */
-    public static final double INTAKE_INTAKE_SPEED = 0.8;
+    public static final double INTAKE_INTAKE_SPEED = 1;
     public static final double INTAKE_PURGE_SPEED = -0.4;
 }

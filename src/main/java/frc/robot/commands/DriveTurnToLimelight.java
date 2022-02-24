@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+/* Turns the Robot based on the Limelight */
+
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -27,12 +29,13 @@ public class DriveTurnToLimelight extends CommandBase {
     rotationController = new PIDController(Constants.DRIVE_ROTATION_CONTROLLER_P, Constants.DRIVE_ROTATION_CONTROLLER_I,
         Constants.DRIVE_ROTATION_CONTROLLER_D);
     rotationController.setTolerance(0.5);
+    timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.limelight.setLEDMode(LEDMode.LED_ON);
+    RobotContainer.limelight.checkout();
     timer.start();
     timer.reset();
     hasHadTarget = false;
@@ -45,13 +48,13 @@ public class DriveTurnToLimelight extends CommandBase {
   public void execute() {
     SmartDashboard.putNumber("Targeting Error", rotationController.getPositionError());
     if (RobotContainer.limelight.hasTarget()) {
-      setPoint = RobotContainer.drive.getAngleDegrees() - RobotContainer.limelight.getCorrectedAngleX();
+      setPoint = RobotContainer.drive.getAngleDegrees() + RobotContainer.limelight.getCorrectedAngleX();
     } else if (RobotContainer.drive.hasOdometryBeenSet() &&
         !hasHadTarget && timer.hasElapsed(.2) && !timer.hasElapsed(1)) {
-      Translation2d relativePos = RobotContainer.drive.getPoseMeters().getTranslation()
-          .minus(Constants.DRIVE_GOAL_POSITION);
-      setPoint = -1 * Math.toDegrees(Math.atan2(relativePos.getY(), relativePos.getX()))
-          + RobotContainer.drive.getAngleDegrees();
+      // Translation2d relativePos = RobotContainer.drive.getPoseMeters().getTranslation()
+      //     .minus(Constants.DRIVE_GOAL_POSITION);
+      // setPoint = -1 * Math.toDegrees(Math.atan2(relativePos.getY(), relativePos.getX()))
+      //     + RobotContainer.drive.getAngleDegrees();
       if (setPoint > 180) {
         setPoint -= 360;
       } else if (setPoint <= -180) {
@@ -78,8 +81,8 @@ public class DriveTurnToLimelight extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.limelight.uncheckout();
     RobotContainer.drive.drive(0.0, 0.0, 0.0, true);
-    RobotContainer.limelight.setLEDMode(LEDMode.LED_OFF);
   }
 
   // Returns true when the command should end.

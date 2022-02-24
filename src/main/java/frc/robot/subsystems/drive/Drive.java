@@ -83,7 +83,6 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("Front Left Swerve Module Absolute", getModuleAbsoluteRotation(1));
         SmartDashboard.putNumber("Back Left Swerve Module Absolute", getModuleAbsoluteRotation(2));
         SmartDashboard.putNumber("Back Right Swerve Module Absolute", getModuleAbsoluteRotation(3));
-
         ChassisSpeeds speeds = kinematics.toChassisSpeeds(getModuleStates());
         SmartDashboard.putNumber("Drive speed", Math.sqrt(speeds.vxMetersPerSecond * speeds.vyMetersPerSecond));
         SmartDashboard.putNumber("Drive degrees per second", speeds.omegaRadiansPerSecond * (180 / Math.PI));
@@ -324,7 +323,9 @@ public class Drive extends SubsystemBase {
      * @return the robot's current Pose in meters
      */
     public Pose2d getPoseMeters() {
-        return odometry.getPoseMeters();
+        Pose2d pose = odometry.getPoseMeters();
+        pose = new Pose2d(pose.getTranslation(), new Rotation2d(-pose.getRotation().getRadians()));
+        return pose;
     }
 
     /**

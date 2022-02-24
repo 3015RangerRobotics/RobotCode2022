@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -25,6 +26,7 @@ public class Intake extends SubsystemBase {
 		intakeMotor = new TalonSRX(Constants.INTAKE_MOTORS[id]);
 		intakeSensor = new DigitalInput(Constants.INTAKE_BALL_DETECTORS[id]);
 		intakeMotor.setInverted(id == 0);
+		intakeMotor.setNeutralMode(NeutralMode.Brake);
 		intakeMotor.enableVoltageCompensation(true);
 		intakeMotor.configVoltageCompSaturation(12.5);
 		this.id = id;

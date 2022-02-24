@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
 		shooter.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 10);
 		shooter.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 10);
 
-		shooter.setNeutralMode(NeutralMode.Coast);
+		shooter.setNeutralMode(NeutralMode.Brake);
 
 		shooter.enableVoltageCompensation(true);
 		shooter.configVoltageCompSaturation(12.5);

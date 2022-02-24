@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+/* Zeros the gyro based on the robots current facing  or set a specific angle to zero based on current facing */
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
