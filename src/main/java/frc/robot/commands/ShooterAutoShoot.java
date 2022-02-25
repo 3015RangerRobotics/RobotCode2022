@@ -17,6 +17,7 @@ public class ShooterAutoShoot extends CommandBase {
   Timer timer = new Timer();
   double loopDelay;
   double initialDelay;
+  double angle;
 
   public ShooterAutoShoot() {
     this(0, 0);
@@ -39,15 +40,15 @@ public class ShooterAutoShoot extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.limelight.checkout();
+    this.angle = RobotContainer.limelight.getHoodPos();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double speed = RobotContainer.limelight.getShooterSpeed();
-    double angle = RobotContainer.limelight.getHoodPos();
     RobotContainer.hood.setHoodPosition(angle);
-    RobotContainer.shooter[0].setRPM(speed);
+    RobotContainer.shooter[0].setRPM(speed  + 50);
     RobotContainer.shooter[1].setRPM(speed);
     RobotContainer.feeder[0].setPercentOutput(Constants.FEEDER_SHOOT_SPEED);
     RobotContainer.feeder[1].setPercentOutput(Constants.FEEDER_SHOOT_SPEED);

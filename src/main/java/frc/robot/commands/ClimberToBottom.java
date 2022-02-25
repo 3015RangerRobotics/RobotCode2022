@@ -25,6 +25,7 @@ public class ClimberToBottom extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.climber.setPIDSlot(1);
+    RobotContainer.climber.setBrakeMode(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

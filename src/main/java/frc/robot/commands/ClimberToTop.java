@@ -32,6 +32,7 @@ public class ClimberToTop extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.climber.setPIDSlot(0);
+    RobotContainer.climber.setBrakeMode(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

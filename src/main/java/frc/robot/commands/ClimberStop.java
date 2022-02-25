@@ -22,5 +22,6 @@ public class ClimberStop extends InstantCommand {
   @Override
   public void initialize() {
     RobotContainer.climber.setOutput(0.0);
+    RobotContainer.climber.setBrakeMode(false);
   }
 }

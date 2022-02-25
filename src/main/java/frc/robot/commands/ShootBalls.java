@@ -31,11 +31,11 @@ public class ShootBalls extends CommandBase {
   public ShootBalls(int side, double rpm, double loopDelay, double initialDelay) {
     this.intake = RobotContainer.intake[side];
     this.feeder = RobotContainer.feeder[side];
-    this.shooter = RobotContainer.shooter[side];
+    // this.shooter = RobotContainer.shooter[side];
     this.rpm = rpm;
     this.timer = new Timer();
     this.loopDelay = loopDelay < 0.25 ? 0.25 : loopDelay;
-    addRequirements(intake, feeder, shooter);
+    addRequirements(intake, feeder);
   }
 
   // Called when the command is initially scheduled.
@@ -43,13 +43,13 @@ public class ShootBalls extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
-    shooter.setRPM(rpm);
+    // shooter.setRPM(rpm);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setRPM(rpm);
+    // shooter.setRPM(rpm);
     feeder.setPercentOutput(Constants.FEEDER_SHOOT_SPEED);
     intake.intake();
   }

@@ -169,19 +169,30 @@ public class RobotContainer {
   private void configureButtonBindings() {
     double staticSpeed = 0.6;
     driverLB.whenActive(new DriveZeroGyro());
-    driverBack.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep()))
-        .whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    // driverBack.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep()))
+        // .whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     driverRB.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
     driverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
-    driverStart.whileActiveContinuous(
-        new ParallelCommandGroup(new ShooterAutoShoot()));
-    driverRT.whileActiveContinuous(
-        new ParallelCommandGroup(new ShootBallsByNetwork(0), new ShootBallsByNetwork(1, 0, 0.25),
-            new HoodSetByNetwork()));
 
-    driverLT.whileActiveContinuous(
-        new ParallelCommandGroup(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork()))
-        .whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    driverLT.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 3450), new HoodSetPosition(5.85))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 3450), new ShootBalls(1, 3450)));
+
+    driverX.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 2000), new ShooterSetSpeed(1, 2000), new HoodSetPosition(6.85))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+
+    coDriverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
+    coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
+    coDriverDUp.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 3450), new HoodSetPosition(5.85))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    coDriverDDown.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 2000), new ShooterSetSpeed(1, 2000), new HoodSetPosition(6.85))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0), new ShootBalls(1, 0)));
+    // driverStart.whileActiveContinuous(
+    //     new ParallelCommandGroup(new ShooterAutoShoot()));
+    // driverRT.whileActiveContinuous(
+    //     new ParallelCommandGroup(new ShootBallsByNetwork(0), new ShootBallsByNetwork(1, 0, 0.25),
+    //         new HoodSetByNetwork()));
+
+    // driverLT.whileActiveContinuous(
+    //     new ParallelCommandGroup(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork()))
+    //     .whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
 
     // coDriverLT.whileActiveContinuous( new ParallelCommandGroup(new
     // ShooterSetByNetwork(0), new ShooterSetByNetwork(1))).whenInactive(new
@@ -201,6 +212,9 @@ public class RobotContainer {
     // driverA.whenActive(new DriveFollowPath("yPath", 3, 4));
     // driverX.whenActive(new DriveFollowPath("forwardMoveRight", 3, 4));
     // driverY.whenActive(new DriveFollowPath("forwardRotateLeft", 3, 4));
+
+    coDriverStart.and(coDriverBack).whenActive(new ClimbAllTheWay());
+
     driverA.whileActiveContinuous(new DriveAutoRotate());
     SmartDashboard.putNumber("shooter speed", staticSpeed);
     SmartDashboard.putNumber("Hood Set Position", 10);

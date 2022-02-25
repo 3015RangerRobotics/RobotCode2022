@@ -82,6 +82,10 @@ public class Climber extends SubsystemBase {
         hasBeenHomed = true;
     }
 
+    public void setBrakeMode(boolean enable) {
+        climberMotor.setNeutralMode(enable ? NeutralMode.Brake : NeutralMode.Coast);
+    }
+
     /**
      * Sets the climber motor's position in meters
      * 

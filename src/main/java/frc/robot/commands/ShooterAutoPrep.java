@@ -29,7 +29,7 @@ public class ShooterAutoPrep extends CommandBase {
     double speed = RobotContainer.limelight.getShooterSpeed();
     double angle = RobotContainer.limelight.getHoodPos();
     RobotContainer.hood.setHoodPosition(angle);
-    RobotContainer.shooter[0].setRPM(speed);
+    RobotContainer.shooter[0].setRPM(speed + 50);
     RobotContainer.shooter[1].setRPM(speed);
   }
 

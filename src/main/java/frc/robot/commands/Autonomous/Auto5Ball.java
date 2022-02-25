@@ -31,8 +31,8 @@ import frc.robot.subsystems.Intake;
 public class Auto5Ball extends SequentialCommandGroup {
         /** Creates a new Auto5Ball. */
         public Auto5Ball() {
-                double firstSpeed = 3600;
-                double secondSpeed = 3600;
+                double firstSpeed = 3800;
+                double secondSpeed = 3800;
                 double firstAngle = 24.5;
                 double secondAngle = 24.5;
                 addCommands(

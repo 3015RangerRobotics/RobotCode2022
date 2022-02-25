@@ -6,10 +6,14 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
@@ -21,27 +25,44 @@ public class ClimbAllTheWay extends SequentialCommandGroup {
   public ClimbAllTheWay() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    JoystickButton waitButton = RobotContainer.coDriverA;
     addCommands(
         new ClimberHomePosition(),
-        new WaitUntilCommand(RobotContainer.driverA::get),
+        new SmartDashboardPutData("boolean", "confirm climb", true),
+        new WaitUntilCommand(waitButton::get),
+        new SmartDashboardPutData("boolean", "confirm climb", false),
         new ClimberToTop().withName("prepareToGrabBarTwo"),
-        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToPullRobotUpToBarTwo"),
+        new SmartDashboardPutData("boolean", "confirm climb", true),
+        new WaitUntilCommand(waitButton::get),
+        new SmartDashboardPutData("boolean", "confirm climb", false),
         new ClimberToBottom().withName("pullRobotUpToBarTwo"),
-        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToReachToBarThree"),
+        new SmartDashboardPutData("boolean", "confirm climb", true),
+        new WaitUntilCommand(waitButton::get),
+        new SmartDashboardPutData("boolean", "confirm climb", false),
         new FloppyArmUp(),//Constants.CLIMBER_FLOPPY_BAR_TWO_TO_THREE).withName("reachToBarThree"),
         new WaitCommand(1.5),
-        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToGrabBarThree"),
+        new SmartDashboardPutData("boolean", "confirm climb", true),
+        new WaitUntilCommand(waitButton::get),
+        new SmartDashboardPutData("boolean", "confirm climb", false),
         // new ClimberToBarRelease(),
         new ClimberStop(),
         new WaitCommand(1),
-        new WaitUntilCommand(RobotContainer.driverA::get),
+        new SmartDashboardPutData("boolean", "confirm climb", true),
+        new WaitUntilCommand(waitButton::get),
+        new SmartDashboardPutData("boolean", "confirm climb", false),
         new ClimberToTop().withName("grabBarThree"),
-        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToPullUpToBarThree"),
+        new SmartDashboardPutData("boolean", "confirm climb", true),
+        new WaitUntilCommand(waitButton::get),
+        new SmartDashboardPutData("boolean", "confirm climb", false),
         new ClimberToBottom().withName("pullUpToBarThree"),
-        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToDropToGrabBarFour"),
+        new SmartDashboardPutData("boolean", "confirm climb", true),
+        new WaitUntilCommand(waitButton::get),
+        new SmartDashboardPutData("boolean", "confirm climb", false),
         new FloppyArmDown(),//Constants.CLIMBER_FLOPPY_BAR_THREE_TO_FOUR).withName("dropToGrabBarFour"),
         new WaitCommand(1.5),
-        new WaitUntilCommand(RobotContainer.driverA::get).withName("waitToGrabBarFour"),
+        new SmartDashboardPutData("boolean", "confirm climb", true),
+        new WaitUntilCommand(waitButton::get),
+        new SmartDashboardPutData("boolean", "confirm climb", false),
         // new ClimberToBarRelease().withName("grabBarFour"),
         new ClimberStop(),
         new WaitCommand(1),
