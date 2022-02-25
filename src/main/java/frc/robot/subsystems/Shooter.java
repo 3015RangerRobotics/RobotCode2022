@@ -59,6 +59,13 @@ public class Shooter extends SubsystemBase {
 	public void periodic() {
 		if (doPeriodic) {
 			SmartDashboard.putNumber((id == 0 ? "Left " : "Right ") + "Shooter RPM", getRPM());
+			SmartDashboard.putBoolean((id == 0 ? "Left " : "Right ") + "Shooter Primed",
+					isPrimed() && lastSetpoint != 0);
+			if (id == 0) {
+				int left = (isPrimed() && lastSetpoint != 0) ? 1 : 0;
+				int right = SmartDashboard.getBoolean("Right Shooter Primed", false) ? 1 : 0;
+				SmartDashboard.putNumber("Shooters ready", left + right);
+			}
 			// SmartDashboard.putNumber("PIDTarget", lastSetpoint);
 			// SmartDashboard.putNumber("PIDActual", getRPM());
 		}
@@ -69,6 +76,10 @@ public class Shooter extends SubsystemBase {
 	 */
 	public double getRPM() {
 		return (shooter.getSelectedSensorVelocity() * 10 * 60 / Constants.SHOOTER_PULSES_PER_ROTATION);
+	}
+
+	public void setPercentOutput(double percent) {
+		shooter.set(ControlMode.PercentOutput, percent);
 	}
 
 	/**
@@ -88,7 +99,7 @@ public class Shooter extends SubsystemBase {
 		shooter.set(ControlMode.PercentOutput, -.2);
 	}
 
-	public boolean isPrimed(double speed) {
-		return (Math.abs(speed - getRPM()) / speed < Constants.SHOOTER_TOLERANCE);
+	public boolean isPrimed() {
+		return (Math.abs(lastSetpoint - getRPM()) / lastSetpoint < Constants.SHOOTER_TOLERANCE);
 	}
 }

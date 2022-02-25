@@ -97,7 +97,6 @@ public final class Constants {
     public static final double DRIVE_AUTO_ROTATE_CONTROLLER_P = 2.4;
     public static final double DRIVE_AUTO_ROTATE_CONTROLLER_I = 0;
     public static final double DRIVE_AUTO_ROTATE_CONTROLLER_D = 0;
-    
 
     public static final double DRIVE_ROTATION_MIN_VELOCITY = 0; // place holder
 
@@ -106,10 +105,10 @@ public final class Constants {
     /* Shooter Constants */
     public static final double SHOOTER_MOTOR_SPEED = 10;
 
-    public static final double SHOOTER_P = 0.5;
+    public static final double SHOOTER_P = 0;
     public static final double SHOOTER_I = 0;
-    public static final double SHOOTER_D = 5;
-    public static final double SHOOTER_F = 0.0468;
+    public static final double SHOOTER_D = 0;
+    public static final double SHOOTER_F = 0.04485;
 
     public static final double SHOOTER_SHOOT_P = 1;
     public static final double SHOOTER_SHOOT_I = 0;
@@ -140,11 +139,12 @@ public final class Constants {
     /* Limelight Constants */
     public static final double LL_TARGET_HEIGHT = 2.64;// in meters
     public static final double LL_MOUNT_HEIGHT = 0.8001; // 31.5 inches
-    public static final double LL_MOUNT_ANGLE = 30;
+    public static final double LL_MOUNT_ANGLE = 25;
     public static final double LL_ROBOT_TO_TARGET = .183;
     public static final double LL_OFFSET = -0.178; // add real
     public static final double LL_BACK_OFFSET = 0.605; // add real
     public static final double LL_TOLERANCE = 1;
+    public static final double LL_RIM_TO_FENDER = 0.1743;
     public static final double LL_GOAL_RADIUS = 1.355852;
 
     /* Climber Constants */
@@ -195,7 +195,7 @@ public final class Constants {
         HOOD_POSITION_TABLE.put(96.0, 18.1);
         HOOD_POSITION_TABLE.put(110.0, 18.6);
         HOOD_POSITION_TABLE.put(124.0, 19.1);
-        HOOD_POSITION_TABLE.put(136.0, 19.8);
+        HOOD_POSITION_TABLE.put(136.0, 19.9); // originally 19.8
         HOOD_POSITION_TABLE.put(158.0, 22.2);
         HOOD_POSITION_TABLE.put(178.0, 23.8);
         HOOD_POSITION_TABLE.put(192.0, 27.0);

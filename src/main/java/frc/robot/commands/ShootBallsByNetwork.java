@@ -37,6 +37,7 @@ public class ShootBallsByNetwork extends CommandBase {
     this.rpm = SmartDashboard.getNumber("shooter speed", 0);
     this.timer = new Timer();
     this.loopDelay = loopDelay < 0.25 ? 0.25 : loopDelay;
+    this.initialDelay = initialDelay;
     addRequirements(intake, feeder, shooter);
   }
 
@@ -71,7 +72,6 @@ public class ShootBallsByNetwork extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     intake.stop();
-    shooter.stop();
     feeder.setPercentOutput(0);
   }
 

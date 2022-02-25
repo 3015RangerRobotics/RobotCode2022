@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 import java.util.ArrayList;
 
@@ -81,10 +82,14 @@ public class Limelight extends SubsystemBase {
 		SmartDashboard.putNumber("Target Distance", getRobotToTargetDistance());
 		SmartDashboard.putNumber("Corrected Distance", getRobotCorrectedDistance());
 		SmartDashboard.putNumber("Distance from LL", getDistanceFromLLPlane());
-		SmartDashboard.putNumber("Corrected Distance from LL", getCorrectedDistanceFromLLPlane());
+		double correctedDistance = getCorrectedDistanceFromLLPlane();
+		SmartDashboard.putNumber("Corrected Distance from LL", correctedDistance);
+		SmartDashboard.putNumber("Corrected Distance Inches", correctedDistance * 39.37);
 		SmartDashboard.putNumber("Target Angle X", getTargetAngleX());
 		SmartDashboard.putNumber("Corrected Angle X", getCorrectedAngleX());
 		SmartDashboard.putNumber("Limelight Users", users);
+		SmartDashboard.putNumber("Limelight RPM Target", getShooterSpeed());
+		SmartDashboard.putNumber("Limelight Hood Target", getHoodPos());
 
 		if (users > 0) {
 			setLEDMode(LEDMode.LED_ON);
@@ -153,20 +158,20 @@ public class Limelight extends SubsystemBase {
 	// }
 
 	public double getShooterSpeed() {
-		double distance = (getCorrectedDistanceFromLLPlane() - Constants.LL_GOAL_RADIUS) * 37.39008;
+		// double distance = (getCorrectedDistanceFromLLPlane() -
+		// Constants.LL_GOAL_RADIUS)
+		double distance = getDistanceInches();
 		double lookupRPM = Constants.SHOOTER_LOOKUP_TABLE.lookup(distance);
 		SmartDashboard.putNumber("Lookup Distance Inches", distance);
-		SmartDashboard.putNumber("Shooter Lookup", lookupRPM);
 		return lookupRPM;
 	}
 
 	public double getHoodPos() {
-		double distance = (getCorrectedDistanceFromLLPlane() - Constants.LL_GOAL_RADIUS) * 37.39008;
+		double distance = getDistanceInches();
 		double lookupAngle = Constants.HOOD_POSITION_TABLE.lookup(distance);
-		SmartDashboard.putNumber("Hood Lookup", lookupAngle);
 		return lookupAngle;
 	}
-	  
+
 	public double getCorrectedAngleX() {
 		double distance = getDistanceFromLLPlane();
 		double correctedDistance = getCorrectedDistanceFromLLPlane();
@@ -304,8 +309,8 @@ public class Limelight extends SubsystemBase {
 				Math.tan(Math.toRadians(Constants.LL_MOUNT_ANGLE + getTargetAngleY())))
 				* ((Constants.LL_TARGET_HEIGHT - Constants.LL_MOUNT_HEIGHT) /
 						Math.tan(Math.toRadians(Constants.LL_MOUNT_ANGLE + getTargetAngleY())))
-				-
-				(Constants.LL_OFFSET * Constants.LL_OFFSET)) - Constants.LL_BACK_OFFSET - Constants.LL_ROBOT_TO_TARGET);
+				- (Constants.LL_OFFSET * Constants.LL_OFFSET)) - Constants.LL_BACK_OFFSET
+				- Constants.LL_ROBOT_TO_TARGET);
 	}
 
 	public double getDistanceFromLLPlane() {
@@ -317,6 +322,14 @@ public class Limelight extends SubsystemBase {
 		double distance = getDistanceFromLLPlane();
 		return (Math.sqrt((Constants.LL_OFFSET * Constants.LL_OFFSET) + (distance * distance)
 				- (2.0 * distance * Constants.LL_OFFSET * Math.sin(Math.toRadians(getTargetAngleX())))));
+	}
+
+	public double getDistanceInches() {
+		double angle = Math.toRadians(getTargetAngleY() + Constants.LL_MOUNT_ANGLE);
+		double linearDistance = (Constants.LL_TARGET_HEIGHT - Constants.LL_MOUNT_HEIGHT) / Math.tan(angle);
+		double adjustedDitance = linearDistance - Constants.LL_BACK_OFFSET - Constants.LL_RIM_TO_FENDER;
+		return adjustedDitance * 39.37008;
+
 	}
 
 	/*
