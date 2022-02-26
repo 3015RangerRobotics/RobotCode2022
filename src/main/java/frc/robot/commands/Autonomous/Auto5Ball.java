@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.CompressorSetEnabled;
 import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveTurnToLimelight;
@@ -18,6 +19,7 @@ import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.HoodHome;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
+import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShooterAutoPrep;
 import frc.robot.commands.ShooterAutoShoot;
@@ -37,6 +39,8 @@ public class Auto5Ball extends SequentialCommandGroup {
                 double secondAngle = 24.5;
                 addCommands(
                         new DriveZeroGyro(158),
+                        new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown),
+                        new CompressorSetEnabled(false),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt1", 3, 4),
                                 new HoodHome(0.3),
@@ -81,6 +85,7 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new ParallelDeadlineGroup(
                                 new WaitCommand(2), 
                                 new IntakeBall(0)),
+                        new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt5", 3, 4, false), 
                                 new ShooterSetSpeed(0, secondSpeed),
@@ -93,7 +98,8 @@ public class Auto5Ball extends SequentialCommandGroup {
                                 new WaitCommand(1), 
                                 new DriveTurnToLimelight(),
                                 new ShootBalls(0, secondSpeed)),
-                        new ShooterStop(0));
+                        new ShooterStop(0),
+                        new CompressorSetEnabled(true));
                 System.out.println("===============================================\nAUTO HAS BEEN CREATED\n===============================================");
         }         
 }

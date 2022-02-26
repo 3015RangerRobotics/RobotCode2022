@@ -51,8 +51,8 @@ public class Climber extends SubsystemBase {
         // LimitSwitchNormal.NormallyOpen, deviceID)
 
         /* Might need to change pneumatics module type */
-        secondaryArm = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.CLIMBER_SOLENOID_DOWN,
-                Constants.CLIMBER_SOLENOID_UP);
+        secondaryArm = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.CLIMBER_SOLENOID_REVERSE,
+                Constants.CLIMBER_SOLENOID_FORWARD);
 
         bottomLimit = new DigitalInput(Constants.CLIMBER_BOTTOM_SWITCH);
 
@@ -165,7 +165,7 @@ public class Climber extends SubsystemBase {
     }
 
     public double getArmAngle() {
-        return armEncoder.get() + Constants.CLIMBER_FLOPPY_ARM_OFFSET;
+        return (armEncoder.get() * Constants.CLIMBER_ARM_DEGREES_PER_PULSE) + Constants.CLIMBER_FLOPPY_ARM_OFFSET;
     }
 
     public double getArmSpeed() {

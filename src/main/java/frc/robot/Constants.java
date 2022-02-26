@@ -28,7 +28,7 @@ public final class Constants {
     public static final int DRIVE_PIGEON_CHANNEL = 1;
 
     /* Intake */
-    public static final int[] INTAKE_MOTORS = { 24, 26 }; // { left, right }
+    public static final int[] INTAKE_MOTORS = { 24, 26, 29 }; // { left, right, drop}
 
     /* Feeder */
     public static final int[] FEEDER_TOP_MOTORS = { 25, 27 }; // { left, right }
@@ -47,8 +47,13 @@ public final class Constants {
 
     /* Solenoid ID's */
     /* Climber */
-    public static final int CLIMBER_SOLENOID_UP = 0;
-    public static final int CLIMBER_SOLENOID_DOWN = 1;
+    public static final int CLIMBER_SOLENOID_FORWARD = 0;
+    public static final int CLIMBER_SOLENOID_REVERSE = 1;
+
+    /* Intake */
+    // Currently using climber solenoid's ids, update later
+    public static final int DROP_SOLENOID_FORWARD = 0;
+    public static final int DROP_SOLENOID_REVERSE = 1;
 
     /* Digital IO ID's */
     /* climber */
@@ -125,6 +130,13 @@ public final class Constants {
         SHOOTER_LOOKUP_TABLE.put(45.0, 3900.0);
         SHOOTER_LOOKUP_TABLE.put(63.0, 4000.0);
         SHOOTER_LOOKUP_TABLE.put(74.0, 4150.0);
+        SHOOTER_LOOKUP_TABLE.put(85.8, 4150.0);
+        SHOOTER_LOOKUP_TABLE.put(100.1, 4275.0);
+        SHOOTER_LOOKUP_TABLE.put(112.8, 4300.0);
+        SHOOTER_LOOKUP_TABLE.put(125.3, 4300.0);
+        SHOOTER_LOOKUP_TABLE.put(136.2, 4375.0);
+        SHOOTER_LOOKUP_TABLE.put(152.8, 4400.0);
+
         // SHOOTER_LOOKUP_TABLE.put(96.0, 3550.0);
         // SHOOTER_LOOKUP_TABLE.put(110.0, 3650.0);
         // SHOOTER_LOOKUP_TABLE.put(124.0, 3750.0);
@@ -188,6 +200,12 @@ public final class Constants {
         HOOD_POSITION_TABLE.put(45.0, 12.0);
         HOOD_POSITION_TABLE.put(63.0, 12.6);
         HOOD_POSITION_TABLE.put(74.0, 15.0);
+        HOOD_POSITION_TABLE.put(85.8, 16.5);
+        HOOD_POSITION_TABLE.put(100.1, 18.0);
+        HOOD_POSITION_TABLE.put(112.8, 18.0);
+        HOOD_POSITION_TABLE.put(125.3, 19.0);
+        HOOD_POSITION_TABLE.put(136.2, 22.5);
+        HOOD_POSITION_TABLE.put(152.8, 23.0);
         // HOOD_POSITION_TABLE.put(96.0, 18.1);
         // HOOD_POSITION_TABLE.put(110.0, 18.6);
         // HOOD_POSITION_TABLE.put(124.0, 19.1);
