@@ -34,7 +34,7 @@ public class Intake extends SubsystemBase {
 	public Intake(int id) {
 		intakeMotor = new TalonSRX(Constants.INTAKE_MOTORS[id]);
 		if (id == 0) {
-			intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.DROP_SOLENOID_REVERSE, Constants.DROP_SOLENOID_FORWARD);
+			intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_REVERSE, Constants.INTAKE_SOLENOID_FORWARD);
 		}
 		intakeSensor = new DigitalInput(Constants.INTAKE_BALL_DETECTORS[id]);
 		intakeMotor.setInverted(id == 0);
@@ -52,10 +52,10 @@ public class Intake extends SubsystemBase {
 		}
         switch (solenoidPosition) {
             case kUp:
-                intakeSolenoid.set(Value.kForward);
+                intakeSolenoid.set(Value.kReverse);
                 break;
             case kDown:
-                intakeSolenoid.set(Value.kReverse);
+                intakeSolenoid.set(Value.kForward);
                 break;
         }
 	}

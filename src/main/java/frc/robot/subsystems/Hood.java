@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.FaultID;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -18,6 +19,7 @@ public class Hood extends SubsystemBase {
     private CANSparkMax hoodMotor;
     private DigitalInput limitSwitch;
     public double pos;
+    boolean hasBeenHomed = false;
 
     public Hood() {
         hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
@@ -35,6 +37,7 @@ public class Hood extends SubsystemBase {
         limitSwitch = new DigitalInput(Constants.HOOD_SWITCH_CHANNEL);
         enableForwardSoftLimit(true);
         setReverseLimit(true);
+        hoodMotor.burnFlash();
     }
 
     @Override
@@ -77,5 +80,19 @@ public class Hood extends SubsystemBase {
 
     public boolean isPrimed() {
 	    return (Math.abs(pos - getHoodPosition()) <= Constants.HOOD_TOLERANCE);
+    }
+
+    public boolean hasBeenHomed() {
+        if(hoodMotor.getFault(FaultID.kHasReset)) {
+            hasBeenHomed = false;
+            hoodMotor.clearFaults();
+            return false;
+        } else {
+            return hasBeenHomed;
+        }
+    }
+
+    public void setHomed() {
+        hasBeenHomed = true;
     }
 }

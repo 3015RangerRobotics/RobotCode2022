@@ -58,9 +58,10 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.6),
                                 new DriveTurnToLimelight(),
+                                // new ShooterAutoPrep(),
+                                new HoodSetPosition(firstAngle),
                                 new ShooterSetSpeed(0, firstSpeed),
-                                new ShooterSetSpeed(1, firstSpeed),
-                                new HoodSetPosition(firstAngle)),
+                                new ShooterSetSpeed(1, firstSpeed)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.5), 
                                 new ShootBalls(0, firstSpeed),
@@ -71,7 +72,9 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.3),
                                 new DriveTurnToLimelight(),
-                                new ShooterSetSpeed(0, firstSpeed), 
+                                // new ShooterAutoPrep(), 
+                                new ShooterSetSpeed(0, firstSpeed),
+                                new ShooterSetSpeed(1, firstSpeed),
                                 new IntakeBall(0)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.5), 
@@ -85,20 +88,23 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new ParallelDeadlineGroup(
                                 new WaitCommand(2), 
                                 new IntakeBall(0)),
-                        new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp),
+                        //new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt5", 3, 4, false), 
                                 new ShooterSetSpeed(0, secondSpeed),
-                                new HoodSetPosition(secondAngle)),
+                                new HoodSetPosition(secondAngle),
+                                new IntakeBall(0)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.8), 
                                 new ShooterSetSpeed(0, secondSpeed),
+                                // new ShooterAutoPrep(),
                                 new DriveTurnToLimelight()),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(1), 
                                 new DriveTurnToLimelight(),
                                 new ShootBalls(0, secondSpeed)),
                         new ShooterStop(0),
+                        new ShooterStop(1),
                         new CompressorSetEnabled(true));
                 System.out.println("===============================================\nAUTO HAS BEEN CREATED\n===============================================");
         }         

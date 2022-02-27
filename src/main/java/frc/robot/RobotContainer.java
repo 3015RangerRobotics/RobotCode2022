@@ -120,7 +120,7 @@ public class RobotContainer {
     SmartDashboard.putData("Zero Modules", new DriveMakeAllCurrentModuleAnglesZero());
 
     compressor = new Compressor();
-    // climber = new Climber();
+    climber = new Climber();
     limelight = new Limelight();
     intake[0] = new Intake(0);
     intake[1] = new Intake(1);
@@ -138,9 +138,9 @@ public class RobotContainer {
     SmartDashboard.putData("Hood home", new HoodHome());
     SmartDashboard.putData("Enable Compressor", new CompressorSetEnabled(true));
     SmartDashboard.putData("Disable Compressor", new CompressorSetEnabled(false));
-    // SmartDashboard.putData("Floppy Arm Down", new FloppyArmDown());
-    // SmartDashboard.putData("Floppy Arm Up", new FloppyArmUp());
-    // SmartDashboard.putData("Climber Home", new ClimberHomePosition());
+    SmartDashboard.putData("Floppy Arm Down", new FloppyArmDown());
+    SmartDashboard.putData("Floppy Arm Up", new FloppyArmUp());
+    SmartDashboard.putData("Climber Home", new ClimberHomePosition());
     SmartDashboard.putData("Zero 202", new DriveZeroGyro(158));
     SmartDashboard.putData("Hood 0", new HoodSetPosition(0));
     SmartDashboard.putData("Hood 5", new HoodSetPosition(5));
@@ -150,6 +150,7 @@ public class RobotContainer {
     SmartDashboard.putData("Limelight manual on", new LimelightManualOn());
     SmartDashboard.putData("Drive Coast", new DriveCoast());
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
+    // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
 
     autoChooser.setDefaultOption("5 Ball Auto", new Auto5Ball());
@@ -177,20 +178,25 @@ public class RobotContainer {
     // driverLT.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 3450), new HoodSetPosition(6.35))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     // driverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     driverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 3450), new ShootBalls(1, 3450)));
+    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0), new ShootBalls(1, 0, 0, 0.25)));
 
     driverY.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 3450), new HoodSetPosition(6.35))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+
+    driverDUp.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
+    driverDDown.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown));
 
     coDriverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
     coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
     coDriverDUp.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 3450), new HoodSetPosition(6.35))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     coDriverDDown.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 2000), new ShooterSetSpeed(1, 2000), new HoodSetPosition(6.85))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     coDriverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0), new ShootBalls(1, 0)));
+    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0), new ShootBalls(1, 0, 0, 0.25)));
     coDriverLB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown));
     coDriverRB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
 
-    // coDriverStart.and(coDriverBack).whenActive(new ParallelCommandGroup(new ClimbAllTheWay(), new DriveWithGamepad(true, false)));
+    coDriverY.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 2000), new HoodSetPosition(6.5))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+
+    coDriverStart.and(coDriverBack).whenActive(new ParallelCommandGroup(new ClimbAllTheWay(), new DriveWithGamepad(true, false)));
 
 
 

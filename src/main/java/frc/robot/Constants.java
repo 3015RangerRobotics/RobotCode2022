@@ -52,8 +52,8 @@ public final class Constants {
 
     /* Intake */
     // Currently using climber solenoid's ids, update later
-    public static final int DROP_SOLENOID_FORWARD = 0;
-    public static final int DROP_SOLENOID_REVERSE = 1;
+    public static final int INTAKE_SOLENOID_FORWARD = 2;
+    public static final int INTAKE_SOLENOID_REVERSE = 3;
 
     /* Digital IO ID's */
     /* climber */
