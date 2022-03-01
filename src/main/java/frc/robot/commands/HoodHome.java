@@ -35,7 +35,9 @@ public class HoodHome extends CommandBase {
   @Override
   public void execute() {
     RobotContainer.hood.setReverseLimit(false);
-    RobotContainer.hood.setHoodOutputPercentage(speed);
+    if (!RobotContainer.hood.hasBeenHomed()) {
+      RobotContainer.hood.setHoodOutputPercentage(speed);
+    }
   }
 
   // Called once the command ends or is interrupted.

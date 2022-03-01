@@ -11,11 +11,18 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveFollowPath;
+import frc.robot.commands.DriveTurnToAngle;
 import frc.robot.commands.DriveTurnToLimelight;
+import frc.robot.commands.DriveZeroGyro;
+import frc.robot.commands.HoodHome;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
+import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShooterSetSpeed;
+import frc.robot.commands.ShooterStop;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakeSolenoidPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -25,39 +32,51 @@ public class Auto4Ball extends SequentialCommandGroup {
   public Auto4Ball() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    double firstSpeed = 3500;
-    double firstAngle = 30;
+    double firstSpeed = 3800;
+    double firstAngle = 24.5;
     addCommands(
-        // Move to and intake first ball
+        new DriveZeroGyro(115),
         new ParallelDeadlineGroup(
-            new DriveFollowPath("4BallAutopt1"),
-            new IntakeBall(1), // Left Intake
-            new HoodSetPosition(firstAngle)),
-        // move to shooting pos while reving shooter
+            new DriveFollowPath("4BallAutopt1", 3, 4), 
+            new HoodHome(0.3),
+            new IntakeBall(0)),
         new ParallelDeadlineGroup(
-            new DriveFollowPath("4BallAutopt2"),
+            new WaitCommand(0.5), 
+            new HoodHome(0.5),
+            new IntakeBall(0)),
+        new ParallelDeadlineGroup(
+            new WaitCommand(1.2),
+            new DriveTurnToAngle(-30),
+            new HoodSetPosition(firstAngle),
             new ShooterSetSpeed(0, firstSpeed),
             new ShooterSetSpeed(1, firstSpeed)),
-        // ensures robot is on target
-        new DriveTurnToLimelight(),
-        // shoots the 2 balls
-        new ParallelCommandGroup(
-            new ShootBalls(1, firstSpeed),
-            new ShootBalls(2, firstSpeed)),
-        // Move to human player station to grab balls
         new ParallelDeadlineGroup(
-            new DriveFollowPath("4BallAutopt3"),
-            new IntakeBall(0)), // Right Intake
-        // Drive to shooting position while reving shooter
+            new WaitCommand(0.8), 
+            new DriveTurnToLimelight()),
         new ParallelDeadlineGroup(
-            new DriveFollowPath("4BallAutopt4"),
-            new ShooterSetSpeed(0, firstSpeed),
-            new ShooterSetSpeed(1, firstSpeed)),
-        // ensures robot is on target
-        new DriveTurnToLimelight(),
-        // shoot the balls
-        new ParallelCommandGroup(
-            new ShootBalls(1, firstSpeed),
-            new ShootBalls(0, firstSpeed)));
+            new WaitCommand(0.5),
+            new ShootBalls(0, 0),
+            new ShootBalls(1, 0)),
+        new ShooterStop(0),
+        new ShooterStop(1),
+        new ParallelDeadlineGroup(
+            new DriveFollowPath("4BallAutopt2", 3, 4, false), 
+            new IntakeBall(0)),
+        new ParallelDeadlineGroup(
+            new WaitCommand(2), 
+            new IntakeBall(0)),
+        new IntakeSetPneumatic(IntakeSolenoidPosition.kUp),
+        new ParallelDeadlineGroup(
+            new DriveFollowPath("4BallAutopt3", 3, 4, false), 
+            new HoodSetPosition(firstAngle),
+            new ShooterSetSpeed(0, firstSpeed)),
+        new ParallelDeadlineGroup(
+            new WaitCommand(1.2), 
+            new DriveTurnToLimelight()),
+        new ParallelDeadlineGroup(
+            new WaitCommand(1), 
+            new ShootBalls(0, 0, 0.4)),
+        new ShooterStop(0)
+    );
   }
 }

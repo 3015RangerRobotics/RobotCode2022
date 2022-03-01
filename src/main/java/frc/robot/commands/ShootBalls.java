@@ -19,39 +19,51 @@ public class ShootBalls extends CommandBase {
   private Feeder feeder;
   private Shooter shooter;
   double rpm;
-  double loopDelay;
+  double secondBallDelay;
   double initialDelay;
+  boolean hasTwoBalls;
   Timer timer;
 
   public ShootBalls(int side, double rpm) {
     this(side, rpm, 0, 0);
   }
 
+  public ShootBalls(int side, double rpm, double secondBallDelay) {
+    this(side, rpm, secondBallDelay, 0);
+  }
+
   /** Creates a new ShootBalls. */
-  public ShootBalls(int side, double rpm, double loopDelay, double initialDelay) {
+  public ShootBalls(int side, double rpm, double secondBallDelay, double initialDelay) {
     this.intake = RobotContainer.intake[side];
     this.feeder = RobotContainer.feeder[side];
     // this.shooter = RobotContainer.shooter[side];
     this.rpm = rpm;
     this.timer = new Timer();
-    this.loopDelay = loopDelay < 0.25 ? 0.25 : loopDelay;
+    this.initialDelay = initialDelay;
+    this.secondBallDelay = secondBallDelay;
     addRequirements(intake, feeder);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    hasTwoBalls = intake.getIntakeSensor() && feeder.getBallDetector();
     timer.reset();
     timer.start();
-    // shooter.setRPM(rpm);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // shooter.setRPM(rpm);
-    feeder.setPercentOutput(Constants.FEEDER_SHOOT_SPEED);
-    intake.intake();
+    double time = timer.get();
+    if (time > initialDelay) {
+      feeder.setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
+    }
+    if (hasTwoBalls && time > initialDelay + secondBallDelay) {
+      intake.intake();
+    } else if (time > initialDelay) {
+      intake.intake();
+    }
   }
 
   // Called once the command ends or is interrupted.

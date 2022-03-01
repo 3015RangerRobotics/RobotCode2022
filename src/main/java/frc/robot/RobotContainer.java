@@ -47,6 +47,7 @@ import frc.robot.commands.ShooterAutoShoot;
 import frc.robot.commands.ShooterSetByNetwork;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
+import frc.robot.commands.Autonomous.Auto4Ball;
 import frc.robot.commands.Autonomous.Auto5Ball;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Compressor;
@@ -153,13 +154,14 @@ public class RobotContainer {
     // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
 
-    autoChooser.setDefaultOption("5 Ball Auto", new Auto5Ball());
+    autoChooser.setDefaultOption("4 Ball Auto", new Auto4Ball());
+    autoChooser.addOption("5 Ball Auto", new Auto5Ball());
 
     // Configure the button bindings
     configureButtonBindings();
   }
 
-  /**
+  /**`
    * Use this method to define your button->command mappings. Buttons can be
    * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -178,7 +180,7 @@ public class RobotContainer {
     // driverLT.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 3450), new HoodSetPosition(6.35))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     // driverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     driverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0), new ShootBalls(1, 0, 0, 0.25)));
+    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0), new ShootBalls(1, 0, 0.4, 0.25))); 
 
     driverY.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 3450), new HoodSetPosition(6.35))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
 
@@ -190,7 +192,7 @@ public class RobotContainer {
     coDriverDUp.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 3450), new HoodSetPosition(6.35))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     coDriverDDown.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 2000), new ShooterSetSpeed(1, 2000), new HoodSetPosition(6.85))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     coDriverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0), new ShootBalls(1, 0, 0, 0.25)));
+    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0), new ShootBalls(1, 0, 0.4, 0.25)));
     coDriverLB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown));
     coDriverRB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
 
