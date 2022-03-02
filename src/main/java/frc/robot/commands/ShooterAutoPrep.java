@@ -11,6 +11,11 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class ShooterAutoPrep extends CommandBase {
+
+  double speed;
+  double angle;
+  boolean hasHadTarget = false;
+
   /** Creates a new ShooterAutoPrep. */
   public ShooterAutoPrep() {
     addRequirements(RobotContainer.hood, RobotContainer.shooter[0], RobotContainer.shooter[1]);
@@ -26,11 +31,16 @@ public class ShooterAutoPrep extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = RobotContainer.limelight.getShooterSpeed();
-    double angle = RobotContainer.limelight.getHoodPos();
-    RobotContainer.hood.setHoodPosition(angle);
-    RobotContainer.shooter[0].setRPM(speed);
-    RobotContainer.shooter[1].setRPM(speed);
+    if (RobotContainer.limelight.hasTarget()) {
+      speed = RobotContainer.limelight.getShooterSpeed();
+      angle = RobotContainer.limelight.getHoodPos();
+      hasHadTarget = true;
+    }
+    if (hasHadTarget && !(RobotContainer.driverRT.get() || RobotContainer.coDriverRT.get())) {
+      RobotContainer.hood.setHoodPosition(angle);
+      RobotContainer.shooter[0].setRPM(speed);
+      RobotContainer.shooter[1].setRPM(speed);
+    }
   }
 
   // Called once the command ends or is interrupted.

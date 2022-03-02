@@ -26,7 +26,7 @@ public class DriveAutoRotate extends CommandBase {
     addRequirements(RobotContainer.drive);
     rotationController = new PIDController(Constants.DRIVE_ROTATION_CONTROLLER_P, Constants.DRIVE_ROTATION_CONTROLLER_I,
         Constants.DRIVE_ROTATION_CONTROLLER_D);
-    rotationController.setTolerance(0.5);
+    rotationController.setTolerance(0.3);
   }
 
   // Called when the command is initially scheduled.

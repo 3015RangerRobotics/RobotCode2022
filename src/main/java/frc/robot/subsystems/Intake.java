@@ -65,10 +65,14 @@ public class Intake extends SubsystemBase {
 			SmartDashboard.putBoolean("Intake Sensor " + (id == 0 ? "Left" : "Right"), getIntakeSensor());
 		}
 	}
-
+	
 	public void intake() {
+		intake(true);
+	}
+
+	public void intake(boolean dropIntake) {
 		intakeMotor.set(ControlMode.PercentOutput, Constants.INTAKE_INTAKE_SPEED);
-		if (id == 0) {
+		if (id == 0 && dropIntake) {
 			setPneumaticPosition(IntakeSolenoidPosition.kDown);
 		}
 	}

@@ -110,7 +110,7 @@ public final class Constants {
     /* Shooter Constants */
     public static final double SHOOTER_MOTOR_SPEED = 10;
 
-    public static final double SHOOTER_P = 0;
+    public static final double SHOOTER_P = 0.1;
     public static final double SHOOTER_I = 0;
     public static final double SHOOTER_D = 0;
     public static final double SHOOTER_F = 0.04485;
@@ -122,8 +122,9 @@ public final class Constants {
 
     public static final double SHOOTER_PULSES_PER_ROTATION = 2048;
 
-    public static final double SHOOTER_TOLERANCE = .05; // ??
+    public static final double SHOOTER_TOLERANCE = .005;
     public static final LookupTable SHOOTER_LOOKUP_TABLE = new LookupTable();
+    public static final double SHOOTER_LL_ADJUST = 50;
 
     static {
         SHOOTER_LOOKUP_TABLE.put(35, 3300);

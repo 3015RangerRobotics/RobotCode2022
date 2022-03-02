@@ -60,9 +60,9 @@ public class ShootBalls extends CommandBase {
       feeder.setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
     }
     if (hasTwoBalls && time > initialDelay + secondBallDelay) {
-      intake.intake();
-    } else if (time > initialDelay) {
-      intake.intake();
+      intake.intake(false);
+    } else if (!hasTwoBalls && time > initialDelay) {
+      intake.intake(false);
     }
   }
 
