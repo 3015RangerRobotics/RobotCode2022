@@ -4,40 +4,34 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMax.FaultID;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Hood extends SubsystemBase {
-    private CANSparkMax hoodMotor;
+    private TalonSRX hoodMotor;
     private DigitalInput limitSwitch;
     public double pos;
     boolean hasBeenHomed = false;
 
     public Hood() {
-        hoodMotor = new CANSparkMax(Constants.HOOD_MOTOR, MotorType.kBrushless);
-        hoodMotor.restoreFactoryDefaults();
-        hoodMotor.getPIDController().setP(Constants.HOOD_CONTROLLER_P);
-        hoodMotor.getPIDController().setI(Constants.HOOD_CONTROLLER_I);
-        hoodMotor.getPIDController().setD(Constants.HOOD_CONTROLLER_D);
+        hoodMotor = new TalonSRX(Constants.HOOD_MOTOR);
+        hoodMotor.config_kP(0, Constants.HOOD_CONTROLLER_P);
+        hoodMotor.config_kI(0, Constants.HOOD_CONTROLLER_I);
+        hoodMotor.config_kD(0, Constants.HOOD_CONTROLLER_D);
         // hoodMotor.getPIDController().setOutputRange(-1, 1);
         // hoodMotor.setInverted(true);
         // hoodMotor.getEncoder().setInverted(true);
-        hoodMotor.setSoftLimit(SoftLimitDirection.kForward,
-                (float) (Constants.HOOD_MAX_ANGLE / Constants.HOOD_DEGREES_PER_ROTATION));
-        hoodMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        hoodMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        hoodMotor.configForwardSoftLimitThreshold(Constants.HOOD_MAX_ANGLE / Constants.HOOD_DEGREES_PER_PULSE);
+        hoodMotor.configReverseSoftLimitThreshold(0);
+        hoodMotor.configForwardSoftLimitEnable(true);
+        hoodMotor.configReverseSoftLimitEnable(true);
         limitSwitch = new DigitalInput(Constants.HOOD_SWITCH_CHANNEL);
         enableForwardSoftLimit(true);
         setReverseLimit(true);
-        hoodMotor.burnFlash();
     }
 
     @Override
@@ -47,11 +41,11 @@ public class Hood extends SubsystemBase {
     }
 
     public double getHoodPosition() {
-        return hoodMotor.getEncoder().getPosition() * Constants.HOOD_DEGREES_PER_ROTATION;
+        return hoodMotor.getSelectedSensorPosition() * Constants.HOOD_DEGREES_PER_PULSE;
     }
 
     public void setHoodPosition(double position) {
-        hoodMotor.getPIDController().setReference(position / Constants.HOOD_DEGREES_PER_ROTATION, ControlType.kPosition);
+        hoodMotor.set(ControlMode.Position, position / Constants.HOOD_DEGREES_PER_PULSE);
     }
 
     public boolean getReverseLimit() {
@@ -59,23 +53,23 @@ public class Hood extends SubsystemBase {
     }
 
     public void setReverseLimit(boolean enable) {
-        hoodMotor.enableSoftLimit(SoftLimitDirection.kReverse, enable);
+        hoodMotor.configReverseSoftLimitEnable(enable);
     }
 
     public void setHoodOutputPercentage(double percentage) {
         // if (percentage < 0 && getReverseLimit()) {
         // hoodMotor.set(0);
         // } else {
-        hoodMotor.set(percentage);
+        hoodMotor.set(ControlMode.PercentOutput, percentage);
         // }
     }
 
     public void enableForwardSoftLimit(boolean enabled) {
-        hoodMotor.enableSoftLimit(SoftLimitDirection.kForward, enabled);
+        hoodMotor.configForwardSoftLimitEnable(enabled);
     }
 
     public void resetZero() {
-        hoodMotor.getEncoder().setPosition(0);
+        hoodMotor.setSelectedSensorPosition(0);
     }
 
     public boolean isPrimed() {
@@ -83,13 +77,7 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean hasBeenHomed() {
-        if(hoodMotor.getFault(FaultID.kHasReset)) {
-            hasBeenHomed = false;
-            hoodMotor.clearFaults();
-            return false;
-        } else {
-            return hasBeenHomed;
-        }
+        return hasBeenHomed;
     }
 
     public void setHomed() {

@@ -186,7 +186,7 @@ public final class Constants {
     public static final double HOOD_CONTROLLER_D = 0;
     public static final double HOOD_CONTROLLER_F = 0;
 
-    public static final double HOOD_DEGREES_PER_ROTATION = (1 / 933.333) * 360;
+    public static final double HOOD_DEGREES_PER_PULSE = (1 / 933.333) * 360 / 1024.0;
     public static final double HOOD_MAX_ANGLE = 32;
 
     public static final double HOOD_TOLERANCE = .5;
