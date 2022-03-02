@@ -126,24 +126,19 @@ public final class Constants {
     public static final LookupTable SHOOTER_LOOKUP_TABLE = new LookupTable();
 
     static {
-        SHOOTER_LOOKUP_TABLE.put(36.0, 3900.0);
-        SHOOTER_LOOKUP_TABLE.put(45.0, 3900.0);
-        SHOOTER_LOOKUP_TABLE.put(63.0, 4000.0);
-        SHOOTER_LOOKUP_TABLE.put(74.0, 4150.0);
-        SHOOTER_LOOKUP_TABLE.put(85.8, 4150.0);
-        SHOOTER_LOOKUP_TABLE.put(100.1, 4275.0);
-        SHOOTER_LOOKUP_TABLE.put(112.8, 4300.0);
-        SHOOTER_LOOKUP_TABLE.put(125.3, 4300.0);
-        SHOOTER_LOOKUP_TABLE.put(136.2, 4375.0);
-        SHOOTER_LOOKUP_TABLE.put(152.8, 4400.0);
-
-        // SHOOTER_LOOKUP_TABLE.put(96.0, 3550.0);
-        // SHOOTER_LOOKUP_TABLE.put(110.0, 3650.0);
-        // SHOOTER_LOOKUP_TABLE.put(124.0, 3750.0);
-        // SHOOTER_LOOKUP_TABLE.put(136.0, 4000.0);
-        // SHOOTER_LOOKUP_TABLE.put(158.0, 4100.0);
-        // SHOOTER_LOOKUP_TABLE.put(178.0, 4200.0);
-        // SHOOTER_LOOKUP_TABLE.put(192.0, 4500.0);
+        SHOOTER_LOOKUP_TABLE.put(35, 3300);
+        SHOOTER_LOOKUP_TABLE.put(40, 3350);
+        SHOOTER_LOOKUP_TABLE.put(50, 3400);
+        SHOOTER_LOOKUP_TABLE.put(60, 3400);
+        SHOOTER_LOOKUP_TABLE.put(73, 3425);
+        SHOOTER_LOOKUP_TABLE.put(83, 3450);
+        SHOOTER_LOOKUP_TABLE.put(90, 3450);
+        SHOOTER_LOOKUP_TABLE.put(100, 3475);
+        SHOOTER_LOOKUP_TABLE.put(110, 3550);
+        SHOOTER_LOOKUP_TABLE.put(120, 3675);
+        SHOOTER_LOOKUP_TABLE.put(130, 3725);
+        SHOOTER_LOOKUP_TABLE.put(140, 3800);
+        SHOOTER_LOOKUP_TABLE.put(150, 3900);
     }
 
     /* Limelight Constants */
@@ -196,23 +191,19 @@ public final class Constants {
     public static final double HOOD_TOLERANCE = .5;
     public static final LookupTable HOOD_POSITION_TABLE = new LookupTable();
     static {
-        HOOD_POSITION_TABLE.put(36.0, 11.5);
-        HOOD_POSITION_TABLE.put(45.0, 12.0);
-        HOOD_POSITION_TABLE.put(63.0, 12.6);
-        HOOD_POSITION_TABLE.put(74.0, 15.0);
-        HOOD_POSITION_TABLE.put(85.8, 16.5);
-        HOOD_POSITION_TABLE.put(100.1, 18.0);
-        HOOD_POSITION_TABLE.put(112.8, 18.0);
-        HOOD_POSITION_TABLE.put(125.3, 19.0);
-        HOOD_POSITION_TABLE.put(136.2, 22.5);
-        HOOD_POSITION_TABLE.put(152.8, 23.0);
-        // HOOD_POSITION_TABLE.put(96.0, 18.1);
-        // HOOD_POSITION_TABLE.put(110.0, 18.6);
-        // HOOD_POSITION_TABLE.put(124.0, 19.1);
-        // HOOD_POSITION_TABLE.put(136.0, 19.9); // originally 19.8
-        // HOOD_POSITION_TABLE.put(158.0, 22.2);
-        // HOOD_POSITION_TABLE.put(178.0, 23.8);
-        // HOOD_POSITION_TABLE.put(192.0, 27.0);
+        HOOD_POSITION_TABLE.put(35, 12.5);
+        HOOD_POSITION_TABLE.put(40, 12.5);
+        HOOD_POSITION_TABLE.put(50, 14.5);
+        HOOD_POSITION_TABLE.put(60, 17.5);
+        HOOD_POSITION_TABLE.put(73, 19.0);
+        HOOD_POSITION_TABLE.put(83, 20.0);
+        HOOD_POSITION_TABLE.put(90, 21.0);
+        HOOD_POSITION_TABLE.put(100, 22.5);
+        HOOD_POSITION_TABLE.put(110, 24.0);
+        HOOD_POSITION_TABLE.put(120, 24.0);
+        HOOD_POSITION_TABLE.put(130, 24.0);
+        HOOD_POSITION_TABLE.put(140, 24.0);
+        HOOD_POSITION_TABLE.put(150, 24.0);
     }
 
     /* Feeder Constants */
