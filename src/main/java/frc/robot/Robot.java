@@ -4,7 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoSource;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -19,12 +29,32 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  UsbCamera camera1;
+  UsbCamera camera2;
+  VideoSink server;
+  NetworkTableEntry cameraSelection;
+  int hRes = 160;
+  int vRes = 120;
+  int fps = 15;
+
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
+    camera1 = CameraServer.startAutomaticCapture("Left Camera", 0);
+    // camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    // camera1.setPixelFormat(PixelFormat.kMJPEG);
+    camera1.setVideoMode(PixelFormat.kMJPEG, hRes, vRes, fps);
+
+    server = CameraServer.getServer();
+
+    server.setSource(camera1);
+
+    // cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -39,6 +69,23 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    // if (timer.hasElapsed(10) && !camera2Started) {
+    //   camera2Started = true;
+    //   camera2 = CameraServer.startAutomaticCapture(1);
+    //   camera2.setVideoMode(PixelFormat.kMJPEG, 320, 240, 15);
+    // }
+    if (RobotContainer.coDriverDLeft.get() || RobotContainer.driverDLeft.get()) {
+      camera2.setConnectionStrategy(ConnectionStrategy.kForceClose);
+      camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+      server.setSource(camera1);
+      // cameraSelection.setString(camera1.getName());
+    }
+    if (RobotContainer.driverDRight.get() || RobotContainer.coDriverDRight.get()) {
+      camera1.setConnectionStrategy(ConnectionStrategy.kForceClose);
+      camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+      server.setSource(camera2);
+      // cameraSelection.setString(camera2.getName());
+    }
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -70,6 +117,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    
+    camera2 = CameraServer.startAutomaticCapture("Right Camera", 1);
+    // camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    // camera2.setPixelFormat(PixelFormat.kMJPEG);
+    camera2.setVideoMode(PixelFormat.kMJPEG, hRes, vRes, fps);
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
