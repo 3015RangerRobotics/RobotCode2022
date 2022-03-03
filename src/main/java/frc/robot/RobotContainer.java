@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,6 +42,7 @@ import frc.robot.commands.IntakeBall;
 import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.LimelightManualOn;
 import frc.robot.commands.PurgeBall;
+import frc.robot.commands.RumbleCoDriver;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShootBallsByNetwork;
 import frc.robot.commands.ShooterAutoPrep;
@@ -73,6 +75,8 @@ public class RobotContainer {
   public static Limelight limelight;
   public static Climber climber;
   public static Compressor compressor;
+
+  public static SubstystemActiveTrigger isClimberRunning;
 
   public static final XboxController driver = new XboxController(0);
   public static final XboxController coDriver = new XboxController(1);
@@ -131,6 +135,7 @@ public class RobotContainer {
     shooter[0] = new Shooter(0);
     shooter[1] = new Shooter(1);
     hood = new Hood();
+    isClimberRunning = new SubstystemActiveTrigger(climber);
     SmartDashboard.putData("Front Right Control", new DriveOneModule(0));
     SmartDashboard.putData("Front Left Control", new DriveOneModule(1));
     SmartDashboard.putData("Back Left Control", new DriveOneModule(2));
@@ -193,7 +198,7 @@ public class RobotContainer {
     driverDUp.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
     driverDDown.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown));
 
-    coDriverA.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
+    coDriverA.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
     coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
     coDriverDUp.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     coDriverDDown.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, lowFenderSpeed), new ShooterSetSpeed(1, lowFenderSpeed), new HoodSetPosition(lowFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
@@ -204,12 +209,18 @@ public class RobotContainer {
     coDriverRB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
 
     coDriverY.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 2000), new HoodSetPosition(6.5))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    coDriverStart.and(coDriverBack).whenActive(new RumbleCoDriver(0.5));
 
-    coDriverStart.and(coDriverBack).whenActive(new ParallelCommandGroup(new ClimbAllTheWay(), new DriveWithGamepad(true, false)));
+    coDriverStart.and(coDriverBack).toggleWhenActive(new ParallelCommandGroup(new ClimbAllTheWay(), new DriveWithGamepad(true, false)));
 
     // driverA.whileActiveContinuous(new DriveAutoRotate());
     SmartDashboard.putNumber("shooter speed", startSpeed);
     SmartDashboard.putNumber("Hood Set Position", startAngle);
+  }
+
+  public static void setCoDriverRumble(double outputLeft, double outputRight) {
+    coDriver.setRumble(RumbleType.kLeftRumble, outputLeft);
+    coDriver.setRumble(RumbleType.kRightRumble, outputRight);
   }
 
   /**

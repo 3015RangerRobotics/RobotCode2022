@@ -27,6 +27,12 @@ public class ClimbAllTheWay extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     JoystickButton waitButton = RobotContainer.coDriverA;
     addCommands(
+        parallel(
+          new ShooterStop(0),
+          new ShooterStop(1),
+          new IntakeStop(0),
+          new IntakeStop(1)
+        ),
         new ClimberHomePosition(),
         new SmartDashboardPutData("boolean", "confirm climb", true),
         new WaitUntilCommand(waitButton::get),

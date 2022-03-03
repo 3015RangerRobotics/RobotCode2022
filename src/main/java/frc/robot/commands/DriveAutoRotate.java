@@ -50,18 +50,18 @@ public class DriveAutoRotate extends CommandBase {
     SmartDashboard.putNumber("Target Distance", RobotContainer.limelight.getRobotToTargetDistance());
     if (RobotContainer.limelight.hasTarget()) {
       setPoint = RobotContainer.drive.getAngleDegrees() + RobotContainer.limelight.getCorrectedAngleX();
-    } else if (RobotContainer.drive.hasOdometryBeenSet() &&
-        !hasHadTarget && timer.hasElapsed(.2) && !timer.hasElapsed(1)) {
-      Translation2d relativePos = RobotContainer.drive.getPoseMeters().getTranslation()
-          .minus(Constants.DRIVE_GOAL_POSITION);
-      setPoint = -1 * Math.toDegrees(Math.atan2(relativePos.getY(), relativePos.getX()));
-      RobotContainer.drive.getAngleDegrees();
-      if (setPoint > 180) {
-        setPoint -= 360;
-      } else if (setPoint <= -180) {
-        setPoint += 360;
-      }
-    }
+    }// else if (RobotContainer.drive.hasOdometryBeenSet() &&
+    //     !hasHadTarget && timer.hasElapsed(.2) && !timer.hasElapsed(1)) {
+    //   Translation2d relativePos = RobotContainer.drive.getPoseMeters().getTranslation()
+    //       .minus(Constants.DRIVE_GOAL_POSITION);
+    //   setPoint = -1 * Math.toDegrees(Math.atan2(relativePos.getY(), relativePos.getX()));
+    //   RobotContainer.drive.getAngleDegrees();
+    //   if (setPoint > 180) {
+    //     setPoint -= 360;
+    //   } else if (setPoint <= -180) {
+    //     setPoint += 360;
+    //   }
+    // }
 
     // SmartDashboard.putBoolean("hasOdometryBeenSet", );
     // if(Math.abs(rotationController.getPositionError()) <=
