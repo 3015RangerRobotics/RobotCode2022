@@ -187,24 +187,24 @@ public class RobotContainer {
     double lowFenderAngle = 22;
     double highFenderAngle = 7.75;
     driverLB.whenActive(new DriveZeroGyro());
-    driverRB.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
-    driverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
+    driverRB.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
+    driverB.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
 
-    driverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.2))); 
+    driverLT.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    driverRT.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.2))); 
 
-    driverY.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    driverY.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
 
     driverDUp.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
     driverDDown.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown));
 
     coDriverA.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
     coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
-    coDriverDUp.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    coDriverDDown.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, lowFenderSpeed), new ShooterSetSpeed(1, lowFenderSpeed), new HoodSetPosition(lowFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    coDriverDUp.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    coDriverDDown.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, lowFenderSpeed), new ShooterSetSpeed(1, lowFenderSpeed), new HoodSetPosition(lowFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     // coDriverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     coDriverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1))); 
-    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.2)));
+    coDriverRT.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.2)));
     coDriverLB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
     coDriverRB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
 
