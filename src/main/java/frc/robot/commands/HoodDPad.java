@@ -32,10 +32,10 @@ public class HoodDPad extends CommandBase {
     double speed = 0;
     switch (hat) {
       case 0:
-        speed = 0.2;
+        speed = 0.8;
         break;
       case 180:
-        speed = -0.2;
+        speed = -0.8;
         break;
       default:
         break;

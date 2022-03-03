@@ -14,7 +14,7 @@ public class HoodHome extends CommandBase {
   double speed;
 
   public HoodHome() {
-    this(-0.1);
+    this(-0.8);
   }
 
   /** Creates a new HoodHome. */

@@ -25,12 +25,13 @@ public class Hood extends SubsystemBase {
         // hoodMotor.getPIDController().setOutputRange(-1, 1);
         // hoodMotor.setInverted(true);
         // hoodMotor.getEncoder().setInverted(true);
+        hoodMotor.setInverted(true);
         hoodMotor.configForwardSoftLimitThreshold(Constants.HOOD_MAX_ANGLE / Constants.HOOD_DEGREES_PER_PULSE);
         hoodMotor.configReverseSoftLimitThreshold(0);
         hoodMotor.configForwardSoftLimitEnable(true);
         hoodMotor.configReverseSoftLimitEnable(true);
         limitSwitch = new DigitalInput(Constants.HOOD_SWITCH_CHANNEL);
-        enableForwardSoftLimit(true);
+        enableForwardSoftLimit(false);
         setReverseLimit(true);
     }
 
@@ -38,6 +39,7 @@ public class Hood extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putBoolean("Hood Limit Switch", getReverseLimit());
         SmartDashboard.putNumber("Hood Angle", getHoodPosition());
+        SmartDashboard.putBoolean("Hood has been homed", hasBeenHomed);
     }
 
     public double getHoodPosition() {

@@ -15,12 +15,18 @@ import frc.robot.subsystems.Intake;
 public class IntakeBall extends CommandBase {
   private Intake intake;
   private Feeder feeder;
+  private boolean affectPneumatic;
+
+  public IntakeBall(int side) {
+    this(side, true);
+  }
 
   /** Creates a new IntakeBall. Will run eternally */
-  public IntakeBall(int side) {
+  public IntakeBall(int side, boolean affectPneumatic) {
     // there has to be a better way to do this
     intake = RobotContainer.intake[side];
     feeder = RobotContainer.feeder[side];
+    this.affectPneumatic = affectPneumatic;
     addRequirements(intake, feeder);
   }
 
@@ -34,9 +40,9 @@ public class IntakeBall extends CommandBase {
   public void execute() {
 
     if (intake.getIntakeSensor() && feeder.getBallDetector()) {
-      intake.stop();
+      intake.stop(affectPneumatic);
     } else {
-      intake.intake();
+      intake.intake(affectPneumatic);
     }
 
     if (feeder.getBallDetector()) {
@@ -49,7 +55,7 @@ public class IntakeBall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stop();
+    intake.stop(affectPneumatic);
     feeder.setPercentOutput(0);
   }
 

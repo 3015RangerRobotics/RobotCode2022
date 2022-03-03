@@ -7,16 +7,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-	private DoubleSolenoid intakeSolenoid;
+	private static DoubleSolenoid intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_FORWARD, Constants.INTAKE_SOLENOID_REVERSE);
 	private TalonSRX intakeMotor;
 	private DigitalInput intakeSensor;
 	private boolean doPeriodic = false;
+	private boolean overridePneumatic = false;
+	private Timer timer;
 	private int id;
 
 	public enum IntakeSolenoidPosition {
@@ -33,9 +36,6 @@ public class Intake extends SubsystemBase {
 
 	public Intake(int id) {
 		intakeMotor = new TalonSRX(Constants.INTAKE_MOTORS[id]);
-		if (id == 0) {
-			intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_REVERSE, Constants.INTAKE_SOLENOID_FORWARD);
-		}
 		intakeSensor = new DigitalInput(Constants.INTAKE_BALL_DETECTORS[id]);
 		intakeMotor.setInverted(id == 0);
 		intakeMotor.setNeutralMode(NeutralMode.Brake);
@@ -43,7 +43,9 @@ public class Intake extends SubsystemBase {
 		intakeMotor.configVoltageCompSaturation(12.5);
 		this.id = id;
 		doPeriodic = true;
-
+		timer = new Timer();
+		timer.reset();
+		timer.start();
 	}
 
 	public void setPneumaticPosition(IntakeSolenoidPosition solenoidPosition) {
@@ -62,6 +64,13 @@ public class Intake extends SubsystemBase {
 
 	public void periodic() {
 		if (doPeriodic) {
+			if (id == 0 && !overridePneumatic) {
+				if (timer.get() > 0.7) {
+					setPneumaticPosition(IntakeSolenoidPosition.kUp);
+				} else {
+					setPneumaticPosition(IntakeSolenoidPosition.kDown);
+				}
+			}
 			SmartDashboard.putBoolean("Intake Sensor " + (id == 0 ? "Left" : "Right"), getIntakeSensor());
 		}
 	}
@@ -72,8 +81,9 @@ public class Intake extends SubsystemBase {
 
 	public void intake(boolean dropIntake) {
 		intakeMotor.set(ControlMode.PercentOutput, Constants.INTAKE_INTAKE_SPEED);
-		if (id == 0 && dropIntake) {
-			setPneumaticPosition(IntakeSolenoidPosition.kDown);
+		if (dropIntake) {
+			timer.reset();
+			timer.stop();
 		}
 	}
 
@@ -82,10 +92,22 @@ public class Intake extends SubsystemBase {
 	}
 
 	public void stop() {
+		stop(true);
+	}
+
+	public void stop(boolean raiseIntake) {
 		intakeMotor.set(ControlMode.PercentOutput, 0);
+		if (raiseIntake) {
+			timer.reset();
+			timer.start();
+		}
 	}
 
 	public boolean getIntakeSensor() {
 		return !intakeSensor.get();
+	}
+
+	public void setOverride(boolean override) {
+		overridePneumatic = override;
 	}
 }

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.RobotContainer;
 import frc.robot.commands.CompressorSetEnabled;
 import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveFollowPath;
@@ -37,24 +38,28 @@ public class Auto5Ball extends SequentialCommandGroup {
                 double secondSpeed = 3800;
                 double firstAngle = 24.5;
                 double secondAngle = 24.5;
+                RobotContainer.intake[0].setOverride(true);
+                RobotContainer.intake[1].setOverride(true);
                 addCommands(
                         new DriveZeroGyro(158),
                         new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown),
-                        new CompressorSetEnabled(false),
+                        //new CompressorSetEnabled(true),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt1", 3, 4),
-                                new HoodHome(0.3),
-                                new IntakeBall(0)),
+                                new HoodHome(1),
+                                new IntakeBall(0, false)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.8), 
-                                new HoodHome(0.3),
-                                new IntakeBall(0)),
+                                new HoodHome(1),
+                                new IntakeBall(0, false)),
+                                new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt2", 3, 4, false),
-                                new IntakeBall(0),
-                                new HoodHome(0.3),
+                                new IntakeBall(0, false),
+                                new HoodHome(1),
                                 new ShooterSetSpeed(0, firstSpeed),
                                 new ShooterSetSpeed(1, firstSpeed)),
+                                new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.6),
                                 new DriveTurnToLimelight(),
@@ -62,20 +67,22 @@ public class Auto5Ball extends SequentialCommandGroup {
                                 new HoodSetPosition(firstAngle),
                                 new ShooterSetSpeed(0, firstSpeed),
                                 new ShooterSetSpeed(1, firstSpeed)),
+                                new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.5), 
                                 new ShootBalls(0, firstSpeed),
                                 new ShootBalls(1, firstSpeed)),
+                                new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt3", 2.5, 3, false), 
-                                new IntakeBall(0)),
+                                new IntakeBall(0, false)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.3),
                                 new DriveTurnToLimelight(),
                                 // new ShooterAutoPrep(), 
                                 new ShooterSetSpeed(0, firstSpeed),
                                 new ShooterSetSpeed(1, firstSpeed),
-                                new IntakeBall(0)),
+                                new IntakeBall(0, false)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.5), 
                                 new DriveTurnToLimelight(),
@@ -84,28 +91,31 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new ShooterStop(1),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt4", 3, 4, false), 
-                                new IntakeBall(0)),
+                                new IntakeBall(0, false)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(2), 
-                                new IntakeBall(0)),
+                                new IntakeBall(0, false)),
                         //new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt5", 3, 4, false), 
                                 new ShooterSetSpeed(0, secondSpeed),
                                 new HoodSetPosition(secondAngle),
-                                new IntakeBall(0)),
+                                new IntakeBall(0, false)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.8), 
                                 new ShooterSetSpeed(0, secondSpeed),
                                 // new ShooterAutoPrep(),
                                 new DriveTurnToLimelight()),
+                        //new CompressorSetEnabled(true),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(1), 
+                                
                                 new DriveTurnToLimelight(),
                                 new ShootBalls(0, secondSpeed)),
                         new ShooterStop(0),
-                        new ShooterStop(1),
-                        new CompressorSetEnabled(true));
+                        new ShooterStop(1));
+                RobotContainer.intake[0].setOverride(false);
+                RobotContainer.intake[1].setOverride(false);
                 System.out.println("===============================================\nAUTO HAS BEEN CREATED\n===============================================");
         }         
 }

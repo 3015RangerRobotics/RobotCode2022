@@ -6,6 +6,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -15,6 +16,7 @@ public class ShooterAutoPrep extends CommandBase {
   double speed;
   double angle;
   boolean hasHadTarget = false;
+  Pose2d previousPose;
 
   /** Creates a new ShooterAutoPrep. */
   public ShooterAutoPrep() {
@@ -26,6 +28,7 @@ public class ShooterAutoPrep extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.limelight.checkout();
+    previousPose = RobotContainer.drive.getPoseMeters();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +39,9 @@ public class ShooterAutoPrep extends CommandBase {
       angle = RobotContainer.limelight.getHoodPos();
       hasHadTarget = true;
     }
-    if (hasHadTarget && !(RobotContainer.driverRT.get() || RobotContainer.coDriverRT.get())) {
+    double differencce = previousPose.minus(RobotContainer.drive.getPoseMeters()).getTranslation().getNorm();
+    previousPose = RobotContainer.drive.getPoseMeters();
+    if (hasHadTarget && !(RobotContainer.driverRT.get() || RobotContainer.coDriverRT.get()) && differencce > 0 && RobotContainer.hood.hasBeenHomed()) {
       RobotContainer.hood.setHoodPosition(angle);
       RobotContainer.shooter[0].setRPM(speed);
       RobotContainer.shooter[1].setRPM(speed);

@@ -52,8 +52,8 @@ public final class Constants {
 
     /* Intake */
     // Currently using climber solenoid's ids, update later
-    public static final int INTAKE_SOLENOID_FORWARD = 2;
-    public static final int INTAKE_SOLENOID_REVERSE = 3;
+    public static final int INTAKE_SOLENOID_FORWARD = 3;
+    public static final int INTAKE_SOLENOID_REVERSE = 2;
 
     /* Digital IO ID's */
     /* climber */
@@ -124,7 +124,7 @@ public final class Constants {
 
     public static final double SHOOTER_TOLERANCE = .005;
     public static final LookupTable SHOOTER_LOOKUP_TABLE = new LookupTable();
-    public static final double SHOOTER_LL_ADJUST = 50;
+    public static final double SHOOTER_LL_ADJUST = 75;
 
     static {
         SHOOTER_LOOKUP_TABLE.put(35, 3300);
@@ -181,12 +181,12 @@ public final class Constants {
     public static final double CLIMBER_FLOPPY_ARM_OFFSET = 22;// Looked up on 2/8/22 using actual robot
 
     /* Hood Constants */
-    public static final double HOOD_CONTROLLER_P = 1;
+    public static final double HOOD_CONTROLLER_P = 10;
     public static final double HOOD_CONTROLLER_I = 0;
     public static final double HOOD_CONTROLLER_D = 0;
     public static final double HOOD_CONTROLLER_F = 0;
 
-    public static final double HOOD_DEGREES_PER_PULSE = (1 / 933.333) * 360 / 1024.0;
+    public static final double HOOD_DEGREES_PER_PULSE = ((1 / 23.3333) * 360.0) / 4096.0; // 1:23.333 ratio * 360 deg / 1024 pulses per rotation
     public static final double HOOD_MAX_ANGLE = 32;
 
     public static final double HOOD_TOLERANCE = .5;
@@ -213,6 +213,6 @@ public final class Constants {
     public static final double FEEDER_SHOOT_SPEED = 0.8;
 
     /* Intake Constants */
-    public static final double INTAKE_INTAKE_SPEED = 1;
+    public static final double INTAKE_INTAKE_SPEED = 0.4;
     public static final double INTAKE_PURGE_SPEED = -0.4;
 }

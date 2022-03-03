@@ -21,7 +21,7 @@ public class DriveWithGamepad extends CommandBase {
   ProfiledPIDController rotationController;
   double currentAngle;
   double previousGyroAngle;
-  final double trainingWheels = 0.7;
+  final double trainingWheels = 0.85;
 
   /**
    * Command for controlling the robot with the gamepad.

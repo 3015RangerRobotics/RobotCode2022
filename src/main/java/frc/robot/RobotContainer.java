@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -147,15 +148,19 @@ public class RobotContainer {
     SmartDashboard.putData("Hood 5", new HoodSetPosition(5));
     SmartDashboard.putData("Hood 15", new HoodSetPosition(15));
     SmartDashboard.putData("Hood 20", new HoodSetPosition(20));
-    SmartDashboard.putData("Hood Home Fast", new HoodHome(0.4));
+    SmartDashboard.putData("Hood Home Fast", new HoodHome(0.8));
+    SmartDashboard.putData("Hood Home Lightning", new HoodHome(1));
     SmartDashboard.putData("Limelight manual on", new LimelightManualOn());
     SmartDashboard.putData("Drive Coast", new DriveCoast());
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
     // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
 
-    autoChooser.setDefaultOption("4 Ball Auto", new Auto5Ball());
+    autoChooser.setDefaultOption("Do Nothing", new WaitCommand(1.0));
+    autoChooser.addOption("4 Ball Auto", new Auto4Ball());
     autoChooser.addOption("5 Ball Auto", new Auto5Ball());
+
+    SmartDashboard.putData("Auto Mode", autoChooser);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -170,17 +175,18 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    double staticSpeed = 3500;
-    double lowFenderSpeed = 1850;
-    double highFenderSpeed = 3400;
-    double lowFenderAngle = 7.7;
-    double highFenderAngle = 6.35;
+    double startSpeed = 3800;
+    double startAngle = 24.5;
+    double lowFenderSpeed = 1600;
+    double highFenderSpeed = 3300;
+    double lowFenderAngle = 22;
+    double highFenderAngle = 7.75;
     driverLB.whenActive(new DriveZeroGyro());
     driverRB.whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
     driverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
 
-    driverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.1))); 
+    driverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    driverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.2))); 
 
     driverY.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
 
@@ -191,8 +197,9 @@ public class RobotContainer {
     coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
     coDriverDUp.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
     coDriverDDown.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, lowFenderSpeed), new ShooterSetSpeed(1, lowFenderSpeed), new HoodSetPosition(lowFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    coDriverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.1)));
+    // coDriverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
+    coDriverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1))); 
+    coDriverRT.whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.2)));
     coDriverLB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
     coDriverRB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
 
@@ -201,8 +208,8 @@ public class RobotContainer {
     coDriverStart.and(coDriverBack).whenActive(new ParallelCommandGroup(new ClimbAllTheWay(), new DriveWithGamepad(true, false)));
 
     // driverA.whileActiveContinuous(new DriveAutoRotate());
-    SmartDashboard.putNumber("shooter speed", staticSpeed);
-    SmartDashboard.putNumber("Hood Set Position", 10);
+    SmartDashboard.putNumber("shooter speed", startSpeed);
+    SmartDashboard.putNumber("Hood Set Position", startAngle);
   }
 
   /**
