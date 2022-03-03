@@ -270,7 +270,7 @@ public class RobotContainer {
     }
   }
 
-  private static class DPadButton extends Button {
+  static class DPadButton extends Button {
     private final int dPadDegree;
     private final XboxController controller;
 
