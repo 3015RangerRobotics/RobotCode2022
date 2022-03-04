@@ -8,21 +8,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** Add your docs here. */
-public class SubstystemActiveTrigger extends Trigger {
-
+public class SubsystemActiveTrigger extends Trigger {
     private SubsystemBase[] subsystems;
 
-    public SubstystemActiveTrigger(SubsystemBase... subsystem) {
+    /**
+     * A trigger that can be used to see if any input subsystems 
+     * are running a command. Good for locking out 
+     * buttons/triggers when a subsystem is active.
+     * 
+     * @param subsystem subsystems whose active state are to be polled
+     */
+    public SubsystemActiveTrigger(SubsystemBase... subsystem) {
         this.subsystems = subsystem;
 
     }
 
     @Override
     public boolean get() {
+        //start with a false output
         boolean output = false;
+        //for each subsystem...
         for (SubsystemBase subsystem : subsystems) {
+            //find whether it is running, and if true or it with output
             output |= (subsystem.getCurrentCommand() != null);
         }
+        //returns true if any subsystem in subsystems is running a command
         return output;
     }
 }

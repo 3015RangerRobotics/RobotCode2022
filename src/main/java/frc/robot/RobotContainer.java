@@ -76,7 +76,7 @@ public class RobotContainer {
   public static Climber climber;
   public static Compressor compressor;
 
-  public static SubstystemActiveTrigger isClimberRunning;
+  public static SubsystemActiveTrigger isClimberRunning;
 
   public static final XboxController driver = new XboxController(0);
   public static final XboxController coDriver = new XboxController(1);
@@ -135,7 +135,7 @@ public class RobotContainer {
     shooter[0] = new Shooter(0);
     shooter[1] = new Shooter(1);
     hood = new Hood();
-    isClimberRunning = new SubstystemActiveTrigger(climber);
+    isClimberRunning = new SubsystemActiveTrigger(climber);
     SmartDashboard.putData("Front Right Control", new DriveOneModule(0));
     SmartDashboard.putData("Front Left Control", new DriveOneModule(1));
     SmartDashboard.putData("Back Left Control", new DriveOneModule(2));
@@ -209,9 +209,9 @@ public class RobotContainer {
     coDriverRB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
 
     coDriverY.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 2000), new HoodSetPosition(6.5))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    coDriverStart.and(coDriverBack).whenActive(new RumbleCoDriver(0.5));
 
     coDriverStart.and(coDriverBack).toggleWhenActive(new ParallelCommandGroup(new ClimbAllTheWay(), new DriveWithGamepad(true, false)));
+    coDriverStart.and(coDriverBack).whenActive(new RumbleCoDriver(0.5));
 
     // driverA.whileActiveContinuous(new DriveAutoRotate());
     SmartDashboard.putNumber("shooter speed", startSpeed);

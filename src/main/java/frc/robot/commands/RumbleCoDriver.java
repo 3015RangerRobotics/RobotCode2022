@@ -11,9 +11,11 @@ import frc.robot.RobotContainer;
 public class RumbleCoDriver extends CommandBase {
   Timer timer = new Timer();
   double timeout;
-  /** Creates a new RumbleCoDriver. */
+  /** 
+   * Lightly rumbles the coDriver gamepad for the timeOut amount
+   * @param timeout time in seconds
+   */
   public RumbleCoDriver(double timeout) {
-    // Use addRequirements() here to declare subsystem dependencies.
     this.timeout = timeout;
   }
 
