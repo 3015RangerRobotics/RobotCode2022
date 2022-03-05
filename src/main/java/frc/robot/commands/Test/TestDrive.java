@@ -80,9 +80,7 @@ public class TestDrive extends CommandBase {
         stage++;
         break;
       case 11:
-        drive.drive(0, 0, 60, false);
-        if (timer.hasElapsed(2)) {
-          drive.drive(0, 0, 0, false);
+        if (Math.abs(drive.getAngleDegrees()) > 5 && timer.hasElapsed(0.25)) {
           stage++;
         }
     }
