@@ -17,6 +17,7 @@ import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.HoodHome;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
+import frc.robot.commands.IntakeSetOverride;
 import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShooterSetSpeed;
@@ -36,13 +37,15 @@ public class Auto4Ball extends SequentialCommandGroup {
     double firstAngle = 24.5;
     addCommands(
         new DriveZeroGyro(115),
+        new IntakeSetOverride(true),
+        new IntakeSetPneumatic(IntakeSolenoidPosition.kDown),
         new ParallelDeadlineGroup(
             new DriveFollowPath("4BallAutopt1", 3, 4), 
-            new HoodHome(0.3),
+            new HoodHome(1),
             new IntakeBall(0)),
         new ParallelDeadlineGroup(
             new WaitCommand(0.5), 
-            new HoodHome(0.5),
+            new HoodHome(1),
             new IntakeBall(0)),
         new ParallelDeadlineGroup(
             new WaitCommand(1.2),
@@ -65,7 +68,6 @@ public class Auto4Ball extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new WaitCommand(2), 
             new IntakeBall(0)),
-        new IntakeSetPneumatic(IntakeSolenoidPosition.kUp),
         new ParallelDeadlineGroup(
             new DriveFollowPath("4BallAutopt3", 3, 4, false), 
             new HoodSetPosition(firstAngle),

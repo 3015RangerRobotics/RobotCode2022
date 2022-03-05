@@ -50,8 +50,10 @@ import frc.robot.commands.ShooterAutoShoot;
 import frc.robot.commands.ShooterSetByNetwork;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
+import frc.robot.commands.Autonomous.Auto3Ball;
 import frc.robot.commands.Autonomous.Auto4Ball;
 import frc.robot.commands.Autonomous.Auto5Ball;
+import frc.robot.commands.Autonomous.IntakeTest;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.drive.Drive;
@@ -161,9 +163,10 @@ public class RobotContainer {
     // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
 
-    autoChooser.setDefaultOption("Do Nothing", new WaitCommand(1.0));
+    autoChooser.setDefaultOption("No Auto Selected", new WaitCommand(1.0));
     autoChooser.addOption("4 Ball Auto", new Auto4Ball());
     autoChooser.addOption("5 Ball Auto", new Auto5Ball());
+    autoChooser.addOption("3 Ball Auto", new Auto3Ball());
 
     SmartDashboard.putData("Auto Mode", autoChooser);
 

@@ -117,6 +117,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    RobotContainer.intake[0].setOverride(false);
     
     camera2 = CameraServer.startAutomaticCapture("Right Camera", 1);
     // camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);

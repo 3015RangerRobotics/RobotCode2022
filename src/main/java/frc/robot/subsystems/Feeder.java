@@ -48,4 +48,8 @@ public class Feeder extends SubsystemBase {
     public void setPercentOutput(double percent) {
         topMotor.set(ControlMode.PercentOutput, percent);
     }
+
+    public double getEncoderSpeed() {
+        return topMotor.getSelectedSensorVelocity();
+    }
 }

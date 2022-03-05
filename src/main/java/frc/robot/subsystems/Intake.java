@@ -18,6 +18,7 @@ public class Intake extends SubsystemBase {
 	private TalonSRX intakeMotor;
 	private DigitalInput intakeSensor;
 	private boolean doPeriodic = false;
+	private boolean intakeDown = false;
 	private boolean overridePneumatic = false;
 	private Timer timer;
 	private int id;
@@ -54,9 +55,13 @@ public class Intake extends SubsystemBase {
 		}
         switch (solenoidPosition) {
             case kUp:
-                intakeSolenoid.set(Value.kReverse);
+				if (!intakeDown) break;
+				intakeDown = false;
+				intakeSolenoid.set(Value.kReverse);
                 break;
             case kDown:
+				if (intakeDown) break;
+				intakeDown = true;
                 intakeSolenoid.set(Value.kForward);
                 break;
         }
@@ -72,6 +77,7 @@ public class Intake extends SubsystemBase {
 				}
 			}
 			SmartDashboard.putBoolean("Intake Sensor " + (id == 0 ? "Left" : "Right"), getIntakeSensor());
+			SmartDashboard.putBoolean("Intake Override Status", overridePneumatic);
 		}
 	}
 	
@@ -109,5 +115,13 @@ public class Intake extends SubsystemBase {
 
 	public void setOverride(boolean override) {
 		overridePneumatic = override;
+	}
+
+	public void test() {
+		intakeMotor.set(ControlMode.PercentOutput, Constants.INTAKE_TEST_SPEED);
+	}
+
+	public double getEncoderSpeed() {
+		return intakeMotor.getSelectedSensorVelocity();
 	}
 }

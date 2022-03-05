@@ -211,8 +211,10 @@ public final class Constants {
     public static final double FEEDER_INTAKE_SPEED = 0.5;
     public static final double FEEDER_PURGE_SPEED = -0.4;
     public static final double FEEDER_SHOOT_SPEED = 0.8;
+    public static final double FEEDER_TEST_SPEED = 0.4;
 
     /* Intake Constants */
-    public static final double INTAKE_INTAKE_SPEED = 0.4;
+    public static final double INTAKE_INTAKE_SPEED = 0.8;
     public static final double INTAKE_PURGE_SPEED = -0.4;
+    public static final double INTAKE_TEST_SPEED = 0.4;
 }
