@@ -15,7 +15,7 @@ public class TestAll extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new TestInit(),
+      new TestDrive(),
       new TestIntakeAndFeeder(),
       new TestShooter(),
       new TestHood(),

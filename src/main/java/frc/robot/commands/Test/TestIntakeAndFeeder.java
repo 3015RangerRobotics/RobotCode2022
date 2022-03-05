@@ -4,12 +4,9 @@
 
 package frc.robot.commands.Test;
 
-import com.fasterxml.jackson.databind.ser.std.NumberSerializers.FloatSerializer;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -79,7 +76,7 @@ public class TestIntakeAndFeeder extends CommandBase {
           stage++;
         } else if (timer.hasElapsed(5)) {
           intakeLeft.stop();
-          testTable.getEntry("Left Feeder Sensor").setBoolean(false);
+          testTable.getEntry("Left Intake Sensor").setBoolean(false);
           timer.reset();
           timer.start();
           stage++;
@@ -120,7 +117,7 @@ public class TestIntakeAndFeeder extends CommandBase {
           stage++;
         } else if (timer.hasElapsed(5)) {
           intakeRight.stop();
-          testTable.getEntry("Right Feeder Sensor").setBoolean(false);
+          testTable.getEntry("Right Intake Sensor").setBoolean(false);
           timer.reset();
           timer.start();
           stage++;
@@ -135,7 +132,18 @@ public class TestIntakeAndFeeder extends CommandBase {
           timer.reset();
           timer.start();
           stage++;
-        } 
+        }
+        break;
+      case 7: /* drop intake */
+        intakeLeft.setPneumaticPosition(Intake.IntakeSolenoidPosition.kDown);
+        if (timer.hasElapsed(1)) {
+          timer.reset();
+          timer.start();
+          stage++;
+        }
+      case 8:
+        intakeLeft.setPneumaticPosition(Intake.IntakeSolenoidPosition.kUp);
+        stage++;
     }
   }
 

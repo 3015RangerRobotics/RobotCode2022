@@ -4,31 +4,32 @@
 
 package frc.robot.commands.Test;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.drive.Drive;
 
-public class TestHood extends CommandBase {
+public class TestDrive extends CommandBase {
 
   NetworkTable testTable = NetworkTableInstance.getDefault().getTable("test");
-  
-  Hood hood;
-  int stage;
-  int[] testAngles = {0, 10, 15, 5, 20};
+
+  Drive drive;
+  int stage = 0;
   boolean result = true;
 
   Timer timer;
-
-  /** Creates a new TestHood. */
-  public TestHood() {
-    Hood hood = RobotContainer.hood;
-    addRequirements(hood);
+  /** Creates a new TestDrive. */
+  public TestDrive() {
+    drive = RobotContainer.drive;
+    addRequirements(drive);
 
     timer = new Timer();
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -43,46 +44,47 @@ public class TestHood extends CommandBase {
   @Override
   public void execute() {
     switch(stage) {
-      case 0: /* start homing hood */
-        if (hood.getReverseLimit()) {
-          stage++;
-          break;
-        }
-        hood.setHoodOutputPercentage(-1);
-        hood.setReverseLimit(false);
-        stage++;
-        break;
-      case 1: /* home hood, immediately end test if this fails */
-        if (hood.getReverseLimit()) {
-          hood.setHoodOutputPercentage(0);
-          testTable.getEntry("Hood homing test").setBoolean(true);
-          hood.setReverseLimit(true);
-          hood.resetZero();
-          timer.reset();
-          timer.start();
-          stage++;
-        } else if (timer.hasElapsed(1.5)) {
-          testTable.getEntry("Hood homing test").setBoolean(false);
-          hood.setHoodOutputPercentage(0);
-          stage = 8;
-        }
-        break;
+      case 0:
+      case 1:
       case 2:
       case 3:
+        drive.driveOneModule(stage, 0, 0, ControlMode.PercentOutput);
+        stage++;
+        break;
       case 4:
-      case 5:
-      case 6:
-        hood.setHoodPosition(testAngles[stage - 2]);
-        if (timer.hasElapsed(0.75)) {
-          result &= Math.abs(hood.getHoodPosition() - testAngles[stage - 2]) < 0.25;
+        if (timer.hasElapsed(1.5)) {
           timer.reset();
           timer.start();
           stage++;
         }
         break;
-      case 7:
-        testTable.getEntry("Hood position test").setBoolean(result);
+      case 5:
+        for(int i = 0; i < 4; i++) {
+          result &= Math.abs(drive.getModuleRotation(i)) < 1.5;
+        }
+        testTable.getEntry("Drive module rotation test 1").setBoolean(result);
+        result = true;
+        stage++;
         break;
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+        drive.driveOneModule(stage - 6, 90, 0, ControlMode.PercentOutput);
+        stage++;
+        break;
+      case 10:
+        drive.resetIMU();
+        timer.reset();
+        timer.start();
+        stage++;
+        break;
+      case 11:
+        drive.drive(0, 0, 60, false);
+        if (timer.hasElapsed(2)) {
+          drive.drive(0, 0, 0, false);
+          stage++;
+        }
     }
   }
 
