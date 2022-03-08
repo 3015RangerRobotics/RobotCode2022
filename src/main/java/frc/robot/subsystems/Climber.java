@@ -63,7 +63,7 @@ public class Climber extends SubsystemBase {
 
     public void periodic() {
         SmartDashboard.putBoolean("Bottom climber switch", getBottomLimit());
-        // TODO: push both encoder values to SmartDashboard for testing
+        
         SmartDashboard.putNumber("Climber position", getClimberPos());
     }
 

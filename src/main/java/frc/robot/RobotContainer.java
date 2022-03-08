@@ -12,21 +12,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.CG_IntakeBalls;
+import frc.robot.commands.CG_SetShooterSpeedAndAngle;
+import frc.robot.commands.CG_ShootAll;
 import frc.robot.commands.ClimbAllTheWay;
 import frc.robot.commands.ClimberHomePosition;
-import frc.robot.commands.ClimberStop;
-import frc.robot.commands.ClimberToBottom;
-import frc.robot.commands.ClimberToTop;
 import frc.robot.commands.CompressorSetEnabled;
 import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveCoast;
 import frc.robot.commands.DriveFeedbackWhileDisabled;
-import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveMakeAllCurrentModuleAnglesZero;
 import frc.robot.commands.DriveOneModule;
 import frc.robot.commands.DriveTurnToAngle;
@@ -34,9 +34,7 @@ import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.FloppyArmDown;
 import frc.robot.commands.FloppyArmUp;
-import frc.robot.commands.HoodDPad;
 import frc.robot.commands.HoodHome;
-import frc.robot.commands.HoodSetByNetwork;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.IntakeSetPneumatic;
@@ -44,16 +42,13 @@ import frc.robot.commands.LimelightManualOn;
 import frc.robot.commands.PurgeBall;
 import frc.robot.commands.RumbleCoDriver;
 import frc.robot.commands.ShootBalls;
-import frc.robot.commands.ShootBallsByNetwork;
 import frc.robot.commands.ShooterAutoPrep;
-import frc.robot.commands.ShooterAutoShoot;
-import frc.robot.commands.ShooterSetByNetwork;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
+import frc.robot.commands.Autonomous.Auto2Ball;
 import frc.robot.commands.Autonomous.Auto3Ball;
 import frc.robot.commands.Autonomous.Auto4Ball;
 import frc.robot.commands.Autonomous.Auto5Ball;
-import frc.robot.commands.Autonomous.IntakeTest;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.drive.Drive;
@@ -164,9 +159,10 @@ public class RobotContainer {
     // hood.setDefaultCommand(new HoodDPad());
 
     autoChooser.setDefaultOption("No Auto Selected", new WaitCommand(1.0));
-    autoChooser.addOption("4 Ball Auto", new Auto4Ball());
     autoChooser.addOption("5 Ball Auto", new Auto5Ball());
-    autoChooser.addOption("3 Ball Auto", new Auto3Ball());
+    autoChooser.addOption("4 Ball Auto", new Auto4Ball());
+    autoChooser.addOption("3 Ball Auto (Feed Me)", new Auto3Ball());
+    autoChooser.addOption("2 Ball Auto (Feed Me)", new Auto2Ball());
 
     SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -185,38 +181,55 @@ public class RobotContainer {
   private void configureButtonBindings() {
     double startSpeed = 3800;
     double startAngle = 24.5;
-    double lowFenderSpeed = 1600;
+    double lowFenderSpeed = Constants.SHOOTER_REST_SPEED;
     double highFenderSpeed = 3300;
-    double lowFenderAngle = 22;
+    double lowFenderAngle = Constants.HOOD_REST_POSITION;
     double highFenderAngle = 7.75;
+    /*================ Driver Controls ================*/
+    driverB.and(isClimberRunning.negate())
+      .whileActiveContinuous(parallel(new PurgeBall(0), new PurgeBall(1)));
+    driverY.and(isClimberRunning.negate())
+      .whileActiveContinuous(parallel(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle)))
+      .whenInactive(parallel(new ShooterSetSpeed(0, lowFenderSpeed), new ShooterSetSpeed(1, lowFenderSpeed)));
     driverLB.whenActive(new DriveZeroGyro());
-    driverRB.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
-    driverB.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
-
-    driverLT.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    driverRT.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.2))); 
-
-    driverY.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-
+    driverRB.and(isClimberRunning.negate())
+      .whileActiveContinuous(new CG_IntakeBalls());
+    driverLT.and(isClimberRunning.negate())
+      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+    driverRT.and(isClimberRunning.negate())
+      .whileActiveContinuous(new CG_ShootAll()); 
+    
     driverDUp.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
     driverDDown.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown));
 
-    coDriverA.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new IntakeBall(0), new IntakeBall(1)));
-    coDriverB.whileActiveContinuous(new ParallelCommandGroup(new PurgeBall(0), new PurgeBall(1)));
-    coDriverDUp.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    coDriverDDown.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, lowFenderSpeed), new ShooterSetSpeed(1, lowFenderSpeed), new HoodSetPosition(lowFenderAngle))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    // coDriverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterAutoPrep())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-    coDriverLT.whileActiveContinuous(new ParallelCommandGroup(new DriveAutoRotate(), new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork())).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1))); 
-    coDriverRT.and(isClimberRunning.negate()).whileActiveContinuous(new ParallelCommandGroup(new ShootBalls(0, 0, 0.2, 0), new ShootBalls(1, 0, 0.2, 0.2)));
+    
+    /*===============CoDriver Controls ===============*/
+    coDriverA.and(isClimberRunning.negate())
+      .whileActiveContinuous(new CG_IntakeBalls());
+    coDriverB.whileActiveContinuous(parallel(new PurgeBall(0), new PurgeBall(1)));
+    coDriverX.and(isClimberRunning.negate())
+      .whileActiveContinuous(new CG_IntakeBalls(false));
+    coDriverY.and(isClimberRunning.negate())
+      .whileActiveContinuous(new CG_SetShooterSpeedAndAngle(highFenderSpeed, lowFenderSpeed, highFenderAngle))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
     coDriverLB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
     coDriverRB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
-
-    coDriverY.whileActiveContinuous(new ParallelCommandGroup(new ShooterSetSpeed(0, 3450), new ShooterSetSpeed(1, 2000), new HoodSetPosition(6.5))).whenInactive(new ParallelCommandGroup(new ShooterStop(0), new ShooterStop(1)));
-
-    coDriverStart.and(coDriverBack).toggleWhenActive(new ParallelCommandGroup(new ClimbAllTheWay(), new DriveWithGamepad(true, false)));
-    coDriverStart.and(coDriverBack).whenActive(new RumbleCoDriver(0.5));
-
-    // driverA.whileActiveContinuous(new DriveAutoRotate());
+    coDriverStart.and(coDriverBack)
+      .toggleWhenActive(parallel(new ClimbAllTheWay(), new DriveWithGamepad(true, false)))
+      .whenActive(new RumbleCoDriver(0.5));
+    coDriverLT.and(isClimberRunning.negate())
+      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+    coDriverRT.and(isClimberRunning.negate())
+      .whileActiveContinuous(new CG_ShootAll());
+    coDriverDUp.and(isClimberRunning.negate())
+      .whileActiveContinuous(new CG_SetShooterSpeedAndAngle(highFenderSpeed, highFenderAngle))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+    coDriverDDown.and(isClimberRunning.negate())
+      .whileActiveContinuous(new CG_SetShooterSpeedAndAngle(lowFenderSpeed, lowFenderAngle))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+    
     SmartDashboard.putNumber("shooter speed", startSpeed);
     SmartDashboard.putNumber("Hood Set Position", startAngle);
   }
@@ -224,6 +237,16 @@ public class RobotContainer {
   public static void setCoDriverRumble(double outputLeft, double outputRight) {
     coDriver.setRumble(RumbleType.kLeftRumble, outputLeft);
     coDriver.setRumble(RumbleType.kRightRumble, outputRight);
+  }
+
+  /**
+   * Factory method for {@link ParallelCommandGroup}, included for brevity/convenience.
+   *
+   * @param commands the commands to include
+   * @return the command group
+   */
+  public static CommandGroupBase parallel(Command... commands) {
+    return new ParallelCommandGroup(commands);
   }
 
   /**

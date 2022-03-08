@@ -23,18 +23,18 @@ public final class Constants {
 
     /* CTRE CAN IDs */
     /* Drive */;
-    public static final int[] SWERVE_DRIVE_CHANNELS = { 11, 13, 15, 17 }; // { FR, FL, BL, BR }
+    public static final int[] SWERVE_DRIVE_CHANNELS = { 11, 22, 15, 17 }; // { FR, FL, BL, BR }
     public static final int[] SWERVE_ROTATION_CHANNELS = { 12, 14, 16, 18 }; // { FR, FL, BL, BR }
     public static final int DRIVE_PIGEON_CHANNEL = 1;
 
     /* Intake */
-    public static final int[] INTAKE_MOTORS = { 24, 26, 29 }; // { left, right, drop}
+    public static final int[] INTAKE_MOTORS = { 24, 26 }; // { left, right }
 
     /* Feeder */
     public static final int[] FEEDER_TOP_MOTORS = { 25, 27 }; // { left, right }
 
     /* Shooter */
-    public static final int[] SHOOTER_MOTORS = { 22, 23 }; // { left, right }
+    public static final int[] SHOOTER_MOTORS = { 34, 23 }; // { left, right }
 
     /* Climber */
     public static final int CLIMBER_MOTOR = 31;
@@ -47,13 +47,12 @@ public final class Constants {
 
     /* Solenoid ID's */
     /* Climber */
-    public static final int CLIMBER_SOLENOID_FORWARD = 0;
-    public static final int CLIMBER_SOLENOID_REVERSE = 1;
+    public static final int CLIMBER_SOLENOID_FORWARD = 15;
+    public static final int CLIMBER_SOLENOID_REVERSE = 12;
 
     /* Intake */
-    // Currently using climber solenoid's ids, update later
-    public static final int INTAKE_SOLENOID_FORWARD = 3;
-    public static final int INTAKE_SOLENOID_REVERSE = 2;
+    public static final int INTAKE_SOLENOID_FORWARD = 14;
+    public static final int INTAKE_SOLENOID_REVERSE = 13;
 
     /* Digital IO ID's */
     /* climber */
@@ -122,9 +121,11 @@ public final class Constants {
 
     public static final double SHOOTER_PULSES_PER_ROTATION = 2048;
 
-    public static final double SHOOTER_TOLERANCE = .005;
+    public static final double SHOOTER_TOLERANCE = .0065;
     public static final LookupTable SHOOTER_LOOKUP_TABLE = new LookupTable();
     public static final double SHOOTER_LL_ADJUST = 75;
+
+    public static final double SHOOTER_REST_SPEED = 1600;
 
     static {
         SHOOTER_LOOKUP_TABLE.put(35, 3300);
@@ -147,7 +148,7 @@ public final class Constants {
     public static final double LL_MOUNT_HEIGHT = 0.8001; // 31.5 inches
     public static final double LL_MOUNT_ANGLE = 25;
     public static final double LL_ROBOT_TO_TARGET = .183;
-    public static final double LL_OFFSET = -0.178; // add real
+    public static final double LL_OFFSET = - (8.25 / 39.37008); // 8.25"
     public static final double LL_BACK_OFFSET = 0.605; // add real
     public static final double LL_TOLERANCE = 1;
     public static final double LL_RIM_TO_FENDER = 0.1743;
@@ -190,6 +191,8 @@ public final class Constants {
     public static final double HOOD_MAX_ANGLE = 32;
 
     public static final double HOOD_TOLERANCE = .5;
+    public static final double HOOD_REST_POSITION = 22;
+
     public static final LookupTable HOOD_POSITION_TABLE = new LookupTable();
     static {
         HOOD_POSITION_TABLE.put(35, 12.5);

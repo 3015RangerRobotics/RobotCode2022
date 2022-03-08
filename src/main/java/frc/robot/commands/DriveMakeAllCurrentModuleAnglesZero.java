@@ -38,6 +38,10 @@ public class DriveMakeAllCurrentModuleAnglesZero extends CommandBase {
     timer.stop();
     if (!interrupted && DriverStation.isDisabled()) {
       RobotContainer.drive.setRotationOffsets(90);
+    }else if(interrupted){
+      System.out.println("WARNING: RESET COMMAND INTERRUPTED - RESET FAILED");
+    }else if(!DriverStation.isDisabled()){
+      System.out.println("WARNING: ROBOT NOT DISABLED (DISABLE ROBOT!) - RESET FAILED");
     }
   }
 

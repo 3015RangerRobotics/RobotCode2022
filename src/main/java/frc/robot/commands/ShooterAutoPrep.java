@@ -40,8 +40,8 @@ public class ShooterAutoPrep extends CommandBase {
       hasHadTarget = true;
     }
     double differencce = previousPose.minus(RobotContainer.drive.getPoseMeters()).getTranslation().getNorm();
-    previousPose = RobotContainer.drive.getPoseMeters();
     if (hasHadTarget && !(RobotContainer.driverRT.get() || RobotContainer.coDriverRT.get()) && differencce > 0 && RobotContainer.hood.hasBeenHomed()) {
+      previousPose = RobotContainer.drive.getPoseMeters();
       RobotContainer.hood.setHoodPosition(angle);
       RobotContainer.shooter[0].setRPM(speed);
       RobotContainer.shooter[1].setRPM(speed);

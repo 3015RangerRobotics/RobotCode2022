@@ -77,6 +77,24 @@ public class LookupTable {
         return hasVal.value;
     }
 
+    // public double lookupRound(double key){
+    //     InterpolatingDouble k = new InterpolatingDouble(key);
+    //     InterpolatingDouble hasVal = treeMap.get(k);
+    //     if (hasVal == null) {
+    //         InterpolatingDouble top = treeMap.ceilingKey(k);
+    //         InterpolatingDouble bottom = treeMap.floorKey(k);
+
+    //         if (bottom == null) {
+    //             return treeMap.get(top).value;
+    //         } else if(top == null){
+    //             return treeMap.get(bottom).value;
+    //         }else{
+
+    //         }
+    //     }
+    //     return hasVal.value;
+    // }
+
     private static class InterpolatingDouble implements Comparable<InterpolatingDouble> {
         private final double value;
 

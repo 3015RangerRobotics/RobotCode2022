@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CompressorSetEnabled;
 import frc.robot.commands.DriveAutoRotate;
@@ -40,16 +41,18 @@ public class Auto5Ball extends SequentialCommandGroup {
                 double firstAngle = 24.5;
                 double secondAngle = 24.5;
                 addCommands(
-                        new DriveZeroGyro(158),
+                        new DriveZeroGyro(182),
                         new IntakeSetOverride(true),
                         new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown),
                         //new CompressorSetEnabled(true),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt1", 3, 4),
                                 new HoodHome(1),
+                                new ShooterSetSpeed(0, firstSpeed),
+                                new ShooterSetSpeed(1, firstSpeed),
                                 new IntakeBall(0, false)),
-                        new ParallelDeadlineGroup(
-                                new WaitCommand(0.8), 
+                        new ParallelDeadlineGroup( // 0.8
+                                new WaitUntilCommand(RobotContainer.intake[0]::getIntakeSensor).withTimeout(0.8),
                                 new HoodHome(1),
                                 new IntakeBall(0, false)),
                         new ParallelDeadlineGroup(
@@ -71,7 +74,7 @@ public class Auto5Ball extends SequentialCommandGroup {
                                 new ShootBalls(0, firstSpeed),
                                 new ShootBalls(1, firstSpeed)),
                         new ParallelDeadlineGroup(
-                                new DriveFollowPath("5BallAutopt3", 2.5, 3, false), 
+                                new DriveFollowPath("5BallAutopt3", 3, 4, false), 
                                 new IntakeBall(0, false)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.3),
@@ -89,12 +92,15 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt4", 3, 4, false), 
                                 new IntakeBall(0, false)),
-                        new ParallelDeadlineGroup(
-                                new WaitCommand(2), 
+                        new ParallelDeadlineGroup( // 1.5
+                                new SequentialCommandGroup(
+                                        new WaitUntilCommand(RobotContainer.feeder[0]::getBallDetector),
+                                        new WaitUntilCommand(RobotContainer.intake[0]::getIntakeSensor)
+                                ).withTimeout(1.5),
                                 new IntakeBall(0, false)),
                         //new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp),
                         new ParallelDeadlineGroup(
-                                new DriveFollowPath("5BallAutopt5", 3, 4, false), 
+                                new DriveFollowPath("5BallAutopt5", 4, 4.5, false), 
                                 new ShooterSetSpeed(0, secondSpeed),
                                 new HoodSetPosition(secondAngle),
                                 new IntakeBall(0, false)),

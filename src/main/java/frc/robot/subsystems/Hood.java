@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,6 +17,7 @@ public class Hood extends SubsystemBase {
     private DigitalInput limitSwitch;
     public double pos;
     boolean hasBeenHomed = false;
+    Timer timer;
 
     public Hood() {
         hoodMotor = new TalonSRX(Constants.HOOD_MOTOR);
@@ -33,6 +35,8 @@ public class Hood extends SubsystemBase {
         limitSwitch = new DigitalInput(Constants.HOOD_SWITCH_CHANNEL);
         enableForwardSoftLimit(false);
         setReverseLimit(true);
+        timer = new Timer();
+        timer.start();
     }
 
     @Override
@@ -40,6 +44,9 @@ public class Hood extends SubsystemBase {
         SmartDashboard.putBoolean("Hood Limit Switch", getReverseLimit());
         SmartDashboard.putNumber("Hood Angle", getHoodPosition());
         SmartDashboard.putBoolean("Hood has been homed", hasBeenHomed);
+        if (timer.hasElapsed(1) && hasBeenHomed) {
+            setHoodPosition(Constants.HOOD_REST_POSITION);
+        }
     }
 
     public double getHoodPosition() {
@@ -48,6 +55,7 @@ public class Hood extends SubsystemBase {
 
     public void setHoodPosition(double position) {
         hoodMotor.set(ControlMode.Position, position / Constants.HOOD_DEGREES_PER_PULSE);
+        timer.reset();
     }
 
     public boolean getReverseLimit() {

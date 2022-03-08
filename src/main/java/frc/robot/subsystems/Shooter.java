@@ -68,6 +68,13 @@ public class Shooter extends SubsystemBase {
 			}
 			// SmartDashboard.putNumber("PIDTarget", lastSetpoint);
 			// SmartDashboard.putNumber("PIDActual", getRPM());
+			if (getRPM() < Constants.SHOOTER_REST_SPEED && lastSetpoint == 0) {
+				/* Doing this, rather than setting the speed to the rest speed
+				allows the shooter wheel to spin down naturally and still maintain
+				a minimum speed, rather than forcefully slowing the motor down,
+				wasting the battery, and shortening the lifespan of the motor. */
+				setRPM(Constants.SHOOTER_REST_SPEED);
+			}
 		}
 	}
 
@@ -101,5 +108,9 @@ public class Shooter extends SubsystemBase {
 
 	public boolean isPrimed() {
 		return (Math.abs(lastSetpoint - getRPM()) / lastSetpoint < Constants.SHOOTER_TOLERANCE);
+	}
+
+	public boolean isInUse() {
+		return (lastSetpoint != 0) && (lastSetpoint != Constants.SHOOTER_REST_SPEED);
 	}
 }

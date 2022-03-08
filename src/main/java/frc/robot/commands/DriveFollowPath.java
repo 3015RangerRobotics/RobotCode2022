@@ -142,6 +142,8 @@ public class DriveFollowPath extends CommandBase {
     HolonomicDriveController controller;
     boolean resetOdometry;
 
+    String pathName;
+
     public DriveFollowPath(String pathname) {
         this(pathname, Constants.SWERVE_MAX_VELOCITY_METERS, Constants.SWERVE_MAX_ACCEL_METERS, true);
     }
@@ -164,6 +166,8 @@ public class DriveFollowPath extends CommandBase {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         this.controller = new HolonomicDriveController(xController, yController, thetaController);
         this.resetOdometry = resetOdometry;
+
+        this.pathName = pathName;
     }
 
     @Override
@@ -199,6 +203,11 @@ public class DriveFollowPath extends CommandBase {
         // SmartDashboard.putNumber("PIDActual", pathController.getCurrentHeading().getDegrees());
         // System.out.println("tr:" + Math.round(desiredState.holonomicRotation.getDegrees()) + ", " + "r:" + Math.round(RobotContainer.drive.getAngleDegrees()) + " | th:" + Math.round(desiredState.poseMeters.getRotation().getDegrees()));
 
+        Pose2d currentPose = RobotContainer.drive.getPoseMeters();
+        String tString = " [" + Math.round(timer.get() * 100) / 100.0 + "]";
+        System.out.println(pathName + tString + " x error: " + (desiredState.poseMeters.getX() - currentPose.getX()));
+        System.out.println(pathName + tString + " y error: " + (desiredState.poseMeters.getY() - currentPose.getY()));
+        System.out.println(pathName + tString + " r error: " + (desiredState.holonomicRotation.getDegrees() - currentPose.getRotation().getDegrees()));
 
         RobotContainer.drive.drive(targetSpeeds);
     }

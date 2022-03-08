@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
-import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveTurnToLimelight;
 import frc.robot.commands.DriveZeroGyro;

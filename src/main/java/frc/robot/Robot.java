@@ -5,16 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
-import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -33,10 +32,11 @@ public class Robot extends TimedRobot {
   UsbCamera camera2;
   VideoSink server;
   NetworkTableEntry cameraSelection;
-  int hRes = 160;
-  int vRes = 120;
+  int hRes = 320;
+  int vRes = 240;
   int fps = 15;
 
+  Timer matchTimer;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -44,14 +44,24 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    LiveWindow.setEnabled(false);
     camera1 = CameraServer.startAutomaticCapture("Left Camera", 0);
     // camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     // camera1.setPixelFormat(PixelFormat.kMJPEG);
     camera1.setVideoMode(PixelFormat.kMJPEG, hRes, vRes, fps);
 
+    camera2 = CameraServer.startAutomaticCapture("Right Camera", 1);
+    // camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    // camera2.setPixelFormat(PixelFormat.kMJPEG);
+    camera2.setVideoMode(PixelFormat.kMJPEG, hRes, vRes, fps);
+
     server = CameraServer.getServer();
 
     server.setSource(camera1);
+
+    matchTimer = new Timer();
+    matchTimer.reset();
+    matchTimer.stop();
 
     // cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
 
@@ -95,7 +105,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    SmartDashboard.putBoolean("isEnabled", false);
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -103,6 +115,9 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    SmartDashboard.putBoolean("isEnabled", true);
+    matchTimer.reset();
+    matchTimer.start();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -113,17 +128,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    SmartDashboard.putNumber("time", (int) Math.round(15 - matchTimer.get()));
+  }
 
   @Override
   public void teleopInit() {
+    SmartDashboard.putBoolean("isEnabled", true);
+    //matchTimer.reset();
+    //matchTimer.start();
     RobotContainer.intake[0].setOverride(false);
     
-    camera2 = CameraServer.startAutomaticCapture("Right Camera", 1);
-    // camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    // camera2.setPixelFormat(PixelFormat.kMJPEG);
-    camera2.setVideoMode(PixelFormat.kMJPEG, hRes, vRes, fps);
-
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -135,7 +150,15 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    SmartDashboard.putNumber("time", (int) Math.round(150 - matchTimer.get()));
+
+    // if (RobotContainer.shooter[0].isInUse() && RobotContainer.shooter[0].isPrimed() && RobotContainer.shooter[1].isPrimed()) {
+    //   RobotContainer.setCoDriverRumble(0.2, 0.2);
+    // } else {
+    //   RobotContainer.setCoDriverRumble(0, 0);
+    // }
+  }
 
   @Override
   public void testInit() {

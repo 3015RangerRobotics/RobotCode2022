@@ -70,7 +70,7 @@ public class Intake extends SubsystemBase {
 	public void periodic() {
 		if (doPeriodic) {
 			if (id == 0 && !overridePneumatic) {
-				if (timer.get() > 0.7) {
+				if (timer.get() > 0.5) {
 					setPneumaticPosition(IntakeSolenoidPosition.kUp);
 				} else {
 					setPneumaticPosition(IntakeSolenoidPosition.kDown);
