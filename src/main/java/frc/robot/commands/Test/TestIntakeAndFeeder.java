@@ -7,6 +7,7 @@ package frc.robot.commands.Test;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -32,6 +33,7 @@ public class TestIntakeAndFeeder extends CommandBase {
     feederLeft = RobotContainer.feeder[0];
     feederRight = RobotContainer.feeder[1];
     addRequirements(intakeLeft, intakeRight, feederLeft, feederRight);
+    
 
     timer = new Timer();
   }
@@ -41,11 +43,16 @@ public class TestIntakeAndFeeder extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
+    testTable.getEntry("Left Feeder Sensor").setBoolean(false);
+    testTable.getEntry("Left Intake Sensor").setBoolean(false);
+    testTable.getEntry("Right Feeder Sensor").setBoolean(false);
+    testTable.getEntry("Right Intake Sensor").setBoolean(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    testTable.getEntry("test stage").setNumber(stage);
     switch (stage) {
       case 0: /* runs left intake and feeder */
         intakeLeft.test();
@@ -59,7 +66,7 @@ public class TestIntakeAndFeeder extends CommandBase {
           timer.reset();
           timer.start();
           stage++;
-        } else if (timer.hasElapsed(5)) {
+        } else if (timer.hasElapsed(20)) {
           feederLeft.setPercentOutput(0);
           testTable.getEntry("Left Feeder Sensor").setBoolean(false);
           timer.reset();
@@ -74,7 +81,7 @@ public class TestIntakeAndFeeder extends CommandBase {
           timer.reset();
           timer.start();
           stage++;
-        } else if (timer.hasElapsed(5)) {
+        } else if (timer.hasElapsed(20)) {
           intakeLeft.stop();
           testTable.getEntry("Left Intake Sensor").setBoolean(false);
           timer.reset();
@@ -86,8 +93,10 @@ public class TestIntakeAndFeeder extends CommandBase {
         intakeLeft.purge();
         feederLeft.setPercentOutput(Constants.FEEDER_PURGE_SPEED);
         if (timer.hasElapsed(0.75)) {
-          intakeLeft.stop();
+          intakeLeft.stop(false);
           feederLeft.setPercentOutput(0);
+          intakeRight.test();
+          feederRight.setPercentOutput(Constants.FEEDER_TEST_SPEED);
           timer.reset();
           timer.start();
           stage++;
@@ -100,7 +109,7 @@ public class TestIntakeAndFeeder extends CommandBase {
           timer.reset();
           timer.start();
           stage++;
-        } else if (timer.hasElapsed(5)) {
+        } else if (timer.hasElapsed(20)) {
           feederRight.setPercentOutput(0);
           testTable.getEntry("Right Feeder Sensor").setBoolean(false);
           timer.reset();
@@ -115,7 +124,7 @@ public class TestIntakeAndFeeder extends CommandBase {
           timer.reset();
           timer.start();
           stage++;
-        } else if (timer.hasElapsed(5)) {
+        } else if (timer.hasElapsed(20)) {
           intakeRight.stop();
           testTable.getEntry("Right Intake Sensor").setBoolean(false);
           timer.reset();
@@ -136,14 +145,16 @@ public class TestIntakeAndFeeder extends CommandBase {
         break;
       case 7: /* drop intake */
         intakeLeft.setPneumaticPosition(Intake.IntakeSolenoidPosition.kDown);
-        if (timer.hasElapsed(1)) {
+        if (timer.hasElapsed(1.5)) {
           timer.reset();
           timer.start();
           stage++;
         }
+        break;
       case 8:
         intakeLeft.setPneumaticPosition(Intake.IntakeSolenoidPosition.kUp);
         stage++;
+        break;
     }
   }
 

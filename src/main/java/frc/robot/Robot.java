@@ -10,12 +10,15 @@ import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.Test.TestAll;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -45,6 +48,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     LiveWindow.setEnabled(false);
+    LiveWindow.disableAllTelemetry();
     camera1 = CameraServer.startAutomaticCapture("Left Camera", 0);
     // camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     // camera1.setPixelFormat(PixelFormat.kMJPEG);
@@ -58,6 +62,8 @@ public class Robot extends TimedRobot {
     server = CameraServer.getServer();
 
     server.setSource(camera1);
+
+    SmartDashboard.putString("active camera", "L");
 
     matchTimer = new Timer();
     matchTimer.reset();
@@ -88,14 +94,17 @@ public class Robot extends TimedRobot {
       camera2.setConnectionStrategy(ConnectionStrategy.kForceClose);
       camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
       server.setSource(camera1);
+      SmartDashboard.putString("active camera", "L");
       // cameraSelection.setString(camera1.getName());
     }
     if (RobotContainer.driverDRight.get() || RobotContainer.coDriverDRight.get()) {
       camera1.setConnectionStrategy(ConnectionStrategy.kForceClose);
       camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
       server.setSource(camera2);
+      SmartDashboard.putString("active camera", "R");
       // cameraSelection.setString(camera2.getName());
     }
+    SmartDashboard.putString("alliance", DriverStation.getAlliance() == Alliance.Red ? "red" : "blue");
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -107,6 +116,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     SmartDashboard.putBoolean("isEnabled", false);
+    SmartDashboard.putBoolean("confirm climb", false);
   }
 
   @Override
@@ -163,7 +173,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
+    new TestAll().schedule();
   }
 
   /** This function is called periodically during test mode. */

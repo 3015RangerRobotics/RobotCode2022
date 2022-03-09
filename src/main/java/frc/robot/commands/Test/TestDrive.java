@@ -38,11 +38,15 @@ public class TestDrive extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
+    testTable.getEntry("Drive module rotation test 1").setBoolean(false);
+    testTable.getEntry("Drive module rotation test 2").setBoolean(false);
+    testTable.getEntry("Pigeon reset test").setBoolean(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    testTable.getEntry("test stage").setNumber(stage);
     switch(stage) {
       case 0:
       case 1:
@@ -74,14 +78,22 @@ public class TestDrive extends CommandBase {
         stage++;
         break;
       case 10:
+        for (int i = 0; i < 4; i++) {
+          result &= (Math.abs(drive.getModuleRotation(i)) - 90) < 1.5;
+        }
+        testTable.getEntry("Drive module rotation test 2").setBoolean(result);
+      case 11:
         drive.resetIMU();
         timer.reset();
         timer.start();
         stage++;
         break;
-      case 11:
-        if (Math.abs(drive.getAngleDegrees()) < 0.5 && timer.hasElapsed(0.25)) {
+      case 12:
+        if (Math.abs(drive.getAngleDegrees()) < 0.5) {
           stage++;
+          testTable.getEntry("Pigeon reset test").setBoolean(true);
+        } else if (timer.hasElapsed(0.3)) {
+          testTable.getEntry("Pigeon reset test").setBoolean(false);
         }
     }
   }
@@ -93,6 +105,6 @@ public class TestDrive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return stage == 13;
   }
 }

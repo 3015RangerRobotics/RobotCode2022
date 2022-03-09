@@ -16,6 +16,7 @@ public class Shooter extends SubsystemBase {
 	public double lastSetpoint = 0;
 	public double speed;
 	private double id;
+	private boolean override;
 
 	/**
 	 * Do not use
@@ -68,7 +69,7 @@ public class Shooter extends SubsystemBase {
 			}
 			// SmartDashboard.putNumber("PIDTarget", lastSetpoint);
 			// SmartDashboard.putNumber("PIDActual", getRPM());
-			if (getRPM() < Constants.SHOOTER_REST_SPEED && lastSetpoint == 0) {
+			if (getRPM() < Constants.SHOOTER_REST_SPEED && lastSetpoint == 0 && !override) {
 				/* Doing this, rather than setting the speed to the rest speed
 				allows the shooter wheel to spin down naturally and still maintain
 				a minimum speed, rather than forcefully slowing the motor down,
@@ -112,5 +113,9 @@ public class Shooter extends SubsystemBase {
 
 	public boolean isInUse() {
 		return (lastSetpoint != 0) && (lastSetpoint != Constants.SHOOTER_REST_SPEED);
+	}
+
+	public void setMinSpeedOverride(boolean override) {
+		this.override = override;
 	}
 }

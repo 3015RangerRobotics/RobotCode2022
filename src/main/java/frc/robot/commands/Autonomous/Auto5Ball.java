@@ -6,16 +6,13 @@
 
 package frc.robot.commands.Autonomous;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
-import frc.robot.commands.CompressorSetEnabled;
-import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveFollowPath;
+import frc.robot.commands.DriveSetModuleAngles;
 import frc.robot.commands.DriveTurnToLimelight;
 import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.HoodHome;
@@ -24,8 +21,6 @@ import frc.robot.commands.IntakeBall;
 import frc.robot.commands.IntakeSetOverride;
 import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.ShootBalls;
-import frc.robot.commands.ShooterAutoPrep;
-import frc.robot.commands.ShooterAutoShoot;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
 import frc.robot.subsystems.Intake;
@@ -44,6 +39,7 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new DriveZeroGyro(182),
                         new IntakeSetOverride(true),
                         new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown),
+                        // new DriveSetModuleAngles(90),
                         //new CompressorSetEnabled(true),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt1", 3, 4),
@@ -51,7 +47,7 @@ public class Auto5Ball extends SequentialCommandGroup {
                                 new ShooterSetSpeed(0, firstSpeed),
                                 new ShooterSetSpeed(1, firstSpeed),
                                 new IntakeBall(0, false)),
-                        new ParallelDeadlineGroup( // 0.8
+                        new ParallelDeadlineGroup(
                                 new WaitUntilCommand(RobotContainer.intake[0]::getIntakeSensor).withTimeout(0.8),
                                 new HoodHome(1),
                                 new IntakeBall(0, false)),
@@ -117,6 +113,5 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new ShooterStop(0),
                         new ShooterStop(1),
                         new IntakeSetOverride(false));
-                System.out.println("===============================================\nAUTO HAS BEEN CREATED\n===============================================");
         }         
 }

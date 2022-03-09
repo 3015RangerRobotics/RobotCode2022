@@ -43,6 +43,7 @@ public class Climber extends SubsystemBase {
         climberMotor.config_kI(0, Constants.CLIMBER_RAISE_I);
         climberMotor.config_kD(0, Constants.CLIMBER_RAISE_D);
         climberMotor.config_kF(0, Constants.CLIMBER_RAISE_F);
+        // climberMotor.configAllowableClosedloopError(0, 0.01 / Constants.CLIMBER_METERS_PER_PULSE, 20);
         climberMotor.config_kP(1, Constants.CLIMBER_LOWER_P);
         climberMotor.config_kI(1, Constants.CLIMBER_LOWER_I);
         climberMotor.config_kD(1, Constants.CLIMBER_LOWER_D);

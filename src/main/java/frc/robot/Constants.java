@@ -161,7 +161,7 @@ public final class Constants {
                                                                        // (rememner 16 Tooth sprock)
     public static final double CLIMBER_MAX_HEIGHT_METERS = .72;
     public static final double CLIMBER_RELEASE_HEIGHT_METERS = CLIMBER_MAX_HEIGHT_METERS - .15;
-    public static final double CLIMBER_HEIGHT_TOLERANCE = .005;
+    public static final double CLIMBER_HEIGHT_TOLERANCE = .05;
 
     public static final double CLIMBER_RAISE_P = 1;
     public static final double CLIMBER_RAISE_I = 0;
@@ -214,10 +214,10 @@ public final class Constants {
     public static final double FEEDER_INTAKE_SPEED = 0.5;
     public static final double FEEDER_PURGE_SPEED = -0.4;
     public static final double FEEDER_SHOOT_SPEED = 0.8;
-    public static final double FEEDER_TEST_SPEED = 0.4;
+    public static final double FEEDER_TEST_SPEED = 0.5;
 
     /* Intake Constants */
     public static final double INTAKE_INTAKE_SPEED = 0.8;
     public static final double INTAKE_PURGE_SPEED = -0.4;
-    public static final double INTAKE_TEST_SPEED = 0.4;
+    public static final double INTAKE_TEST_SPEED = 0.8;
 }

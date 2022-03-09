@@ -29,6 +29,7 @@ import frc.robot.commands.DriveCoast;
 import frc.robot.commands.DriveFeedbackWhileDisabled;
 import frc.robot.commands.DriveMakeAllCurrentModuleAnglesZero;
 import frc.robot.commands.DriveOneModule;
+import frc.robot.commands.DriveSetModuleAngles;
 import frc.robot.commands.DriveTurnToAngle;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.DriveZeroGyro;
@@ -44,11 +45,13 @@ import frc.robot.commands.RumbleCoDriver;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShooterAutoPrep;
 import frc.robot.commands.ShooterSetSpeed;
+import frc.robot.commands.ShooterSetSpeedOverride;
 import frc.robot.commands.ShooterStop;
 import frc.robot.commands.Autonomous.Auto2Ball;
 import frc.robot.commands.Autonomous.Auto3Ball;
 import frc.robot.commands.Autonomous.Auto4Ball;
 import frc.robot.commands.Autonomous.Auto5Ball;
+import frc.robot.commands.Test.TestAll;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.drive.Drive;
@@ -154,9 +157,14 @@ public class RobotContainer {
     SmartDashboard.putData("Hood Home Lightning", new HoodHome(1));
     SmartDashboard.putData("Limelight manual on", new LimelightManualOn());
     SmartDashboard.putData("Drive Coast", new DriveCoast());
+    SmartDashboard.putData("Set Modules 0", new DriveSetModuleAngles(0));
+    SmartDashboard.putData("Set Modules 90", new DriveSetModuleAngles(90));
+    SmartDashboard.putData("Override shooters", new ShooterSetSpeedOverride());
+    SmartDashboard.putData("Test Everything", new TestAll());
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
     // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
+    // SmartDashboard.putData(climber);
 
     autoChooser.setDefaultOption("No Auto Selected", new WaitCommand(1.0));
     autoChooser.addOption("5 Ball Auto", new Auto5Ball());
@@ -216,7 +224,7 @@ public class RobotContainer {
     coDriverLB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
     coDriverRB.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
     coDriverStart.and(coDriverBack)
-      .toggleWhenActive(parallel(new ClimbAllTheWay(), new DriveWithGamepad(true, false)))
+      .toggleWhenActive(parallel(new ClimbAllTheWay(), new DriveWithGamepad(true, false), new ShooterSetSpeedOverride()))
       .whenActive(new RumbleCoDriver(0.5));
     coDriverLT.and(isClimberRunning.negate())
       .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))

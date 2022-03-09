@@ -21,7 +21,7 @@ public class TestClimber extends CommandBase {
   int stage = 0;
   boolean result = true;
 
-  double[] testPositions = {0, 0.5, 0.25, 0.75, 1};
+  double[] testPositions = {0.5, 0.25, 0.75, 1, 0};
 
   Timer timer;
   /** Creates a new TestClimber. */
@@ -47,6 +47,7 @@ public class TestClimber extends CommandBase {
   public void execute() {
     switch(stage) {
       case 0: /* start homing */
+        climber.setPIDSlot(0);
         if (climber.getBottomLimit()) {
           stage++;
           break;
@@ -93,7 +94,7 @@ public class TestClimber extends CommandBase {
         stage++;
         break;
       case 8:
-        if(RobotContainer.driverStart.get() && RobotContainer.driverBack.get()) {
+        if(RobotContainer.driverRT.get() && RobotContainer.driverRB.get() && RobotContainer.driverLT.get() && RobotContainer.driverLB.get()) {
           timer.reset();
           timer.start();
           stage++;
@@ -106,7 +107,7 @@ public class TestClimber extends CommandBase {
         }
         break;
       case 10:
-        if(RobotContainer.driverStart.get() && RobotContainer.driverBack.get()) {
+        if(RobotContainer.driverRT.get() && RobotContainer.driverRB.get() && RobotContainer.driverLT.get() && RobotContainer.driverLB.get()) {
           timer.reset();
           timer.start();
           stage++;

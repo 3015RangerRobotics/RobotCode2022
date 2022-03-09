@@ -25,7 +25,7 @@ public class TestHood extends CommandBase {
 
   /** Creates a new TestHood. */
   public TestHood() {
-    Hood hood = RobotContainer.hood;
+    hood = RobotContainer.hood;
     addRequirements(hood);
 
     timer = new Timer();
@@ -42,6 +42,7 @@ public class TestHood extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    testTable.getEntry("test stage").setNumber(stage);
     switch(stage) {
       case 0: /* start homing hood */
         if (hood.getReverseLimit()) {
@@ -82,6 +83,7 @@ public class TestHood extends CommandBase {
         break;
       case 7:
         testTable.getEntry("Hood position test").setBoolean(result);
+        stage++;
         break;
     }
   }
@@ -93,6 +95,6 @@ public class TestHood extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return stage == 8;
   }
 }

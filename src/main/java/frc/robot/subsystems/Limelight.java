@@ -90,6 +90,9 @@ public class Limelight extends SubsystemBase {
 		SmartDashboard.putNumber("Limelight Users", users);
 		SmartDashboard.putNumber("Limelight RPM Target", getShooterSpeed());
 		SmartDashboard.putNumber("Limelight Hood Target", getHoodPos());
+		SmartDashboard.putNumber("Limelight area", getArea());
+		SmartDashboard.putNumber("Limelight target short side", getShortSideLength());
+		SmartDashboard.putNumber("Limelight target long side", getLongSideLength());
 
 		if (users > 0) {
 			setLEDMode(LEDMode.LED_ON);
@@ -120,7 +123,7 @@ public class Limelight extends SubsystemBase {
 	 * @return if the limelight has a target
 	 */
 	public boolean hasTarget() {
-		return limelight.getEntry("tv").getDouble(0) == 1;
+		return limelight.getEntry("tv").getDouble(0) == 1 && getArea() < 1.5 && getShortSideLength() < 15;
 	}
 
 	/**
@@ -128,6 +131,14 @@ public class Limelight extends SubsystemBase {
 	 */
 	public double getTargetAngleX() {
 		return limelight.getEntry("tx").getDouble(0);
+	}
+
+	public double getShortSideLength() {
+		return limelight.getEntry("tshort").getDouble(0);
+	}
+
+	public double getLongSideLength() {
+		return limelight.getEntry("tlong").getDouble(0);
 	}
 
 	// public double getCorrectedAngleX() {

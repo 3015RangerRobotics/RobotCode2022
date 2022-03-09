@@ -10,14 +10,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class SmartDashboardPutData extends InstantCommand {
-  String type;
   String key;
   Object value;
 
 
   /** Creates a new SmartDashboardPutData. */
-  public SmartDashboardPutData(String type, String key, Object value) {
-    this.type = type;
+  public SmartDashboardPutData(String key, Object value) {
     this.key = key;
     this.value = value;
   }
@@ -25,22 +23,18 @@ public class SmartDashboardPutData extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    switch(type) {
-      case "String":
-        SmartDashboard.putString(key, (String) value);
-        break;
-      case "double":
-        SmartDashboard.putNumber(key, (double) value);
-        break;
-      case "int":
-        SmartDashboard.putNumber(key, (int) value);
-        break;
-      case "boolean":
-        SmartDashboard.putBoolean(key, (boolean) value);
-        break;
-      default:
-        SmartDashboard.putData(key, (Sendable) value);
-        break;
+    if (value instanceof Number) {
+      SmartDashboard.putNumber(key, (double) value);
+      return;
+    }
+    if (value instanceof Boolean) {
+      SmartDashboard.putBoolean(key, (boolean) value);
+    }
+    if (value instanceof String) {
+      SmartDashboard.putString(key, (String) value);
+    }
+    if (value instanceof Sendable) {
+      SmartDashboard.putData(key, (Sendable) value);
     }
   }
 

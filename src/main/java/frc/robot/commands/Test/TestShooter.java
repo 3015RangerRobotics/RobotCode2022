@@ -40,11 +40,17 @@ public class TestShooter extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
+    testTable.getEntry("Left Shooter low speed test").setBoolean(false);
+    testTable.getEntry("Left Shooter high speed test").setBoolean(false);
+    testTable.getEntry("Right Shooter low speed test").setBoolean(false);
+    testTable.getEntry("Right Shooter high speed test").setBoolean(false);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    testTable.getEntry("test stage").setNumber(stage);
     switch(stage) {
       case 0: /* set left shooter to low rpm */
         leftShooter.setRPM(lowTestRPM);
@@ -63,10 +69,10 @@ public class TestShooter extends CommandBase {
         }
         break;
       case 2: /* hold low speed for one second */
-        if (timer.hasElapsed(0.1)) {
+        if (timer.hasElapsed(0.4)) {
           result &= leftShooter.isPrimed();
         }
-        if (timer.hasElapsed(1)) {
+        if (timer.hasElapsed(1.5)) {
           testTable.getEntry("Left Shooter low speed test").setBoolean(result);
           result = true;
           timer.reset();
@@ -91,10 +97,10 @@ public class TestShooter extends CommandBase {
         }
         break;
       case 5: /* hold high speed for one second */
-        if (timer.hasElapsed(0.1)) {
+        if (timer.hasElapsed(0.4)) {
           result &= leftShooter.isPrimed();
         }
-        if (timer.hasElapsed(1)) {
+        if (timer.hasElapsed(1.5)) {
           testTable.getEntry("Left Shooter high speed test").setBoolean(result);
           result = true;
           timer.reset();
@@ -120,10 +126,10 @@ public class TestShooter extends CommandBase {
         }
         break;
       case 8: /* hold low speed for one second */
-        if (timer.hasElapsed(0.1)) {
+        if (timer.hasElapsed(0.4)) {
           result &= rightShooter.isPrimed();
         }
-        if (timer.hasElapsed(1)) {
+        if (timer.hasElapsed(1.5)) {
           testTable.getEntry("Right Shooter low speed test").setBoolean(result);
           result = true;
           timer.reset();
@@ -148,10 +154,10 @@ public class TestShooter extends CommandBase {
         }
         break;
       case 11: /* hold high speed for one second */
-        if (timer.hasElapsed(0.1)) {
+        if (timer.hasElapsed(0.4)) {
           result &= rightShooter.isPrimed();
         }
-        if (timer.hasElapsed(1)) {
+        if (timer.hasElapsed(1.5)) {
           testTable.getEntry("Right Shooter high speed test").setBoolean(false);
           result = true;
           timer.reset();
