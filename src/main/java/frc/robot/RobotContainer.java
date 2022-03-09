@@ -23,6 +23,8 @@ import frc.robot.commands.CG_SetShooterSpeedAndAngle;
 import frc.robot.commands.CG_ShootAll;
 import frc.robot.commands.ClimbAllTheWay;
 import frc.robot.commands.ClimberHomePosition;
+import frc.robot.commands.ClimberToBarRelease;
+import frc.robot.commands.ClimberToBottom;
 import frc.robot.commands.CompressorSetEnabled;
 import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveCoast;
@@ -37,12 +39,10 @@ import frc.robot.commands.FloppyArmDown;
 import frc.robot.commands.FloppyArmUp;
 import frc.robot.commands.HoodHome;
 import frc.robot.commands.HoodSetPosition;
-import frc.robot.commands.IntakeBall;
 import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.LimelightManualOn;
 import frc.robot.commands.PurgeBall;
 import frc.robot.commands.RumbleCoDriver;
-import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShooterAutoPrep;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterSetSpeedOverride;
@@ -193,7 +193,7 @@ public class RobotContainer {
     double highFenderSpeed = 3300;
     double lowFenderAngle = Constants.HOOD_REST_POSITION;
     double highFenderAngle = 7.75;
-    /*================ Driver Controls ================*/
+    /*================  Driver Controls  ================*/
     driverB.and(isClimberRunning.negate())
       .whileActiveContinuous(parallel(new PurgeBall(0), new PurgeBall(1)));
     driverY.and(isClimberRunning.negate())
@@ -212,7 +212,7 @@ public class RobotContainer {
     driverDDown.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown));
 
     
-    /*===============CoDriver Controls ===============*/
+    /*================ CoDriver Controls ================*/
     coDriverA.and(isClimberRunning.negate())
       .whileActiveContinuous(new CG_IntakeBalls());
     coDriverB.whileActiveContinuous(parallel(new PurgeBall(0), new PurgeBall(1)));
@@ -237,6 +237,17 @@ public class RobotContainer {
     coDriverDDown.and(isClimberRunning.negate())
       .whileActiveContinuous(new CG_SetShooterSpeedAndAngle(lowFenderSpeed, lowFenderAngle))
       .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+
+    /*================  Manual Climbing  ================*/
+    // coDriverDUp.or(driverDUp).and(isClimberRunning)
+    //   .whenActive(new ClimberToBarRelease());
+    // coDriverDDown.or(driverDDown).and(isClimberRunning)
+    //   .whenActive(new ClimberToBottom());
+    // coDriverY.or(driverY).and(isClimberRunning)
+    //   .whenActive(new FloppyArmUp());
+    // coDriverX.or(driverX).and(isClimberRunning)
+    //   .whenActive(new FloppyArmDown());
+    /*====== Only to be enabled at driver request =======*/
     
     SmartDashboard.putNumber("shooter speed", startSpeed);
     SmartDashboard.putNumber("Hood Set Position", startAngle);
