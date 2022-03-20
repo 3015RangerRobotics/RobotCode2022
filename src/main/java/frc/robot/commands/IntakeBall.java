@@ -11,10 +11,11 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeFeeder;
+import frc.robot.subsystems.IntakeFeeder.State;
 
 public class IntakeBall extends CommandBase {
-  private Intake intake;
-  private Feeder feeder;
+  private IntakeFeeder intakeFeeder;
   private boolean affectPneumatic;
 
   public IntakeBall(int side) {
@@ -23,45 +24,31 @@ public class IntakeBall extends CommandBase {
 
   /** Creates a new IntakeBall. Will run eternally */
   public IntakeBall(int side, boolean affectPneumatic) {
-    // there has to be a better way to do this
-    intake = RobotContainer.intake[side];
-    feeder = RobotContainer.feeder[side];
+    intakeFeeder = RobotContainer.intakeFeeder[side];
     this.affectPneumatic = affectPneumatic;
-    addRequirements(intake, feeder);
+    addRequirements(intakeFeeder);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    intakeFeeder.setState(State.kFillToFeeder);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if (intake.getIntakeSensor() && feeder.getBallDetector()) {
-      intake.stop(affectPneumatic);
-    } else {
-      intake.intake(affectPneumatic);
-    }
-
-    if (feeder.getBallDetector()) {
-      feeder.setPercentOutput(0);
-    } else {
-      feeder.setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stop(affectPneumatic);
-    feeder.setPercentOutput(0);
+    intakeFeeder.setState(State.kOff);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.getIntakeSensor() && feeder.getBallDetector();
+    return false;
   }
 }

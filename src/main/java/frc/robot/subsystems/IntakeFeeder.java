@@ -7,13 +7,16 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,20 +26,33 @@ public class IntakeFeeder extends SubsystemBase {
 	private DigitalInput intakeSensor;
   private TalonSRX feederMotor;
   private DigitalInput feederDetector;
+  private ColorSensorV3 colorSensor;
   private Timer pneumaticTimer;
   private Timer intakeBadTimer;
 
   private int id;
 	private boolean doPeriodic = false;
+  private boolean pneumaticOverride;
+  private boolean isRedCorrect;
+  private boolean intakeUp = true;
 
   private boolean prevFeederSensor;
 
   public enum State {
-    kOff, kFillToFeeder, kFillToFeederBadBall, kFillToIntake, kFillToIntakeBadBall, kShootFeeder, kShootFeederIntake, kPurgeFeederIntake, kPurgeIntake
+    kOff,
+    kFillToFeeder,
+    kFillToFeederBadBall,
+    kFillToIntake,
+    kFillToIntakeBadBall,
+    kShootFeeder,
+    kShootFeederIntake,
+    kPurgeFeederIntake,
+    kPurgeFeeder,
+    kPurgeIntake
   }
 
-  private State state;
-  private State prevState;
+  private State state = State.kOff;
+  private State prevState = State.kOff;
 
   /**
 	 * Do not use
@@ -49,6 +65,9 @@ public class IntakeFeeder extends SubsystemBase {
   public IntakeFeeder(int id) {
     this.id = id;
     this.doPeriodic = true;
+    this.isRedCorrect = DriverStation.getAlliance() == DriverStation.Alliance.Red;
+
+    colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
 
     //Feeder stuff
     feederMotor = new TalonSRX(Constants.FEEDER_TOP_MOTORS[id]);
@@ -60,7 +79,9 @@ public class IntakeFeeder extends SubsystemBase {
 
     //intake Stuff
     //TODO: make separate solenoids in Constants
-    intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_FORWARD, Constants.INTAKE_SOLENOID_REVERSE);
+    if (id == 0) {
+      intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_FORWARD, Constants.INTAKE_SOLENOID_REVERSE);
+    }
     pneumaticTimer = new Timer();
 
     intakeMotor = new TalonSRX(Constants.INTAKE_MOTORS[id]);
@@ -85,52 +106,72 @@ public class IntakeFeeder extends SubsystemBase {
     SmartDashboard.putBoolean("Intake Sensor " + (id == 0 ? "Left" : "Right"), getIntakeSensor());
     SmartDashboard.putBoolean("Feeder Sensor " + (id == 0 ? "Left" : "Right"), getFeederDetector());
 
-    //if we are in the intake modes, check if we have a bad ball
-    if( (state == State.kFillToFeeder) && !correctColor()){
-      state = State.kFillToFeederBadBall;
-    }else if( (state == State.kFillToIntake) && !correctColor()){
-      state = State.kFillToIntakeBadBall;
-      //This 
-    }
-
     //TODO: decide if you would rather use an array for these
     double feederSpeed = 0.0;
     double intakeSpeed = 0.0;
+    intakeUp = true;
 
     //TODO: put in the intake and feeder speeds in each case
     switch(state){
       case kShootFeeder:
         //shooting just one ball
-
+        feederSpeed = Constants.FEEDER_SHOOT_SPEED;
+        intakeSpeed = 0;
         break;
       case kShootFeederIntake:
         //shooting both balls
-
+        feederSpeed = Constants.FEEDER_SHOOT_SPEED;
+        intakeSpeed = Constants.INTAKE_INTAKE_SPEED;
         break;
       case kPurgeFeederIntake:
         //purging both balls
-        
+        feederSpeed = Constants.FEEDER_PURGE_SPEED;
+        intakeSpeed = Constants.INTAKE_PURGE_SPEED;
         break;
       case kPurgeIntake:
-        //purging intake ball
-
+        feederSpeed = 0;
+        intakeSpeed = Constants.INTAKE_PURGE_SPEED;
+        intakeUp = false;
+        if (intakeBadTimer.hasElapsed(0.75)) {
+          state = State.kFillToIntake;
+        }
         break;
-      case kFillToIntakeBadBall:
-        //pushing out ball as it the wrong color
-
-        break;
-      case kFillToFeederBadBall:
-
-        //TODO: run a debounce on this logic too, see end of periodic
-        if(!getFeederDetector()){
-          //drop through
+      case kPurgeFeeder:
+        // Assumes the shooter is running at its low speed
+        feederSpeed = Constants.FEEDER_INTAKE_SPEED;
+        intakeSpeed = 0;
+        intakeUp = false;
+        if (!getFeederDetector()) {
           state = State.kFillToFeeder;
         }
-        else{
-          break;
+        break;
+      case kFillToIntakeBadBall:
+        feederSpeed = 0;
+        intakeSpeed = Constants.INTAKE_INTAKE_SPEED;
+        if (getIntakeSensor()) {
+          intakeBadTimer.reset();
+          intakeBadTimer.start();
+          state = State.kPurgeIntake;
         }
+        intakeUp = false;
+        break;
+      case kFillToFeederBadBall:
+        feederSpeed = Constants.FEEDER_INTAKE_SPEED;
+        intakeSpeed = Constants.INTAKE_INTAKE_SPEED;
+        intakeUp = false;
+        if (getFeederDetector()) {
+          state = State.kPurgeFeeder;
+        }
+        break;
       case kFillToFeeder:
         //filling the robot until the Feeder sensor is detected
+        feederSpeed = Constants.FEEDER_INTAKE_SPEED;
+        intakeSpeed = Constants.INTAKE_SLOW_SPEED;
+        intakeUp = false;
+        if (!correctColor()) {
+          state = State.kFillToFeederBadBall;
+          break;
+        }
         if(getFeederDetector()){
           //if we see a ball change state and fall to next case
           state = State.kFillToIntake;
@@ -140,7 +181,13 @@ public class IntakeFeeder extends SubsystemBase {
         }
       case kFillToIntake:
         //filling the robot until the intake sensor is detected
-        
+        feederSpeed = 0;
+        intakeSpeed = Constants.INTAKE_SLOW_SPEED;
+        intakeUp = false;
+        if(!correctColor()) {
+          state = State.kFillToIntakeBadBall;
+          break;
+        }
         if(getIntakeSensor()){
           //if we see a ball change state and fall to next case
           state = State.kOff;
@@ -151,22 +198,28 @@ public class IntakeFeeder extends SubsystemBase {
       case kOff:
         feederSpeed = 0.0;
         intakeSpeed = 0.0;
+        intakeUp = true;
         break;
       default:
         feederSpeed = 0.0;
         intakeSpeed = 0.0;
+        intakeUp = true;
         System.out.println("default ball handler case reached");
     }
 
-    //if we change state, check to see if we need to change the pneumatics etc
-    if(state != prevState){
-      //TODO: write pneumatic stuff
+    if(intakeUp) {
+      pneumaticTimer.start();
+    } else {
+      pneumaticTimer.reset();
+      pneumaticTimer.stop();
+    }
+  
+    if (!pneumaticOverride) {
+      setPneumaticDown(!pneumaticTimer.hasElapsed(0.25));
     }
 
     intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
-    //TODO:as above, set the feeder speed once at the end, this keeps the motor from rapid changes as the case will change motor speeds multiple times, sometimes
-
-    //used in the debounce of the feeder ball sensor
+    feederMotor.set(ControlMode.PercentOutput, feederSpeed);
     prevFeederSensor = getFeederDetector();
     prevState = state;
   }
@@ -197,6 +250,9 @@ public class IntakeFeeder extends SubsystemBase {
    * @param pneumaticDown
    */
   public void setPneumaticDown(boolean pneumaticDown){
+    if (id == 1) {
+      return;
+    }
     if(pneumaticDown){
       intakeSolenoid.set(Value.kForward);
     }else{
@@ -213,7 +269,21 @@ public class IntakeFeeder extends SubsystemBase {
   }
 
   public boolean correctColor(){
-    //TODO: write color sensor code
-    return true;
+    int red = colorSensor.getRed();
+    int blue = colorSensor.getBlue();
+    int proximity = colorSensor.getProximity();
+
+    if (red == 0 && blue == 0 && proximity == 0) {
+      // Color sensor is disconnected, attempt to reconnect
+      colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
+      return true;
+    }
+
+    int diff = red - blue;
+    if (Math.abs(diff) < 100) {
+      // Red / blue signal is not strong enough to make a judgment
+      return true;
+    }
+    return (diff < 0) ^ isRedCorrect;
   }
 }

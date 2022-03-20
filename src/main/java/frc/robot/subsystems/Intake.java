@@ -3,9 +3,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -14,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-	private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_FORWARD, Constants.INTAKE_SOLENOID_REVERSE);
+	private DoubleSolenoid intakeSolenoid;
 	private TalonSRX intakeMotor;
 	private DigitalInput intakeSensor;
 	private boolean doPeriodic = false;
@@ -22,6 +24,8 @@ public class Intake extends SubsystemBase {
 	private boolean overridePneumatic = false;
 	private Timer timer;
 	private int id;
+
+	private ColorSensorV3 colorSensor;
 
 	public enum IntakeSolenoidPosition {
 		kUp,
@@ -36,6 +40,9 @@ public class Intake extends SubsystemBase {
 	}
 
 	public Intake(int id) {
+		if (id == 0) {
+			intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_FORWARD, Constants.INTAKE_SOLENOID_REVERSE);
+		}
 		intakeMotor = new TalonSRX(Constants.INTAKE_MOTORS[id]);
 		intakeSensor = new DigitalInput(Constants.INTAKE_BALL_DETECTORS[id]);
 		intakeMotor.setInverted(id == 0);
@@ -47,6 +54,8 @@ public class Intake extends SubsystemBase {
 		timer = new Timer();
 		timer.reset();
 		timer.start();
+
+		colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 	}
 
 	public void setPneumaticPosition(IntakeSolenoidPosition solenoidPosition) {
@@ -78,6 +87,15 @@ public class Intake extends SubsystemBase {
 			}
 			SmartDashboard.putBoolean("Intake Sensor " + (id == 0 ? "Left" : "Right"), getIntakeSensor());
 			SmartDashboard.putBoolean("Intake Override Status", overridePneumatic);
+
+			int red = colorSensor.getRed();
+			int blue = colorSensor.getBlue();
+			int proximity = colorSensor.getProximity();
+			SmartDashboard.putNumber("red", red);
+			SmartDashboard.putNumber("blue", blue);
+			SmartDashboard.putNumber("proximity", proximity);
+			SmartDashboard.putNumber("red - blue", red - blue);
+			SmartDashboard.putNumber("blue - red", blue - red);
 		}
 	}
 	
