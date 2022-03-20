@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,6 +13,7 @@ import frc.robot.Constants;
 
 public class Compressor extends SubsystemBase {
   PneumaticHub pneumaticHub;
+  NetworkTable powerTable = NetworkTableInstance.getDefault().getTable("power");
   // edu.wpi.first.wpilibj.Compressor compressor;
 
   /** Creates a new Compressor. */
@@ -24,6 +27,7 @@ public class Compressor extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Pressure (psi)", (int) getPressure());
+    powerTable.getEntry("Compressor Current").setDouble(pneumaticHub.getCompressorCurrent());
   }
 
   public void setCompressorEnabled(boolean enabled) {

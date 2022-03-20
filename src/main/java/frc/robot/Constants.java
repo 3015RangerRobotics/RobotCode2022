@@ -23,7 +23,7 @@ public final class Constants {
 
     /* CTRE CAN IDs */
     /* Drive */;
-    public static final int[] SWERVE_DRIVE_CHANNELS = { 11, 22, 15, 17 }; // { FR, FL, BL, BR }
+    public static final int[] SWERVE_DRIVE_CHANNELS = { 11, 22, 50, 15 }; // { FR, FL, BL, BR }
     public static final int[] SWERVE_ROTATION_CHANNELS = { 12, 14, 16, 18 }; // { FR, FL, BL, BR }
     public static final int DRIVE_PIGEON_CHANNEL = 1;
 
@@ -102,7 +102,7 @@ public final class Constants {
     public static final double DRIVE_AUTO_ROTATE_CONTROLLER_I = 0;
     public static final double DRIVE_AUTO_ROTATE_CONTROLLER_D = 0;
 
-    public static final double DRIVE_ROTATION_MIN_VELOCITY = 0; // place holder
+    public static final double DRIVE_ROTATION_MIN_VELOCITY = 30;
 
     public static final Translation2d DRIVE_GOAL_POSITION = new Translation2d(8.2296, 4.1148);
 
@@ -148,7 +148,7 @@ public final class Constants {
     public static final double LL_MOUNT_HEIGHT = 0.8001; // 31.5 inches
     public static final double LL_MOUNT_ANGLE = 25;
     public static final double LL_ROBOT_TO_TARGET = .183;
-    public static final double LL_OFFSET = - (8.25 / 39.37008); // 8.25"
+    public static final double LL_OFFSET = - (8.25 / 39.37008); // 8.25" in reality
     public static final double LL_BACK_OFFSET = 0.605; // add real
     public static final double LL_TOLERANCE = 1;
     public static final double LL_RIM_TO_FENDER = 0.1743;
@@ -159,7 +159,7 @@ public final class Constants {
                                                                        // 12T on fal to 84T on same shaft w/ 12T sprock
                                                                        // to 15T sprock to Unknown diameter sprock
                                                                        // (rememner 16 Tooth sprock)
-    public static final double CLIMBER_MAX_HEIGHT_METERS = .72;
+    public static final double CLIMBER_MAX_HEIGHT_METERS = .7229;
     public static final double CLIMBER_RELEASE_HEIGHT_METERS = CLIMBER_MAX_HEIGHT_METERS - .15;
     public static final double CLIMBER_HEIGHT_TOLERANCE = .05;
 

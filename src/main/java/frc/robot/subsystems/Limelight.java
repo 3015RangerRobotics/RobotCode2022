@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 
 public class Limelight extends SubsystemBase {
 	NetworkTable limelight;
+	PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
 	ArrayList<Double> avgDistance = new ArrayList<>();
 	double users = 0;
 
@@ -90,9 +93,6 @@ public class Limelight extends SubsystemBase {
 		SmartDashboard.putNumber("Limelight Users", users);
 		SmartDashboard.putNumber("Limelight RPM Target", getShooterSpeed());
 		SmartDashboard.putNumber("Limelight Hood Target", getHoodPos());
-		SmartDashboard.putNumber("Limelight area", getArea());
-		SmartDashboard.putNumber("Limelight target short side", getShortSideLength());
-		SmartDashboard.putNumber("Limelight target long side", getLongSideLength());
 
 		if (users > 0) {
 			setLEDMode(LEDMode.LED_ON);
@@ -123,7 +123,7 @@ public class Limelight extends SubsystemBase {
 	 * @return if the limelight has a target
 	 */
 	public boolean hasTarget() {
-		return limelight.getEntry("tv").getDouble(0) == 1 && getArea() < 1.5 && getShortSideLength() < 15;
+		return limelight.getEntry("tv").getDouble(0) == 1;
 	}
 
 	/**
@@ -131,14 +131,6 @@ public class Limelight extends SubsystemBase {
 	 */
 	public double getTargetAngleX() {
 		return limelight.getEntry("tx").getDouble(0);
-	}
-
-	public double getShortSideLength() {
-		return limelight.getEntry("tshort").getDouble(0);
-	}
-
-	public double getLongSideLength() {
-		return limelight.getEntry("tlong").getDouble(0);
 	}
 
 	// public double getCorrectedAngleX() {
@@ -172,25 +164,18 @@ public class Limelight extends SubsystemBase {
 		// double distance = (getCorrectedDistanceFromLLPlane() -
 		// Constants.LL_GOAL_RADIUS)
 		double distance = getDistanceInches();
-		double lookupRPM = Constants.SHOOTER_LOOKUP_TABLE.lookup(distance);//Why was this doing the ciel?
+		double lookupRPM = Constants.SHOOTER_LOOKUP_TABLE.lookupCeil(distance);
 		SmartDashboard.putNumber("Lookup Distance Inches", distance);
 		return lookupRPM + Constants.SHOOTER_LL_ADJUST;
 	}
 
 	public double getHoodPos() {
 		double distance = getDistanceInches();
-		double lookupAngle = Constants.HOOD_POSITION_TABLE.lookup(distance);//Why was this the floor?
+		double lookupAngle = Constants.HOOD_POSITION_TABLE.lookupFloor(distance);
 		return lookupAngle;
 	}
 
 	public double getCorrectedAngleX() {
-		return getCorrectedAngleX(false);
-	}
-
-	public double getCorrectedAngleX(boolean constantOffset) {
-		if (constantOffset) {
-			return getTargetAngleX() - 2;
-		}
 		double distance = getDistanceFromLLPlane();
 		double correctedDistance = getCorrectedDistanceFromLLPlane();
 		double angleX = getTargetAngleX();
@@ -315,6 +300,14 @@ public class Limelight extends SubsystemBase {
 	public void setPipeline(int id) {
 		limelight.getEntry("pipeline").setNumber(id);
 	}
+
+	/**
+	 * 
+	 * @param isOn
+	 */
+  	public void setLimelightPower(boolean isOn){
+    	pdh.setSwitchableChannel(isOn);
+  	}
 
 	public double getRobotToTargetDistance() {
 		return ((Constants.LL_TARGET_HEIGHT - Constants.LL_MOUNT_HEIGHT)

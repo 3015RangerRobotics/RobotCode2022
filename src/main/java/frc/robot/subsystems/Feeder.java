@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
+    NetworkTable powerTable = NetworkTableInstance.getDefault().getTable("power");
     public TalonSRX topMotor;
     public DigitalInput ballDetector;
     boolean doPeriodic = false;
@@ -41,6 +44,7 @@ public class Feeder extends SubsystemBase {
     @Override
     public void periodic() {
         if (doPeriodic) {
+            powerTable.getEntry((id == 0 ? "Left" : "Right") + " Feeder Current").setDouble(topMotor.getSupplyCurrent());
             SmartDashboard.putBoolean("Feeder Sensor " + (id == 0 ? "Left" : "Right"), getBallDetector());
         }
     }

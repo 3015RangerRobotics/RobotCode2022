@@ -22,12 +22,15 @@ import frc.robot.commands.CG_IntakeBalls;
 import frc.robot.commands.CG_SetShooterSpeedAndAngle;
 import frc.robot.commands.CG_ShootAll;
 import frc.robot.commands.ClimbAllTheWay;
+import frc.robot.commands.ClimberForceToTop;
 import frc.robot.commands.ClimberHomePosition;
+import frc.robot.commands.ClimberStop;
 import frc.robot.commands.ClimberToBarRelease;
 import frc.robot.commands.ClimberToBottom;
+import frc.robot.commands.ClimberToTop;
 import frc.robot.commands.CompressorSetEnabled;
 import frc.robot.commands.DriveAutoRotate;
-import frc.robot.commands.DriveCoast;
+import frc.robot.commands.DriveSetBrakeMode;
 import frc.robot.commands.DriveFeedbackWhileDisabled;
 import frc.robot.commands.DriveMakeAllCurrentModuleAnglesZero;
 import frc.robot.commands.DriveOneModule;
@@ -41,6 +44,7 @@ import frc.robot.commands.HoodHome;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.LimelightManualOn;
+import frc.robot.commands.LimelightPowerCycle;
 import frc.robot.commands.PurgeBall;
 import frc.robot.commands.RumbleCoDriver;
 import frc.robot.commands.ShooterAutoPrep;
@@ -52,9 +56,16 @@ import frc.robot.commands.Autonomous.Auto3Ball;
 import frc.robot.commands.Autonomous.Auto4Ball;
 import frc.robot.commands.Autonomous.Auto5Ball;
 import frc.robot.commands.Test.TestAll;
+import frc.robot.commands.Test.TestDrive;
+import frc.robot.commands.Test.TestHood;
+import frc.robot.commands.Test.TestIntakeAndFeeder;
+import frc.robot.commands.Test.TestShooter;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.drive.Drive;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
+import com.revrobotics.ColorSensorV3;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -156,11 +167,17 @@ public class RobotContainer {
     SmartDashboard.putData("Hood Home Fast", new HoodHome(0.8));
     SmartDashboard.putData("Hood Home Lightning", new HoodHome(1));
     SmartDashboard.putData("Limelight manual on", new LimelightManualOn());
-    SmartDashboard.putData("Drive Coast", new DriveCoast());
     SmartDashboard.putData("Set Modules 0", new DriveSetModuleAngles(0));
     SmartDashboard.putData("Set Modules 90", new DriveSetModuleAngles(90));
     SmartDashboard.putData("Override shooters", new ShooterSetSpeedOverride());
     SmartDashboard.putData("Test Everything", new TestAll());
+    SmartDashboard.putData("Test Drive", new TestDrive());
+    SmartDashboard.putData("Test Intake and Feeder", new TestIntakeAndFeeder());
+    SmartDashboard.putData("Test Shooter", new TestShooter());
+    SmartDashboard.putData("Test Hood", new TestHood());
+    SmartDashboard.putData("Limelight power cycle", new LimelightPowerCycle());
+    SmartDashboard.putData("Climber Up", new ClimberToTop());
+    SmartDashboard.putData("Climber Down", new ClimberToBottom());
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
     // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
@@ -192,7 +209,7 @@ public class RobotContainer {
     double lowFenderSpeed = Constants.SHOOTER_REST_SPEED;
     double highFenderSpeed = 3300;
     double lowFenderAngle = Constants.HOOD_REST_POSITION;
-    double highFenderAngle = 7.75;
+    double highFenderAngle = 7.4;
     /*================  Driver Controls  ================*/
     driverB.and(isClimberRunning.negate())
       .whileActiveContinuous(parallel(new PurgeBall(0), new PurgeBall(1)));
@@ -205,8 +222,10 @@ public class RobotContainer {
     driverLT.and(isClimberRunning.negate())
       .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
       .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
-    driverRT.and(isClimberRunning.negate())
+    driverRT.and(isClimberRunning.negate()).and(coDriverDUp.negate())
       .whileActiveContinuous(new CG_ShootAll()); 
+    driverRT.and(isClimberRunning.negate()).and(coDriverDUp)
+      .whileActiveContinuous(new CG_ShootAll(0.5, 0.5));
     
     driverDUp.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp));
     driverDDown.whenActive(new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown));
@@ -229,8 +248,10 @@ public class RobotContainer {
     coDriverLT.and(isClimberRunning.negate())
       .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
       .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
-    coDriverRT.and(isClimberRunning.negate())
+    coDriverRT.and(isClimberRunning.negate()).and(coDriverDUp.negate())
       .whileActiveContinuous(new CG_ShootAll());
+    coDriverRT.and(isClimberRunning.negate()).and(coDriverDUp)
+      .whileActiveContinuous(new CG_ShootAll(0.5, 0.5)); 
     coDriverDUp.and(isClimberRunning.negate())
       .whileActiveContinuous(new CG_SetShooterSpeedAndAngle(highFenderSpeed, highFenderAngle))
       .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
@@ -239,15 +260,16 @@ public class RobotContainer {
       .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
 
     /*================  Manual Climbing  ================*/
-    // coDriverDUp.or(driverDUp).and(isClimberRunning)
-    //   .whenActive(new ClimberToBarRelease());
-    // coDriverDDown.or(driverDDown).and(isClimberRunning)
-    //   .whenActive(new ClimberToBottom());
-    // coDriverY.or(driverY).and(isClimberRunning)
-    //   .whenActive(new FloppyArmUp());
-    // coDriverX.or(driverX).and(isClimberRunning)
-    //   .whenActive(new FloppyArmDown());
-    /*====== Only to be enabled at driver request =======*/
+    coDriverDUp.or(driverDUp).and(isClimberRunning)
+      .whenActive(new ClimberForceToTop());
+    coDriverDDown.or(driverDDown).and(isClimberRunning)
+      .whenActive(new ClimberToBottom());
+    coDriverY.or(driverY).and(isClimberRunning)
+      .whenActive(new FloppyArmUp());
+    coDriverX.or(driverX).and(isClimberRunning)
+      .whenActive(new FloppyArmDown());
+    coDriverB.or(driverB).and(isClimberRunning)
+      .whenActive(new ClimberStop(false));
     
     SmartDashboard.putNumber("shooter speed", startSpeed);
     SmartDashboard.putNumber("Hood Set Position", startAngle);

@@ -172,6 +172,7 @@ public class DriveFollowPath extends CommandBase {
 
     @Override
     public void initialize() {
+        RobotContainer.drive.enableBrakeMode(true);
         timer.reset();
         timer.start();
         Pose2d initialPose = trajectory.getInitialPose();

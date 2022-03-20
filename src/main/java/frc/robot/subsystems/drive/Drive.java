@@ -69,6 +69,8 @@ public class Drive extends SubsystemBase {
         kinematics = new SwerveDriveKinematics(moduleLocations);
         odometry = new SwerveDriveOdometry(kinematics, getAngleRotation2d());
         hasOdometryBeenSet = false;
+
+        // enableBrakeMode(true);
     }
 
     @Override
