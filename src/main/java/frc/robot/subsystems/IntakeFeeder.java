@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -35,8 +34,6 @@ public class IntakeFeeder extends SubsystemBase {
   private boolean pneumaticOverride;
   private boolean isRedCorrect;
   private boolean intakeUp = true;
-
-  private boolean prevFeederSensor;
 
   public enum State {
     kOff,
@@ -65,6 +62,8 @@ public class IntakeFeeder extends SubsystemBase {
   public IntakeFeeder(int id) {
     this.id = id;
     this.doPeriodic = true;
+
+    //TODO: move the following down  either periodic or correctColor, this is not a call, this is local info there is no time delay, this method will only be right if the robot boots with the right alliance, which can't be promised.
     this.isRedCorrect = DriverStation.getAlliance() == DriverStation.Alliance.Red;
 
     colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
@@ -111,7 +110,6 @@ public class IntakeFeeder extends SubsystemBase {
     double intakeSpeed = 0.0;
     intakeUp = true;
 
-    //TODO: put in the intake and feeder speeds in each case
     switch(state){
       case kShootFeeder:
         //shooting just one ball
@@ -128,6 +126,17 @@ public class IntakeFeeder extends SubsystemBase {
         feederSpeed = Constants.FEEDER_PURGE_SPEED;
         intakeSpeed = Constants.INTAKE_PURGE_SPEED;
         break;
+      case kFillToIntakeBadBall:
+        feederSpeed = 0;
+        intakeSpeed = Constants.INTAKE_INTAKE_SPEED;
+        if (getIntakeSensor()) {
+          intakeBadTimer.reset();
+          intakeBadTimer.start();
+          state = State.kPurgeIntake;
+        }else{
+          intakeUp = false;
+          break;
+        }
       case kPurgeIntake:
         feederSpeed = 0;
         intakeSpeed = Constants.INTAKE_PURGE_SPEED;
@@ -136,33 +145,25 @@ public class IntakeFeeder extends SubsystemBase {
           state = State.kFillToIntake;
         }
         break;
-      case kPurgeFeeder:
-        // Assumes the shooter is running at its low speed
-        feederSpeed = Constants.FEEDER_INTAKE_SPEED;
-        intakeSpeed = 0;
-        intakeUp = false;
-        if (!getFeederDetector()) {
-          state = State.kFillToFeeder;
-        }
-        break;
-      case kFillToIntakeBadBall:
-        feederSpeed = 0;
-        intakeSpeed = Constants.INTAKE_INTAKE_SPEED;
-        if (getIntakeSensor()) {
-          intakeBadTimer.reset();
-          intakeBadTimer.start();
-          state = State.kPurgeIntake;
-        }
-        intakeUp = false;
-        break;
       case kFillToFeederBadBall:
         feederSpeed = Constants.FEEDER_INTAKE_SPEED;
         intakeSpeed = Constants.INTAKE_INTAKE_SPEED;
         intakeUp = false;
         if (getFeederDetector()) {
           state = State.kPurgeFeeder;
+        }else{
+          break;
         }
-        break;
+      case kPurgeFeeder:
+          // Assumes the shooter is running at its low speed
+          feederSpeed = Constants.FEEDER_INTAKE_SPEED;
+          intakeSpeed = 0;//TODO: why are we stoppping this????????? don't
+          intakeUp = false;
+          if (!getFeederDetector()) {
+            state = State.kFillToFeeder;
+          }else{
+            break;
+          }
       case kFillToFeeder:
         //filling the robot until the Feeder sensor is detected
         feederSpeed = Constants.FEEDER_INTAKE_SPEED;
@@ -207,6 +208,7 @@ public class IntakeFeeder extends SubsystemBase {
         System.out.println("default ball handler case reached");
     }
 
+    //TODO: remove previous intakeUp logic, go based on shift in State by checking change in state(use prevState) we need independant control of pneumatic arm, so this periodic isn't the only control of the intake pneumatic
     if(intakeUp) {
       pneumaticTimer.start();
     } else {
@@ -218,9 +220,9 @@ public class IntakeFeeder extends SubsystemBase {
       setPneumaticDown(!pneumaticTimer.hasElapsed(0.25));
     }
 
+    //set the motors to the speeds defined in the case structure
     intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
     feederMotor.set(ControlMode.PercentOutput, feederSpeed);
-    prevFeederSensor = getFeederDetector();
     prevState = state;
   }
 
@@ -269,6 +271,9 @@ public class IntakeFeeder extends SubsystemBase {
   }
 
   public boolean correctColor(){
+
+    //TODO: check that the sensor isConnected, polling the sensor when not connected can halt code and freeze robot, return true if not connected
+
     int red = colorSensor.getRed();
     int blue = colorSensor.getBlue();
     int proximity = colorSensor.getProximity();
