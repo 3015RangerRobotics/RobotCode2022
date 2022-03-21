@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import com.ctre.phoenix.motorcontrol.*;
@@ -11,6 +13,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
+	NetworkTable powerTable = NetworkTableInstance.getDefault().getTable("power");
 	public TalonFX shooter;
 	public boolean doPeriodic = false;
 	public double lastSetpoint = 0;
@@ -59,6 +62,7 @@ public class Shooter extends SubsystemBase {
 	@Override
 	public void periodic() {
 		if (doPeriodic) {
+			powerTable.getEntry((id == 0 ? "Left" : "Right") + " Shooter Current");
 			SmartDashboard.putNumber((id == 0 ? "Left " : "Right ") + "Shooter RPM", getRPM());
 			SmartDashboard.putBoolean((id == 0 ? "Left " : "Right ") + "Shooter Primed",
 					isPrimed() && lastSetpoint != 0);

@@ -30,6 +30,7 @@ public class ClimbAllTheWay extends SequentialCommandGroup {
         parallel(
           // new ShooterStop(0),
           // new ShooterStop(1),
+          new ClimbSetSubsystemAlwaysActive(true),
           new IntakeStop(0),
           new IntakeStop(1)
         ),
@@ -51,7 +52,7 @@ public class ClimbAllTheWay extends SequentialCommandGroup {
         new WaitUntilCommand(waitButton::get),
         new SmartDashboardPutData("confirm climb", false),
         // new ClimberToBarRelease(),
-        new ClimberStop(),
+        new ClimberStop(false),
         new WaitCommand(1),
         new SmartDashboardPutData("confirm climb", true),
         new WaitUntilCommand(waitButton::get),
@@ -70,7 +71,7 @@ public class ClimbAllTheWay extends SequentialCommandGroup {
         new WaitUntilCommand(waitButton::get),
         new SmartDashboardPutData("confirm climb", false),
         // new ClimberToBarRelease().withName("grabBarFour"),
-        new ClimberStop(),
+        new ClimberStop(false),
         new WaitCommand(1),
         new FloppyArmUp()
     );

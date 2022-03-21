@@ -13,15 +13,19 @@ import frc.robot.RobotContainer;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ClimberStop extends InstantCommand {
-  public ClimberStop() {
+
+  boolean brakeMode;
+
+  public ClimberStop(boolean brakeMode) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.climber);
+    this.brakeMode = brakeMode;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     RobotContainer.climber.setOutput(0.0);
-    RobotContainer.climber.setBrakeMode(false);
+    RobotContainer.climber.setBrakeMode(brakeMode);
   }
 }

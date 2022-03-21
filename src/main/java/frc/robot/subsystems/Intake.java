@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
@@ -17,6 +19,7 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 	private DoubleSolenoid intakeSolenoid;
+	NetworkTable powerTable = NetworkTableInstance.getDefault().getTable("power");
 	private TalonSRX intakeMotor;
 	private DigitalInput intakeSensor;
 	private boolean doPeriodic = false;
@@ -79,12 +82,13 @@ public class Intake extends SubsystemBase {
 	public void periodic() {
 		if (doPeriodic) {
 			if (id == 0 && !overridePneumatic) {
-				if (timer.get() > 0.5) {
+				if (timer.get() > 0.25) {
 					setPneumaticPosition(IntakeSolenoidPosition.kUp);
 				} else {
 					setPneumaticPosition(IntakeSolenoidPosition.kDown);
 				}
 			}
+			powerTable.getEntry((id == 0 ? "Left" : "Right") + "Intake Current").setDouble(intakeMotor.getSupplyCurrent());
 			SmartDashboard.putBoolean("Intake Sensor " + (id == 0 ? "Left" : "Right"), getIntakeSensor());
 			SmartDashboard.putBoolean("Intake Override Status", overridePneumatic);
 

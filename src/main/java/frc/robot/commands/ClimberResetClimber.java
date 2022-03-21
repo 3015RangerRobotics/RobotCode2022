@@ -19,7 +19,7 @@ public class ClimberResetClimber extends SequentialCommandGroup {
     addCommands(
       new FloppyArmDown(),
       new ClimberToBottom(),
-      new ClimberStop()
+      new ClimberStop(false)
     );
   }
 }

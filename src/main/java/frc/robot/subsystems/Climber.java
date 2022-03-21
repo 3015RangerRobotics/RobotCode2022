@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
+    NetworkTable powerTable = NetworkTableInstance.getDefault().getTable("power");
     private TalonFX climberMotor;
     private DoubleSolenoid secondaryArm;
     private DigitalInput bottomLimit;
@@ -43,7 +46,7 @@ public class Climber extends SubsystemBase {
         climberMotor.config_kI(0, Constants.CLIMBER_RAISE_I);
         climberMotor.config_kD(0, Constants.CLIMBER_RAISE_D);
         climberMotor.config_kF(0, Constants.CLIMBER_RAISE_F);
-        // climberMotor.configAllowableClosedloopError(0, 0.01 / Constants.CLIMBER_METERS_PER_PULSE, 20);
+        climberMotor.configAllowableClosedloopError(0, 0, 20);
         climberMotor.config_kP(1, Constants.CLIMBER_LOWER_P);
         climberMotor.config_kI(1, Constants.CLIMBER_LOWER_I);
         climberMotor.config_kD(1, Constants.CLIMBER_LOWER_D);
@@ -64,8 +67,8 @@ public class Climber extends SubsystemBase {
 
     public void periodic() {
         SmartDashboard.putBoolean("Bottom climber switch", getBottomLimit());
-        
         SmartDashboard.putNumber("Climber position", getClimberPos());
+        powerTable.getEntry("Climber Current").setDouble(climberMotor.getSupplyCurrent());
     }
 
     /**
@@ -178,6 +181,6 @@ public class Climber extends SubsystemBase {
     }
 
     public void setPIDSlot(int slot) {
-        climberMotor.selectProfileSlot(0, slot);
+        climberMotor.selectProfileSlot(slot, slot);
     }
 }

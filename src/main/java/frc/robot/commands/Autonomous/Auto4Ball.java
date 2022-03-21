@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveFollowPath;
+import frc.robot.commands.DriveSetBrakeMode;
 import frc.robot.commands.DriveSetModuleAngles;
 import frc.robot.commands.DriveTurnToAngle;
 import frc.robot.commands.DriveTurnToLimelight;
@@ -37,6 +38,7 @@ public class Auto4Ball extends SequentialCommandGroup {
     double firstSpeed = 3800;
     double firstAngle = 24.5;
     addCommands(
+        new DriveSetBrakeMode(false),
         new DriveZeroGyro(115),
         new IntakeSetOverride(true),
         new IntakeSetPneumatic(IntakeSolenoidPosition.kDown),
@@ -80,7 +82,8 @@ public class Auto4Ball extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new WaitCommand(1), 
             new ShootBalls(0, 0, 0.4)),
-        new ShooterStop(0)
+        new ShooterStop(0),
+        new DriveSetBrakeMode(true)
     );
   }
 }

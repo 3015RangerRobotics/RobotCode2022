@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveFollowPath;
+import frc.robot.commands.DriveSetBrakeMode;
 import frc.robot.commands.DriveSetModuleAngles;
 import frc.robot.commands.DriveTurnToLimelight;
 import frc.robot.commands.DriveZeroGyro;
@@ -31,11 +32,13 @@ import frc.robot.subsystems.Intake;
 public class Auto5Ball extends SequentialCommandGroup {
         /** Creates a new Auto5Ball. */
         public Auto5Ball() {
-                double firstSpeed = 3800;
-                double secondSpeed = 3800;
+                double firstSpeed = 3785;
+                double secondSpeed = 3785;
                 double firstAngle = 24.5;
                 double secondAngle = 24.5;
                 addCommands(
+                        // new DriveSetBrakeMode(true),
+
                         new DriveZeroGyro(182),
                         new IntakeSetOverride(true),
                         new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kDown),

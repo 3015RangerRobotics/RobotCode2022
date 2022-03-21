@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 /** Add your docs here. */
 public class SubsystemActiveTrigger extends Trigger {
     private SubsystemBase[] subsystems;
+    boolean alwaysActive = false;
 
     /**
      * A trigger that can be used to see if any input subsystems 
@@ -33,6 +34,10 @@ public class SubsystemActiveTrigger extends Trigger {
             output |= (subsystem.getCurrentCommand() != null);
         }
         //returns true if any subsystem in subsystems is running a command
-        return output;
+        return output || alwaysActive;
+    }
+
+    public void setAlwaysActive(boolean active) {
+        this.alwaysActive = active;
     }
 }

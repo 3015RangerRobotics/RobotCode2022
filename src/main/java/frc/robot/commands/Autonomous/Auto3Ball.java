@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveFollowPath;
+import frc.robot.commands.DriveSetBrakeMode;
 import frc.robot.commands.DriveTurnToLimelight;
 import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.HoodHome;
@@ -35,6 +36,7 @@ public class Auto3Ball extends SequentialCommandGroup {
     double secondAngle = 24.5; //a guess!
     double secondSpeed = 3800; //a guess!
     addCommands(
+      new DriveSetBrakeMode(false),
       new DriveZeroGyro(72),
       new IntakeSetOverride(true),
       new IntakeSetPneumatic(IntakeSolenoidPosition.kDown),
@@ -86,7 +88,7 @@ public class Auto3Ball extends SequentialCommandGroup {
         new ShootBalls(1, firstSpeed)),
       new ShooterStop(0),
       new ShooterStop(1),
-      new IntakeSetOverride(false));
-
+      new IntakeSetOverride(false),
+      new DriveSetBrakeMode(true));
   }
 }

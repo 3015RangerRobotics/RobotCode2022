@@ -19,16 +19,16 @@ public class TestAll extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SmartDashboardPutData("current test",  "drive"),
-      // new TestDrive(),
-      // new DriveFollowPath("systemCheckPath", 1, 1),
+      new TestDrive(),
+      new DriveFollowPath("systemCheckPath", 1, 1),
       new SmartDashboardPutData("current test", "intake"),
       new TestIntakeAndFeeder(),
       new SmartDashboardPutData("current test", "shooter"),
       new TestShooter(),
       new SmartDashboardPutData("current test", "hood"),
       new TestHood(),
-      new SmartDashboardPutData("current test", "climber"),
-      new TestClimber(),
+      // new SmartDashboardPutData("current test", "climber"),
+      // new TestClimber(),
       new SmartDashboardPutData("current test", "none")
     );
   }
