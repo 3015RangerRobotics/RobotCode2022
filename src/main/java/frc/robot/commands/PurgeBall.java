@@ -12,11 +12,12 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeFeeder;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.IntakeFeeder.State;
 
 public class PurgeBall extends CommandBase {
-  public Intake intake;
-  public Feeder feeder;
+  private IntakeFeeder intakeFeeder;
   public Shooter shooter;
   //TODO:finish adding shooter. shooter subsytem might need to add a weak purge method. drive it w/percent output
   /**
@@ -28,30 +29,27 @@ public class PurgeBall extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     // addRequirements(RobotContainer.intake[side], RobotContainer.feeder[side],
     // RobotContainer.shooter[side]);
-    intake = RobotContainer.intake[side];
-    feeder = RobotContainer.feeder[side];
+    intakeFeeder = RobotContainer.intakeFeeder[side];
     shooter = RobotContainer.shooter[side];
-    addRequirements(intake, feeder, shooter);
+    addRequirements(intakeFeeder, shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    intakeFeeder.setState(State.kPurgeFeederIntake);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.purge();
-    feeder.setPercentOutput(Constants.FEEDER_PURGE_SPEED);
     shooter.purgeShooter();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stop(false);
-    feeder.setPercentOutput(0);
+    intakeFeeder.setState(State.kOff);
     shooter.stop();
   }
 

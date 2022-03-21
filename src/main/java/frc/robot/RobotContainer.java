@@ -81,6 +81,7 @@ public class RobotContainer {
   public static Drive drive;
   public static Intake[] intake = { new Intake(), new Intake() };
   public static Feeder[] feeder = { new Feeder(), new Feeder() };
+  public static IntakeFeeder[] intakeFeeder = { new IntakeFeeder(), new IntakeFeeder() };
   public static Shooter[] shooter = { new Shooter(), new Shooter() };
   public static Hood hood;
   public static Limelight limelight;
@@ -139,10 +140,12 @@ public class RobotContainer {
     compressor = new Compressor();
     climber = new Climber();
     limelight = new Limelight();
-    intake[0] = new Intake(0);
-    intake[1] = new Intake(1);
-    feeder[0] = new Feeder(0);
-    feeder[1] = new Feeder(1);
+    // intake[0] = new Intake(0);
+    // intake[1] = new Intake(1);
+    // feeder[0] = new Feeder(0);
+    // feeder[1] = new Feeder(1);
+    intakeFeeder[0] = new IntakeFeeder(0);
+    intakeFeeder[1] = new IntakeFeeder(1);
     shooter[0] = new Shooter(0);
     shooter[1] = new Shooter(1);
     hood = new Hood();

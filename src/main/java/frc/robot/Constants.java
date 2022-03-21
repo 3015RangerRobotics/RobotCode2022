@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.I2C;
 import lib.LookupTable;
 
 /**
@@ -218,6 +219,8 @@ public final class Constants {
 
     /* Intake Constants */
     public static final double INTAKE_INTAKE_SPEED = 0.8;
+    public static final double INTAKE_SLOW_SPEED = 0.5;
     public static final double INTAKE_PURGE_SPEED = -0.4;
     public static final double INTAKE_TEST_SPEED = 0.8;
+    public static final I2C.Port[] I2C_PORTS = {I2C.Port.kOnboard, I2C.Port.kOnboard}; // {left, right}
 }

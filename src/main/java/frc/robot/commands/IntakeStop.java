@@ -8,24 +8,24 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeFeeder;
+import frc.robot.subsystems.IntakeFeeder.State;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class IntakeStop extends InstantCommand {
-  private Intake intake;
-  private Feeder feeder;
+  private IntakeFeeder intakeFeeder;
+
   public IntakeStop(int side) {
     // Use addRequirements() here to declare subsystem dependencies.
-    intake = RobotContainer.intake[side];
-    feeder = RobotContainer.feeder[side];
-    addRequirements(intake, feeder);
+    intakeFeeder = RobotContainer.intakeFeeder[side];
+    addRequirements(intakeFeeder);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.stop(true);
-    feeder.setPercentOutput(0);
+    intakeFeeder.setState(State.kOff);
   }
 }

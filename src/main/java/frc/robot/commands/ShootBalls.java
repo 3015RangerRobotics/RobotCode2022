@@ -12,11 +12,12 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeFeeder;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.IntakeFeeder.State;
 
 public class ShootBalls extends CommandBase {
-  private Intake intake;
-  private Feeder feeder;
+  private IntakeFeeder intakeFeeder;
   private Shooter shooter;
   double rpm;
   double secondBallDelay;
@@ -34,20 +35,19 @@ public class ShootBalls extends CommandBase {
 
   /** Creates a new ShootBalls. */
   public ShootBalls(int side, double rpm, double secondBallDelay, double initialDelay) {
-    this.intake = RobotContainer.intake[side];
-    this.feeder = RobotContainer.feeder[side];
+    this.intakeFeeder = RobotContainer.intakeFeeder[side];
     // this.shooter = RobotContainer.shooter[side];
     this.rpm = rpm;
     this.timer = new Timer();
     this.initialDelay = initialDelay;
     this.secondBallDelay = secondBallDelay;
-    addRequirements(intake, feeder);
+    addRequirements(intakeFeeder);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    hasTwoBalls = intake.getIntakeSensor() && feeder.getBallDetector();
+    hasTwoBalls = intakeFeeder.getIntakeSensor() && intakeFeeder.getFeederDetector();
     timer.reset();
     timer.start();
   }
@@ -57,20 +57,19 @@ public class ShootBalls extends CommandBase {
   public void execute() {
     double time = timer.get();
     if (time > initialDelay) {
-      feeder.setPercentOutput(Constants.FEEDER_INTAKE_SPEED);
+      intakeFeeder.setState(State.kShootFeeder);
     }
     if (hasTwoBalls && time > initialDelay + secondBallDelay) {
-      intake.intake(false);
+      intakeFeeder.setState(State.kShootFeederIntake);
     } else if (!hasTwoBalls && time > initialDelay) {
-      intake.intake(false);
+      intakeFeeder.setState(State.kShootFeederIntake);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stop(false);
-    feeder.setPercentOutput(0);
+    intakeFeeder.setState(State.kOff);
   }
 
   // Returns true when the command should end.
