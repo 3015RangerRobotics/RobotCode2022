@@ -32,6 +32,7 @@ public class IntakeFeeder extends SubsystemBase {
   private int id;
 	private boolean doPeriodic = false;
   private boolean pneumaticOverride;
+  private boolean colorOverride = false;
   private boolean isRedCorrect;
   private boolean intakeUp = true;
 
@@ -63,8 +64,6 @@ public class IntakeFeeder extends SubsystemBase {
     this.id = id;
     this.doPeriodic = true;
 
-    //TODO: move the following down  either periodic or correctColor, this is not a call, this is local info there is no time delay, this method will only be right if the robot boots with the right alliance, which can't be promised.
-    this.isRedCorrect = DriverStation.getAlliance() == DriverStation.Alliance.Red;
 
     colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
 
@@ -77,10 +76,7 @@ public class IntakeFeeder extends SubsystemBase {
     feederDetector = new DigitalInput(Constants.FEEDER_BALL_DETECTORS[id]);
 
     //intake Stuff
-    //TODO: make separate solenoids in Constants
-    if (id == 0) {
-      intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_FORWARD, Constants.INTAKE_SOLENOID_REVERSE);
-    }
+    intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_FORWARD[id], Constants.INTAKE_SOLENOID_REVERSE[id]);
     pneumaticTimer = new Timer();
 
     intakeMotor = new TalonSRX(Constants.INTAKE_MOTORS[id]);
@@ -101,11 +97,15 @@ public class IntakeFeeder extends SubsystemBase {
       return;
     }
 
+    this.isRedCorrect = DriverStation.getAlliance() == DriverStation.Alliance.Red;
+
     //send sensors to DS
     SmartDashboard.putBoolean("Intake Sensor " + (id == 0 ? "Left" : "Right"), getIntakeSensor());
     SmartDashboard.putBoolean("Feeder Sensor " + (id == 0 ? "Left" : "Right"), getFeederDetector());
+    if (colorSensor.isConnected()) {
+      SmartDashboard.putNumber((id == 0 ? "Left" : "Right") + " Color Sensor Diff", colorSensor.getRed() - colorSensor.getBlue());
+    }
 
-    //TODO: decide if you would rather use an array for these
     double feederSpeed = 0.0;
     double intakeSpeed = 0.0;
     intakeUp = true;
@@ -157,7 +157,7 @@ public class IntakeFeeder extends SubsystemBase {
       case kPurgeFeeder:
           // Assumes the shooter is running at its low speed
           feederSpeed = Constants.FEEDER_INTAKE_SPEED;
-          intakeSpeed = 0;//TODO: why are we stoppping this????????? don't
+          intakeSpeed = Constants.INTAKE_INTAKE_SPEED;
           intakeUp = false;
           if (!getFeederDetector()) {
             state = State.kFillToFeeder;
@@ -252,9 +252,6 @@ public class IntakeFeeder extends SubsystemBase {
    * @param pneumaticDown
    */
   public void setPneumaticDown(boolean pneumaticDown){
-    if (id == 1) {
-      return;
-    }
     if(pneumaticDown){
       intakeSolenoid.set(Value.kForward);
     }else{
@@ -272,7 +269,13 @@ public class IntakeFeeder extends SubsystemBase {
 
   public boolean correctColor(){
 
-    //TODO: check that the sensor isConnected, polling the sensor when not connected can halt code and freeze robot, return true if not connected
+    if (colorOverride) {
+      return true;
+    }
+
+    if (!colorSensor.isConnected()) {
+      return true;
+    }
 
     int red = colorSensor.getRed();
     int blue = colorSensor.getBlue();
@@ -285,10 +288,18 @@ public class IntakeFeeder extends SubsystemBase {
     }
 
     int diff = red - blue;
-    if (Math.abs(diff) < 100) {
+    if (Math.abs(diff) < Constants.INTAKE_COLOR_THRESHOLD) {
       // Red / blue signal is not strong enough to make a judgment
       return true;
     }
     return (diff < 0) ^ isRedCorrect;
+  }
+
+  public void setPneumaticOverride(boolean override) {
+    this.pneumaticOverride = override;
+  }
+
+  public void setColorOverride(boolean override) {
+    this.colorOverride = override;
   }
 }

@@ -33,8 +33,10 @@ public class Auto4Ball2 extends SequentialCommandGroup {
     double angle = 24.5;
     addCommands(
       new DriveZeroGyro(315),
-      new IntakeSetOverride(true),
-      new IntakeSetPneumatic(IntakeSolenoidPosition.kDown),
+      new IntakeSetOverride(0, true),
+      new IntakeSetPneumatic(0, true),
+      new IntakeSetOverride(1, true),
+      new IntakeSetPneumatic(1, true),
       new ParallelDeadlineGroup(
         new DriveFollowPath("4BallAuto2pt1", 3, 4),
         new IntakeBall(1),
@@ -42,7 +44,7 @@ public class Auto4Ball2 extends SequentialCommandGroup {
         new ShooterSetSpeed(0, speed),
         new ShooterSetSpeed(1, speed)),
       new ParallelDeadlineGroup(
-        new WaitUntilCommand(RobotContainer.intake[1]::getIntakeSensor).withTimeout(1),
+        new WaitUntilCommand(RobotContainer.intakeFeeder[1]::getIntakeSensor).withTimeout(1),
         new IntakeBall(1)),
       new ParallelDeadlineGroup(
         new WaitCommand(0.6),
@@ -79,7 +81,7 @@ public class Auto4Ball2 extends SequentialCommandGroup {
         new ShootBalls(1, speed)),
       new ShooterStop(0),
       new ShooterStop(1),
-      new IntakeSetOverride(false)
+      new IntakeSetOverride(0, false)
       
     
     );

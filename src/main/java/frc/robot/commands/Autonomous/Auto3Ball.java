@@ -38,10 +38,12 @@ public class Auto3Ball extends SequentialCommandGroup {
     addCommands(
       new DriveSetBrakeMode(false),
       new DriveZeroGyro(72),
-      new IntakeSetOverride(true),
-      new IntakeSetPneumatic(IntakeSolenoidPosition.kDown),
+      new IntakeSetOverride(0, true),
+      new IntakeSetPneumatic(0, true),
+      new IntakeSetOverride(1, true),
+      new IntakeSetPneumatic(1, true),
       new ParallelDeadlineGroup(
-        new WaitUntilCommand(RobotContainer.intake[1]::getIntakeSensor).withTimeout(4),
+        new WaitUntilCommand(RobotContainer.intakeFeeder[1]::getIntakeSensor).withTimeout(4),
         new IntakeBall(0),
         new IntakeBall(1),
         new HoodHome(1)),
@@ -67,13 +69,13 @@ public class Auto3Ball extends SequentialCommandGroup {
         new DriveFollowPath("3BallAutopt2", 3, 4),
         new IntakeBall(1)),
       new ParallelDeadlineGroup(
-        new WaitUntilCommand(RobotContainer.intake[1]::getIntakeSensor).withTimeout(1),
+        new WaitUntilCommand(RobotContainer.intakeFeeder[1]::getIntakeSensor).withTimeout(1),
         new IntakeBall(1)),
       new ParallelDeadlineGroup(
         new DriveFollowPath("3BallAutopt3", 3, 4),
         new IntakeBall(0)),
       new ParallelDeadlineGroup(
-        new WaitUntilCommand(RobotContainer.intake[0]::getIntakeSensor).withTimeout(1),
+        new WaitUntilCommand(RobotContainer.intakeFeeder[0]::getIntakeSensor).withTimeout(1),
         new IntakeBall(0)),
       new ParallelDeadlineGroup(
         new WaitCommand(1),
@@ -88,7 +90,8 @@ public class Auto3Ball extends SequentialCommandGroup {
         new ShootBalls(1, firstSpeed)),
       new ShooterStop(0),
       new ShooterStop(1),
-      new IntakeSetOverride(false),
+      new IntakeSetOverride(0, false),
+      new IntakeSetOverride(1, false),
       new DriveSetBrakeMode(true));
   }
 }

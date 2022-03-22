@@ -16,16 +16,10 @@ import frc.robot.subsystems.IntakeFeeder.State;
 
 public class IntakeBall extends CommandBase {
   private IntakeFeeder intakeFeeder;
-  private boolean affectPneumatic;
-
-  public IntakeBall(int side) {
-    this(side, true);
-  }
 
   /** Creates a new IntakeBall. Will run eternally */
-  public IntakeBall(int side, boolean affectPneumatic) {
+  public IntakeBall(int side) {
     intakeFeeder = RobotContainer.intakeFeeder[side];
-    this.affectPneumatic = affectPneumatic;
     addRequirements(intakeFeeder);
   }
 

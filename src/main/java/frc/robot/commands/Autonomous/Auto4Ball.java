@@ -40,8 +40,8 @@ public class Auto4Ball extends SequentialCommandGroup {
     addCommands(
         new DriveSetBrakeMode(false),
         new DriveZeroGyro(115),
-        new IntakeSetOverride(true),
-        new IntakeSetPneumatic(IntakeSolenoidPosition.kDown),
+        new IntakeSetOverride(0, true),
+        new IntakeSetPneumatic(0, true),
         // new DriveSetModuleAngles(90),
         new ParallelDeadlineGroup(
             new DriveFollowPath("4BallAutopt1", 3, 4), 

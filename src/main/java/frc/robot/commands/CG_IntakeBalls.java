@@ -10,18 +10,14 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CG_IntakeBalls extends ParallelCommandGroup {
-
-  public CG_IntakeBalls() {
-    this(true);
-  }
-
+  
   /** Creates a new CG_IntakeBalls. */
-  public CG_IntakeBalls(boolean affectPneumatic) {
+  public CG_IntakeBalls() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new IntakeBall(0, affectPneumatic),
-      new IntakeBall(1, affectPneumatic)
+      new IntakeBall(0),
+      new IntakeBall(1)
     );
   }
 }

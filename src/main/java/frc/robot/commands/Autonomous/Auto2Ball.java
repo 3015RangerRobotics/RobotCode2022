@@ -37,10 +37,12 @@ public class Auto2Ball extends SequentialCommandGroup {
     addCommands(
       new DriveSetBrakeMode(false),
       new DriveZeroGyro(317),
-      new IntakeSetOverride(true),
-      new IntakeSetPneumatic(IntakeSolenoidPosition.kDown),
+      new IntakeSetOverride(0, true),
+      new IntakeSetPneumatic(0, true),
+      new IntakeSetOverride(1, true),
+      new IntakeSetPneumatic(1, true),
       new ParallelDeadlineGroup(
-        new WaitUntilCommand(RobotContainer.intake[1]::getIntakeSensor).withTimeout(4),
+        new WaitUntilCommand(RobotContainer.intakeFeeder[1]::getIntakeSensor).withTimeout(4),
         new HoodHome(),
         new IntakeBall(1)),
       new ParallelDeadlineGroup(
@@ -61,7 +63,7 @@ public class Auto2Ball extends SequentialCommandGroup {
         new DriveFollowPath("2BallAutopt2", 3, 4, false), 
         new IntakeBall(1)),
       new ParallelDeadlineGroup(
-        new WaitUntilCommand(RobotContainer.intake[1]::getIntakeSensor).withTimeout(1), 
+        new WaitUntilCommand(RobotContainer.intakeFeeder[1]::getIntakeSensor).withTimeout(1), 
         new DriveTurnToLimelight(), 
         new IntakeBall(1)),
       new ShooterSetSpeed(1, firstSpeed),

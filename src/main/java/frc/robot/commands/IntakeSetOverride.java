@@ -8,16 +8,18 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 
 public class IntakeSetOverride extends InstantCommand {
+  int side;
   boolean override;
 
   /** Creates a new IntakeSetOverride. */
-  public IntakeSetOverride(boolean override) {
+  public IntakeSetOverride(int side, boolean override) {
+    this.side = side;
     this.override = override;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.intake[0].setOverride(override);
+    RobotContainer.intakeFeeder[side].setPneumaticOverride(override);
   }
 }

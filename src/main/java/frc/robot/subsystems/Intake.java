@@ -44,7 +44,7 @@ public class Intake extends SubsystemBase {
 
 	public Intake(int id) {
 		if (id == 0) {
-			intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_FORWARD, Constants.INTAKE_SOLENOID_REVERSE);
+			// intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_FORWARD, Constants.INTAKE_SOLENOID_REVERSE);
 		}
 		intakeMotor = new TalonSRX(Constants.INTAKE_MOTORS[id]);
 		intakeSensor = new DigitalInput(Constants.INTAKE_BALL_DETECTORS[id]);

@@ -52,8 +52,8 @@ public final class Constants {
     public static final int CLIMBER_SOLENOID_REVERSE = 12;
 
     /* Intake */
-    public static final int INTAKE_SOLENOID_FORWARD = 14;
-    public static final int INTAKE_SOLENOID_REVERSE = 13;
+    public static final int[] INTAKE_SOLENOID_FORWARD = {10, 14};
+    public static final int[] INTAKE_SOLENOID_REVERSE = {11, 13};
 
     /* Digital IO ID's */
     /* climber */
@@ -222,5 +222,7 @@ public final class Constants {
     public static final double INTAKE_SLOW_SPEED = 0.5;
     public static final double INTAKE_PURGE_SPEED = -0.4;
     public static final double INTAKE_TEST_SPEED = 0.8;
-    public static final I2C.Port[] I2C_PORTS = {I2C.Port.kOnboard, I2C.Port.kOnboard}; // {left, right}
+    public static final I2C.Port[] I2C_PORTS = {I2C.Port.kOnboard, I2C.Port.kMXP}; // {left, right}
+
+    public static final int INTAKE_COLOR_THRESHOLD = 70;
 }

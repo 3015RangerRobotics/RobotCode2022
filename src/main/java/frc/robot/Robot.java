@@ -147,7 +147,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("isEnabled", true);
     //matchTimer.reset();
     //matchTimer.start();
-    RobotContainer.intake[0].setOverride(false);
+    RobotContainer.intakeFeeder[0].setPneumaticOverride(false);
+    RobotContainer.intakeFeeder[1].setPneumaticOverride(false);
     
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
