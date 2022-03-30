@@ -38,6 +38,7 @@ public class TestShooter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    stage = 0;
     timer.reset();
     timer.start();
     testTable.getEntry("Left Shooter low speed test").setBoolean(false);

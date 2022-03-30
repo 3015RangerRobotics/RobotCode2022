@@ -36,6 +36,7 @@ public class TestDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    stage = 0;
     timer.reset();
     timer.start();
     testTable.getEntry("Drive module rotation test 1").setBoolean(false);

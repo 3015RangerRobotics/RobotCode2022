@@ -30,6 +30,7 @@ public class Drive extends SubsystemBase {
     SwerveDriveOdometry odometry;
 
     boolean hasOdometryBeenSet;
+    boolean debug = false;
 
     public enum ModuleIndices {
         kFrontRight(0),
@@ -76,18 +77,20 @@ public class Drive extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
-        SmartDashboard.putNumber("gyro", getAngleDegrees());
-        SmartDashboard.putNumber("Front Right Swerve Module Relative", getModuleRotation(0));
-        SmartDashboard.putNumber("Front Left Swerve Module Relative", getModuleRotation(1));
-        SmartDashboard.putNumber("Back Left Swerve Module Relative", getModuleRotation(2));
-        SmartDashboard.putNumber("Back Right Swerve Module Relative", getModuleRotation(3));
-        SmartDashboard.putNumber("Front Right Swerve Module Absolute", getModuleAbsoluteRotation(0));
-        SmartDashboard.putNumber("Front Left Swerve Module Absolute", getModuleAbsoluteRotation(1));
-        SmartDashboard.putNumber("Back Left Swerve Module Absolute", getModuleAbsoluteRotation(2));
-        SmartDashboard.putNumber("Back Right Swerve Module Absolute", getModuleAbsoluteRotation(3));
-        ChassisSpeeds speeds = kinematics.toChassisSpeeds(getModuleStates());
-        SmartDashboard.putNumber("Drive speed", Math.sqrt(speeds.vxMetersPerSecond * speeds.vyMetersPerSecond));
-        SmartDashboard.putNumber("Drive degrees per second", speeds.omegaRadiansPerSecond * (180 / Math.PI));
+        if (debug) {
+            SmartDashboard.putNumber("gyro", getAngleDegrees());
+            SmartDashboard.putNumber("Front Right Swerve Module Relative", getModuleRotation(0));
+            SmartDashboard.putNumber("Front Left Swerve Module Relative", getModuleRotation(1));
+            SmartDashboard.putNumber("Back Left Swerve Module Relative", getModuleRotation(2));
+            SmartDashboard.putNumber("Back Right Swerve Module Relative", getModuleRotation(3));
+            SmartDashboard.putNumber("Front Right Swerve Module Absolute", getModuleAbsoluteRotation(0));
+            SmartDashboard.putNumber("Front Left Swerve Module Absolute", getModuleAbsoluteRotation(1));
+            SmartDashboard.putNumber("Back Left Swerve Module Absolute", getModuleAbsoluteRotation(2));
+            SmartDashboard.putNumber("Back Right Swerve Module Absolute", getModuleAbsoluteRotation(3));
+            ChassisSpeeds speeds = kinematics.toChassisSpeeds(getModuleStates());
+            SmartDashboard.putNumber("Drive speed", Math.sqrt(speeds.vxMetersPerSecond * speeds.vyMetersPerSecond));
+            SmartDashboard.putNumber("Drive degrees per second", speeds.omegaRadiansPerSecond * (180 / Math.PI));
+        }
     }
 
     /**
@@ -369,5 +372,9 @@ public class Drive extends SubsystemBase {
     public void driveOneModule(int index, double angle, double value, ControlMode controlMode) {
         swerveModules[index].setDriveMotor(controlMode, value);
         swerveModules[index].setRotationPosition(angle);
+    }
+
+    public void setDebugMode(boolean debug) {
+        this.debug = debug;
     }
 }

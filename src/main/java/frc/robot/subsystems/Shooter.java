@@ -20,6 +20,7 @@ public class Shooter extends SubsystemBase {
 	public double speed;
 	private double id;
 	private boolean override;
+	boolean debug = false;
 
 	/**
 	 * Do not use
@@ -33,10 +34,16 @@ public class Shooter extends SubsystemBase {
 
 		shooter.configFactoryDefault();
 
-		shooter.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 10);
-		shooter.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 10);
+		shooter.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 251);
+        shooter.setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 247);
+        shooter.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 239);
+        shooter.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 233);
+        shooter.setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 229);
 
-		shooter.setNeutralMode(NeutralMode.Brake);
+		shooter.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20);
+		shooter.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20);
+
+		shooter.setNeutralMode(NeutralMode.Coast);
 
 		shooter.enableVoltageCompensation(true);
 		shooter.configVoltageCompSaturation(12.5);
@@ -62,14 +69,16 @@ public class Shooter extends SubsystemBase {
 	@Override
 	public void periodic() {
 		if (doPeriodic) {
-			powerTable.getEntry((id == 0 ? "Left" : "Right") + " Shooter Current");
-			SmartDashboard.putNumber((id == 0 ? "Left " : "Right ") + "Shooter RPM", getRPM());
-			SmartDashboard.putBoolean((id == 0 ? "Left " : "Right ") + "Shooter Primed",
-					isPrimed() && lastSetpoint != 0);
-			if (id == 0) {
-				int left = (isPrimed() && lastSetpoint != 0) ? 1 : 0;
-				int right = SmartDashboard.getBoolean("Right Shooter Primed", false) ? 1 : 0;
-				SmartDashboard.putNumber("Shooters ready", left + right);
+			if (debug) {
+				powerTable.getEntry((id == 0 ? "Left" : "Right") + " Shooter Current");
+				SmartDashboard.putNumber((id == 0 ? "Left " : "Right ") + "Shooter RPM", getRPM());
+				SmartDashboard.putBoolean((id == 0 ? "Left " : "Right ") + "Shooter Primed",
+						isPrimed() && lastSetpoint != 0);
+				if (id == 0) {
+					int left = (isPrimed() && lastSetpoint != 0) ? 1 : 0;
+					int right = SmartDashboard.getBoolean("Right Shooter Primed", false) ? 1 : 0;
+					SmartDashboard.putNumber("Shooters ready", left + right);
+				}
 			}
 			// SmartDashboard.putNumber("PIDTarget", lastSetpoint);
 			// SmartDashboard.putNumber("PIDActual", getRPM());
@@ -122,4 +131,8 @@ public class Shooter extends SubsystemBase {
 	public void setMinSpeedOverride(boolean override) {
 		this.override = override;
 	}
+
+	public void setDebugMode(boolean debug) {
+        this.debug = debug;
+    }
 }

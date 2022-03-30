@@ -14,6 +14,7 @@ import frc.robot.Constants;
 public class Compressor extends SubsystemBase {
   PneumaticHub pneumaticHub;
   NetworkTable powerTable = NetworkTableInstance.getDefault().getTable("power");
+  boolean debug = false;
   // edu.wpi.first.wpilibj.Compressor compressor;
 
   /** Creates a new Compressor. */
@@ -27,7 +28,10 @@ public class Compressor extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Pressure (psi)", (int) getPressure());
-    powerTable.getEntry("Compressor Current").setDouble(pneumaticHub.getCompressorCurrent());
+    if (debug) {
+      powerTable.getEntry("Compressor Current").setDouble(pneumaticHub.getCompressorCurrent());
+    }
+    // System.out.println("Pressure: " + (int) getPressure());
   }
 
   public void setCompressorEnabled(boolean enabled) {
@@ -41,4 +45,8 @@ public class Compressor extends SubsystemBase {
   public double getPressure() {
     return pneumaticHub.getPressure(0); // Might be wrong channel, TBD
   }
+
+  public void setDebugMode(boolean debug) {
+    this.debug = debug;
+}
 }

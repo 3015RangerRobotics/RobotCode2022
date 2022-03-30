@@ -41,6 +41,7 @@ import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.FloppyArmDown;
 import frc.robot.commands.FloppyArmUp;
 import frc.robot.commands.HoodHome;
+import frc.robot.commands.HoodOverrideRestPosition;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.IntakeSetColorOverride;
@@ -59,6 +60,7 @@ import frc.robot.commands.Autonomous.Auto2Ball;
 import frc.robot.commands.Autonomous.Auto3Ball;
 import frc.robot.commands.Autonomous.Auto4Ball;
 import frc.robot.commands.Autonomous.Auto5Ball;
+import frc.robot.commands.Test.DebugAll;
 import frc.robot.commands.Test.TestAll;
 import frc.robot.commands.Test.TestDrive;
 import frc.robot.commands.Test.TestHood;
@@ -91,7 +93,7 @@ public class RobotContainer {
   public static Limelight limelight;
   public static Climber climber;
   public static Compressor compressor;
-
+  public static ShooterSetSpeedOverride shooterOverride;
   public static SubsystemActiveTrigger isClimberRunning;
 
   public static final XboxController driver = new XboxController(0);
@@ -154,6 +156,7 @@ public class RobotContainer {
     shooter[1] = new Shooter(1);
     hood = new Hood();
     isClimberRunning = new SubsystemActiveTrigger(climber);
+    shooterOverride = new ShooterSetSpeedOverride();
     SmartDashboard.putData("Front Right Control", new DriveOneModule(0));
     SmartDashboard.putData("Front Left Control", new DriveOneModule(1));
     SmartDashboard.putData("Back Left Control", new DriveOneModule(2));
@@ -176,7 +179,7 @@ public class RobotContainer {
     SmartDashboard.putData("Limelight manual on", new LimelightManualOn());
     SmartDashboard.putData("Set Modules 0", new DriveSetModuleAngles(0));
     SmartDashboard.putData("Set Modules 90", new DriveSetModuleAngles(90));
-    SmartDashboard.putData("Override shooters", new ShooterSetSpeedOverride());
+    SmartDashboard.putData("Override shooters", shooterOverride);
     SmartDashboard.putData("Test Everything", new TestAll());
     SmartDashboard.putData("Test Drive", new TestDrive());
     SmartDashboard.putData("Test Intake and Feeder", new TestIntakeAndFeeder());
@@ -187,6 +190,9 @@ public class RobotContainer {
     SmartDashboard.putData("Climber Down", new ClimberToBottom());
     SmartDashboard.putData("Toggle Color Override On", parallel(new IntakeSetColorOverride(0, true), new IntakeSetColorOverride(1, true)));
     SmartDashboard.putData("Toggle Color Override Off", parallel(new IntakeSetColorOverride(0, false), new IntakeSetColorOverride(1, false)));
+    SmartDashboard.putData("Enable Debug Mode", new DebugAll());
+    SmartDashboard.putData("Climber Coast", new ClimberStop(false));
+    SmartDashboard.putData("Climber Brake", new ClimberStop(true));
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
     // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
@@ -216,9 +222,11 @@ public class RobotContainer {
     double startSpeed = 3800;
     double startAngle = 24.5;
     double lowFenderSpeed = Constants.SHOOTER_REST_SPEED;
-    double highFenderSpeed = 3300;
+    double highFenderSpeed = 3200; // 3300
     double lowFenderAngle = Constants.HOOD_REST_POSITION;
-    double highFenderAngle = 7.4;
+    double highFenderAngle = 7.05;
+    double setSpeed = 3685;
+    double setAngle = 25.2;
     /*================  Driver Controls  ================*/
     driverB.and(isClimberRunning.negate())
       .whileActiveContinuous(parallel(new PurgeBall(0), new PurgeBall(1)));
@@ -232,12 +240,12 @@ public class RobotContainer {
       .whenInactive(new IntakeStop(0))
       .whenInactive(new IntakeStop(1));
     driverLT.and(isClimberRunning.negate())
-      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
-      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterSetSpeed(0, setSpeed), new ShooterSetSpeed(1, setSpeed), new HoodSetPosition(setAngle), new HoodOverrideRestPosition(true)))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1), new HoodOverrideRestPosition(false)));
     driverRT.and(isClimberRunning.negate()).and(coDriverDUp.negate())
       .whileActiveContinuous(new CG_ShootAll()); 
     driverRT.and(isClimberRunning.negate()).and(coDriverDUp)
-      .whileActiveContinuous(new CG_ShootAll(0.5, 0.5));
+      .whileActiveContinuous(new CG_ShootAll(0.6, 0.6));
 
     
     /*================ CoDriver Controls ================*/
@@ -271,12 +279,12 @@ public class RobotContainer {
     coDriverRB
       .whenPressed(parallel(new IntakeSetColorOverride(0, false), new IntakeSetColorOverride(1, false)));
     coDriverLT.and(isClimberRunning.negate())
-      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
-      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterSetSpeed(0, setSpeed), new ShooterSetSpeed(1, setSpeed), new HoodSetPosition(setAngle), new HoodOverrideRestPosition(true)))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1), new HoodOverrideRestPosition(false)));
     coDriverRT.and(isClimberRunning.negate()).and(coDriverDUp.negate())
       .whileActiveContinuous(new CG_ShootAll());
     coDriverRT.and(isClimberRunning.negate()).and(coDriverDUp)
-      .whileActiveContinuous(new CG_ShootAll(0.5, 0.5)); 
+      .whileActiveContinuous(new CG_ShootAll(0.6, 0.6)); 
     coDriverDUp.and(isClimberRunning.negate())
       .whileActiveContinuous(new CG_SetShooterSpeedAndAngle(highFenderSpeed, highFenderAngle))
       .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));

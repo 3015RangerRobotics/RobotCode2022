@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.ColorSensorV3;
 
@@ -28,6 +30,7 @@ public class IntakeFeeder extends SubsystemBase {
   private ColorSensorV3 colorSensor;
   private Timer pneumaticTimer;
   private Timer intakeBadTimer;
+  private Timer intakeDelayTimer;
 
   private int id;
 	private boolean doPeriodic = false;
@@ -35,6 +38,8 @@ public class IntakeFeeder extends SubsystemBase {
   private boolean colorOverride = false;
   private boolean isRedCorrect;
   private boolean intakeUp = true;
+  private boolean pneumaticDown = false;
+  private boolean debug = false;
 
   public enum State {
     kOff,
@@ -46,7 +51,9 @@ public class IntakeFeeder extends SubsystemBase {
     kShootFeederIntake,
     kPurgeFeederIntake,
     kPurgeFeeder,
-    kPurgeIntake
+    kPurgeIntake, 
+    kWaiting,
+    kTesting
   }
 
   private State state = State.kOff;
@@ -85,9 +92,25 @@ public class IntakeFeeder extends SubsystemBase {
 		intakeMotor.enableVoltageCompensation(true);
 		intakeMotor.configVoltageCompSaturation(12.5);
 
+    intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 251);
+    intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 247);
+    intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 239);
+    intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 233);
+    intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 229);
+
+    intakeMotor.setStatusFramePeriod(StatusFrame.Status_1_General, 50);
+    intakeMotor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 50);
+
+    feederMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 251);
+    feederMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 247);
+    feederMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 239);
+    feederMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 233);
+    feederMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 229);
+
     intakeSensor = new DigitalInput(Constants.INTAKE_BALL_DETECTORS[id]);
 
     intakeBadTimer = new Timer();
+    intakeDelayTimer = new Timer();
   }
 
   @Override
@@ -102,8 +125,11 @@ public class IntakeFeeder extends SubsystemBase {
     //send sensors to DS
     SmartDashboard.putBoolean("Intake Sensor " + (id == 0 ? "Left" : "Right"), getIntakeSensor());
     SmartDashboard.putBoolean("Feeder Sensor " + (id == 0 ? "Left" : "Right"), getFeederDetector());
-    if (colorSensor.isConnected()) {
-      SmartDashboard.putNumber((id == 0 ? "Left" : "Right") + " Color Sensor Diff", colorSensor.getRed() - colorSensor.getBlue());
+    if (debug) {
+      SmartDashboard.putString("Intake State " + (id == 0 ? "Left" : "Right"), state.toString());
+      if (colorSensor.isConnected()) {
+        SmartDashboard.putNumber((id == 0 ? "Left" : "Right") + " Color Sensor Diff", colorSensor.getRed() - colorSensor.getBlue());
+      }
     }
 
     double feederSpeed = 0.0;
@@ -191,9 +217,23 @@ public class IntakeFeeder extends SubsystemBase {
         }
         if(getIntakeSensor()){
           //if we see a ball change state and fall to next case
-          state = State.kOff;
+          intakeDelayTimer.reset();
+          intakeDelayTimer.start();
+          state = State.kWaiting;
         }
         else{
+          break;
+        }
+      case kWaiting:
+        feederSpeed = 0;
+        intakeSpeed = 0;
+        if(!correctColor()) {
+          state = State.kFillToIntakeBadBall;
+          break;
+        }
+        if (intakeDelayTimer.hasElapsed(0.1)) {
+          state = State.kOff;
+        } else {
           break;
         }
       case kOff:
@@ -201,6 +241,8 @@ public class IntakeFeeder extends SubsystemBase {
         intakeSpeed = 0.0;
         intakeUp = true;
         break;
+      case kTesting:
+      break;
       default:
         feederSpeed = 0.0;
         intakeSpeed = 0.0;
@@ -216,13 +258,15 @@ public class IntakeFeeder extends SubsystemBase {
       pneumaticTimer.stop();
     }
   
-    if (!pneumaticOverride) {
+    if (!pneumaticOverride && state != State.kTesting) {
       setPneumaticDown(!pneumaticTimer.hasElapsed(0.25));
     }
 
     //set the motors to the speeds defined in the case structure
-    intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
-    feederMotor.set(ControlMode.PercentOutput, feederSpeed);
+    if (state != State.kTesting && state != prevState) {
+      intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+      feederMotor.set(ControlMode.PercentOutput, feederSpeed);
+    }
     prevState = state;
   }
 
@@ -252,11 +296,14 @@ public class IntakeFeeder extends SubsystemBase {
    * @param pneumaticDown
    */
   public void setPneumaticDown(boolean pneumaticDown){
-    if(pneumaticDown){
-      intakeSolenoid.set(Value.kForward);
-    }else{
-      intakeSolenoid.set(Value.kReverse);
+    if (this.pneumaticDown ^ pneumaticDown) {
+      if(pneumaticDown){
+        intakeSolenoid.set(Value.kForward);
+      }else{
+        intakeSolenoid.set(Value.kReverse);
+      }
     }
+    this.pneumaticDown = pneumaticDown;
   }
 
   public boolean getIntakeSensor() {
@@ -269,30 +316,32 @@ public class IntakeFeeder extends SubsystemBase {
 
   public boolean correctColor(){
 
-    if (colorOverride) {
-      return true;
-    }
+    return true;
 
-    if (!colorSensor.isConnected()) {
-      return true;
-    }
+    // if (colorOverride) {
+    //   return true;
+    // }
 
-    int red = colorSensor.getRed();
-    int blue = colorSensor.getBlue();
-    int proximity = colorSensor.getProximity();
+    // if (!colorSensor.isConnected()) {
+    //   return true;
+    // }
 
-    if (red == 0 && blue == 0 && proximity == 0) {
-      // Color sensor is disconnected, attempt to reconnect
-      colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
-      return true;
-    }
+    // int red = colorSensor.getRed();
+    // int blue = colorSensor.getBlue();
+    // int proximity = colorSensor.getProximity();
 
-    int diff = red - blue;
-    if (Math.abs(diff) < Constants.INTAKE_COLOR_THRESHOLD) {
-      // Red / blue signal is not strong enough to make a judgment
-      return true;
-    }
-    return (diff < 0) ^ isRedCorrect;
+    // if (red == 0 && blue == 0 && proximity == 0) {
+    //   // Color sensor is disconnected, attempt to reconnect
+    //   colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
+    //   return true;
+    // }
+
+    // int diff = red - blue;
+    // if (Math.abs(diff) < Constants.INTAKE_COLOR_THRESHOLD) {
+    //   // Red / blue signal is not strong enough to make a judgment
+    //   return true;
+    // }
+    // return (diff < 0) ^ isRedCorrect;
   }
 
   public void setPneumaticOverride(boolean override) {
@@ -301,5 +350,17 @@ public class IntakeFeeder extends SubsystemBase {
 
   public void setColorOverride(boolean override) {
     this.colorOverride = override;
+  }
+
+  public void setFeederMotor(double percent) {
+    feederMotor.set(ControlMode.PercentOutput, percent);
+  }
+
+  public void setIntakeMotor(double percent) {
+    intakeMotor.set(ControlMode.PercentOutput, percent);
+  }
+
+  public void setDebugMode(boolean debug) {
+    this.debug = debug;
   }
 }

@@ -35,6 +35,7 @@ public class TestHood extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    stage = 0;
     timer.reset();
     timer.start();
   }

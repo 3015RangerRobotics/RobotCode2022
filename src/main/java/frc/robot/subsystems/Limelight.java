@@ -16,6 +16,7 @@ public class Limelight extends SubsystemBase {
 	PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
 	ArrayList<Double> avgDistance = new ArrayList<>();
 	double users = 0;
+	boolean debug = false;
 
 	public enum LEDMode {
 		PIPELINE(0),
@@ -82,17 +83,19 @@ public class Limelight extends SubsystemBase {
 		// if(avgDistance.size() == 10){ //??
 		// avgDistance.remove(0);
 		// }
-		SmartDashboard.putNumber("Target Distance", getRobotToTargetDistance());
-		SmartDashboard.putNumber("Corrected Distance", getRobotCorrectedDistance());
-		SmartDashboard.putNumber("Distance from LL", getDistanceFromLLPlane());
-		double correctedDistance = getCorrectedDistanceFromLLPlane();
-		SmartDashboard.putNumber("Corrected Distance from LL", correctedDistance);
-		SmartDashboard.putNumber("Corrected Distance Inches", correctedDistance * 39.37);
-		SmartDashboard.putNumber("Target Angle X", getTargetAngleX());
-		SmartDashboard.putNumber("Corrected Angle X", getCorrectedAngleX());
-		SmartDashboard.putNumber("Limelight Users", users);
-		SmartDashboard.putNumber("Limelight RPM Target", getShooterSpeed());
-		SmartDashboard.putNumber("Limelight Hood Target", getHoodPos());
+		if (debug) {
+			SmartDashboard.putNumber("Target Distance", getRobotToTargetDistance());
+			SmartDashboard.putNumber("Corrected Distance", getRobotCorrectedDistance());
+			SmartDashboard.putNumber("Distance from LL", getDistanceFromLLPlane());
+			double correctedDistance = getCorrectedDistanceFromLLPlane();
+			SmartDashboard.putNumber("Corrected Distance from LL", correctedDistance);
+			SmartDashboard.putNumber("Corrected Distance Inches", correctedDistance * 39.37);
+			SmartDashboard.putNumber("Target Angle X", getTargetAngleX());
+			SmartDashboard.putNumber("Corrected Angle X", getCorrectedAngleX());
+			SmartDashboard.putNumber("Limelight Users", users);
+			SmartDashboard.putNumber("Limelight RPM Target", getShooterSpeed());
+			SmartDashboard.putNumber("Limelight Hood Target", getHoodPos());
+		}
 
 		if (users > 0) {
 			setLEDMode(LEDMode.LED_ON);
@@ -172,7 +175,7 @@ public class Limelight extends SubsystemBase {
 	public double getHoodPos() {
 		double distance = getDistanceInches();
 		double lookupAngle = Constants.HOOD_POSITION_TABLE.lookupFloor(distance);
-		return lookupAngle;
+		return lookupAngle + Constants.HOOD_LL_ADJUST;
 	}
 
 	public double getCorrectedAngleX() {
@@ -342,6 +345,10 @@ public class Limelight extends SubsystemBase {
 		return adjustedDitance * 39.37008;
 
 	}
+
+	public void setDebugMode(boolean debug) {
+        this.debug = debug;
+    }
 
 	/*
 	 * public double getRobotToTargetDistance() {

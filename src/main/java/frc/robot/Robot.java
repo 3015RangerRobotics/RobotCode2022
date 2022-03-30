@@ -126,6 +126,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     SmartDashboard.putBoolean("isEnabled", true);
+    // SmartDashboard.getEntry("Override shooters/running").setBoolean(false);
+    RobotContainer.shooterOverride.cancel();
     matchTimer.reset();
     matchTimer.start();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -149,6 +151,7 @@ public class Robot extends TimedRobot {
     //matchTimer.start();
     RobotContainer.intakeFeeder[0].setPneumaticOverride(false);
     RobotContainer.intakeFeeder[1].setPneumaticOverride(false);
+    RobotContainer.hood.overriderRestPosition(false);
     
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

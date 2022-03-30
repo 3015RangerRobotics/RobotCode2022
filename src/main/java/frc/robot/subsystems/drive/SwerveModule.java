@@ -29,13 +29,13 @@ public class SwerveModule {
         driveMotor.config_kI(0, Constants.SWERVE_DRIVE_I);
         driveMotor.config_kD(0, Constants.SWERVE_DRIVE_D);
         driveMotor.config_kF(0, 1023.0 / (Constants.SWERVE_MAX_VELOCITY_METERS / Constants.SWERVE_METERS_PER_PULSE));
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, Constants.DRIVE_STATUS_FRAME_PERIOD);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, Constants.DRIVE_STATUS_FRAME_PERIOD);
         // driveMotor.configClosedloopRamp(0.5);
         // driveMotor.setNeutralMode(NeutralMode.Coast);
 
-        rotationMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 1, 10);
-        rotationMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+        rotationMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 1, Constants.DRIVE_STATUS_FRAME_PERIOD);
+        rotationMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.DRIVE_STATUS_FRAME_PERIOD);
         // rotationMotor.configSelectedFeedbackCoefficient(Constants.SWERVE_DEGREES_PER_PULSE,
         // 0, 10);
         // rotationMotor.configSelectedFeedbackCoefficient(Constants.SWERVE_DEGREES_PER_PULSE,
@@ -55,9 +55,9 @@ public class SwerveModule {
         rotationMotor.configPeakCurrentLimit(0);
         rotationMotor.configPeakCurrentDuration(0);
         rotationMotor.configAllowableClosedloopError(0, 2.5 / Constants.SWERVE_DEGREES_PER_PULSE);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 10);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, Constants.DRIVE_STATUS_FRAME_PERIOD);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, Constants.DRIVE_STATUS_FRAME_PERIOD);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, Constants.DRIVE_STATUS_FRAME_PERIOD);
     }
 
     /**

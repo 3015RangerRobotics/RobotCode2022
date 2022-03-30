@@ -17,6 +17,7 @@ import frc.robot.commands.DriveSetModuleAngles;
 import frc.robot.commands.DriveTurnToLimelight;
 import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.HoodHome;
+import frc.robot.commands.HoodOverrideRestPosition;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.IntakeSetOverride;
@@ -42,6 +43,7 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new DriveZeroGyro(182),
                         new IntakeSetOverride(0, true),
                         new IntakeSetPneumatic(0, true),
+                        new HoodOverrideRestPosition(true),
                         // new DriveSetModuleAngles(90),
                         //new CompressorSetEnabled(true),
                         new ParallelDeadlineGroup(
@@ -70,32 +72,38 @@ public class Auto5Ball extends SequentialCommandGroup {
                                 new ShooterSetSpeed(1, firstSpeed)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.75), 
+                                new HoodSetPosition(firstAngle),
                                 new ShootBalls(0, firstSpeed),
                                 new ShootBalls(1, firstSpeed)),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt3", 3, 4, false), 
+                                new HoodSetPosition(firstAngle),
                                 new IntakeBall(0)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.3),
                                 new DriveTurnToLimelight(),
                                 // new ShooterAutoPrep(), 
+                                new HoodSetPosition(firstAngle),
                                 new ShooterSetSpeed(0, firstSpeed),
                                 new ShooterSetSpeed(1, firstSpeed),
                                 new IntakeBall(0)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.5), 
                                 new DriveTurnToLimelight(),
+                                new HoodSetPosition(firstAngle),
                                 new ShootBalls(0, firstSpeed)),
                         new ShooterStop(0),
                         new ShooterStop(1),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt4", 3, 4, false), 
+                                new HoodSetPosition(firstAngle),
                                 new IntakeBall(0)),
                         new ParallelDeadlineGroup( // 1.5
                                 new SequentialCommandGroup(
                                         new WaitUntilCommand(RobotContainer.intakeFeeder[0]::getFeederDetector),
                                         new WaitUntilCommand(RobotContainer.intakeFeeder[0]::getIntakeSensor)
                                 ).withTimeout(1.5),
+                                new HoodSetPosition(secondAngle),
                                 new IntakeBall(0)),
                         //new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp),
                         new ParallelDeadlineGroup(
@@ -105,16 +113,19 @@ public class Auto5Ball extends SequentialCommandGroup {
                                 new IntakeBall(0)),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.8), 
+                                new HoodSetPosition(secondAngle),
                                 new ShooterSetSpeed(0, secondSpeed),
                                 // new ShooterAutoPrep(),
                                 new DriveTurnToLimelight()),
                         //new CompressorSetEnabled(true),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(1), 
+                                new HoodSetPosition(secondAngle),
                                 new DriveTurnToLimelight(),
                                 new ShootBalls(0, secondSpeed)),
                         new ShooterStop(0),
                         new ShooterStop(1),
+                        new HoodOverrideRestPosition(false),
                         new IntakeSetOverride(0, false));
         }         
 }

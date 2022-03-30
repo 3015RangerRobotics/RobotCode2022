@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,6 +18,8 @@ public class Hood extends SubsystemBase {
     private DigitalInput limitSwitch;
     public double pos;
     boolean hasBeenHomed = false;
+    boolean doRestPosition = true;
+    boolean debug = false;
     Timer timer;
 
     public Hood() {
@@ -28,6 +31,11 @@ public class Hood extends SubsystemBase {
         // hoodMotor.setInverted(true);
         // hoodMotor.getEncoder().setInverted(true);
         hoodMotor.setInverted(true);
+        hoodMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 251);
+        hoodMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 247);
+        hoodMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 239);
+        hoodMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 233);
+        hoodMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 229);
         hoodMotor.configForwardSoftLimitThreshold(Constants.HOOD_MAX_ANGLE / Constants.HOOD_DEGREES_PER_PULSE);
         hoodMotor.configReverseSoftLimitThreshold(0);
         hoodMotor.configForwardSoftLimitEnable(true);
@@ -41,10 +49,12 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Hood Limit Switch", getReverseLimit());
-        SmartDashboard.putNumber("Hood Angle", getHoodPosition());
-        SmartDashboard.putBoolean("Hood has been homed", hasBeenHomed);
-        if (timer.hasElapsed(1) && hasBeenHomed) {
+        if (debug) {
+            SmartDashboard.putBoolean("Hood Limit Switch", getReverseLimit());
+            SmartDashboard.putNumber("Hood Angle", getHoodPosition());
+            SmartDashboard.putBoolean("Hood has been homed", hasBeenHomed);
+        }
+        if (timer.hasElapsed(1) && hasBeenHomed && doRestPosition) {
             setHoodPosition(Constants.HOOD_REST_POSITION);
         }
     }
@@ -92,5 +102,13 @@ public class Hood extends SubsystemBase {
 
     public void setHomed() {
         hasBeenHomed = true;
+    }
+
+    public void overriderRestPosition(boolean override) {
+        this.doRestPosition = !override;
+    }
+
+    public void setDebugMode(boolean debug) {
+        this.debug = debug;
     }
 }

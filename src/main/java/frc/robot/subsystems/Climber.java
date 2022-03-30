@@ -23,6 +23,8 @@ public class Climber extends SubsystemBase {
     private Encoder armEncoder;
     private boolean hasBeenHomed;
 
+    private boolean debug;
+
     /**
      * <ul>
      * <li>kNeutral - disables solenoid pressure
@@ -66,9 +68,11 @@ public class Climber extends SubsystemBase {
     }
 
     public void periodic() {
-        SmartDashboard.putBoolean("Bottom climber switch", getBottomLimit());
-        SmartDashboard.putNumber("Climber position", getClimberPos());
-        powerTable.getEntry("Climber Current").setDouble(climberMotor.getSupplyCurrent());
+        if (debug) {
+            SmartDashboard.putBoolean("Bottom climber switch", getBottomLimit());
+            SmartDashboard.putNumber("Climber position", getClimberPos());
+            powerTable.getEntry("Climber Current").setDouble(climberMotor.getSupplyCurrent());
+        }
     }
 
     /**
@@ -182,5 +186,9 @@ public class Climber extends SubsystemBase {
 
     public void setPIDSlot(int slot) {
         climberMotor.selectProfileSlot(slot, slot);
+    }
+
+    public void setDebugMode(boolean debug) {
+        this.debug = debug;
     }
 }

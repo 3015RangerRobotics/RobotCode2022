@@ -52,8 +52,8 @@ public final class Constants {
     public static final int CLIMBER_SOLENOID_REVERSE = 12;
 
     /* Intake */
-    public static final int[] INTAKE_SOLENOID_FORWARD = {10, 14};
-    public static final int[] INTAKE_SOLENOID_REVERSE = {11, 13};
+    public static final int[] INTAKE_SOLENOID_FORWARD = {10, 14}; // { Left, Right }
+    public static final int[] INTAKE_SOLENOID_REVERSE = {11, 13}; // { Left, Right }
 
     /* Digital IO ID's */
     /* climber */
@@ -105,6 +105,8 @@ public final class Constants {
 
     public static final double DRIVE_ROTATION_MIN_VELOCITY = 30;
 
+    public static final int DRIVE_STATUS_FRAME_PERIOD = 20;
+
     public static final Translation2d DRIVE_GOAL_POSITION = new Translation2d(8.2296, 4.1148);
 
     /* Shooter Constants */
@@ -124,7 +126,7 @@ public final class Constants {
 
     public static final double SHOOTER_TOLERANCE = .0065;
     public static final LookupTable SHOOTER_LOOKUP_TABLE = new LookupTable();
-    public static final double SHOOTER_LL_ADJUST = 75;
+    public static final double SHOOTER_LL_ADJUST = 185;
 
     public static final double SHOOTER_REST_SPEED = 1600;
 
@@ -193,6 +195,7 @@ public final class Constants {
 
     public static final double HOOD_TOLERANCE = .5;
     public static final double HOOD_REST_POSITION = 22;
+    public static final double HOOD_LL_ADJUST = 0.6;
 
     public static final LookupTable HOOD_POSITION_TABLE = new LookupTable();
     static {
