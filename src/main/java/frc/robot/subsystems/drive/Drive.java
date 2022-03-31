@@ -122,6 +122,12 @@ public class Drive extends SubsystemBase {
         }
     }
 
+    public void setBrakeModes(boolean[] brake) {
+        for (int i = 0; i < 4; i++) {
+            swerveModules[i].enableBrakeMode(brake[i]);
+        }
+    }
+
     /**
      * Resets the IMU's position such that the current heading will read as '0'
      * 
@@ -329,7 +335,7 @@ public class Drive extends SubsystemBase {
      */
     public Pose2d getPoseMeters() {
         Pose2d pose = odometry.getPoseMeters();
-        pose = new Pose2d(pose.getTranslation(), new Rotation2d(-pose.getRotation().getRadians()));
+        pose = new Pose2d(new Translation2d(pose.getX(), pose.getY()), new Rotation2d(-pose.getRotation().getRadians()));
         return pose;
     }
 

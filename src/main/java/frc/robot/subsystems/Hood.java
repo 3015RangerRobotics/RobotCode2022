@@ -64,6 +64,9 @@ public class Hood extends SubsystemBase {
     }
 
     public void setHoodPosition(double position) {
+        if (!hasBeenHomed) {
+            return;
+        }
         hoodMotor.set(ControlMode.Position, position / Constants.HOOD_DEGREES_PER_PULSE);
         timer.reset();
     }

@@ -19,9 +19,10 @@ public class SwerveModule {
         this.rotationOffset = rotationOffset;
         driveMotor = new TalonFX(driveChannel);
         driveMotor.configFactoryDefault();
+        driveMotor.setNeutralMode(NeutralMode.Brake);
         rotationMotor = new TalonSRX(rotationChannel);
         rotationMotor.configFactoryDefault();
-        rotationMotor.setNeutralMode(NeutralMode.Coast);
+        rotationMotor.setNeutralMode(NeutralMode.Brake);
 
         driveMotor.setInverted(false);
         driveMotor.setSensorPhase(false);
@@ -71,8 +72,10 @@ public class SwerveModule {
     public void enableBrakeMode(boolean enable) {
         if (enable) {
             driveMotor.setNeutralMode(NeutralMode.Brake);
+            rotationMotor.setNeutralMode(NeutralMode.Brake);
         } else {
             driveMotor.setNeutralMode(NeutralMode.Coast);
+            rotationMotor.setNeutralMode(NeutralMode.Coast);
         }
     }
 

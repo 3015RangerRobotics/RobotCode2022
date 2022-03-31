@@ -149,6 +149,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("isEnabled", true);
     //matchTimer.reset();
     //matchTimer.start();
+    RobotContainer.drive.setBrakeModes(new boolean[] {false, true, false, true});
     RobotContainer.intakeFeeder[0].setPneumaticOverride(false);
     RobotContainer.intakeFeeder[1].setPneumaticOverride(false);
     RobotContainer.hood.overriderRestPosition(false);

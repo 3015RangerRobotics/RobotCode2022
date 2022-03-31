@@ -193,7 +193,7 @@ public class IntakeFeeder extends SubsystemBase {
       case kFillToFeeder:
         //filling the robot until the Feeder sensor is detected
         feederSpeed = Constants.FEEDER_INTAKE_SPEED;
-        intakeSpeed = Constants.INTAKE_SLOW_SPEED;
+        intakeSpeed = Constants.INTAKE_INTAKE_SPEED;
         intakeUp = false;
         if (!correctColor()) {
           state = State.kFillToFeederBadBall;
@@ -209,7 +209,7 @@ public class IntakeFeeder extends SubsystemBase {
       case kFillToIntake:
         //filling the robot until the intake sensor is detected
         feederSpeed = 0;
-        intakeSpeed = Constants.INTAKE_SLOW_SPEED;
+        intakeSpeed = Constants.INTAKE_INTAKE_SPEED;
         intakeUp = false;
         if(!correctColor()) {
           state = State.kFillToIntakeBadBall;
@@ -263,7 +263,7 @@ public class IntakeFeeder extends SubsystemBase {
     }
 
     //set the motors to the speeds defined in the case structure
-    if (state != State.kTesting && state != prevState) {
+    if (state != State.kTesting) {
       intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
       feederMotor.set(ControlMode.PercentOutput, feederSpeed);
     }
@@ -314,34 +314,34 @@ public class IntakeFeeder extends SubsystemBase {
     return !feederDetector.get();
   }
 
-  public boolean correctColor(){
+  public boolean correctColor() {
 
-    return true;
+    // return true;
 
-    // if (colorOverride) {
-    //   return true;
-    // }
+    if (colorOverride) {
+      return true;
+    }
 
-    // if (!colorSensor.isConnected()) {
-    //   return true;
-    // }
+    if (!colorSensor.isConnected()) {
+      return true;
+    }
 
-    // int red = colorSensor.getRed();
-    // int blue = colorSensor.getBlue();
-    // int proximity = colorSensor.getProximity();
+    int red = colorSensor.getRed();
+    int blue = colorSensor.getBlue();
+    int proximity = colorSensor.getProximity();
 
-    // if (red == 0 && blue == 0 && proximity == 0) {
-    //   // Color sensor is disconnected, attempt to reconnect
-    //   colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
-    //   return true;
-    // }
+    if (red == 0 && blue == 0 && proximity == 0) {
+      // Color sensor is disconnected, attempt to reconnect
+      colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
+      return true;
+    }
 
-    // int diff = red - blue;
-    // if (Math.abs(diff) < Constants.INTAKE_COLOR_THRESHOLD) {
-    //   // Red / blue signal is not strong enough to make a judgment
-    //   return true;
-    // }
-    // return (diff < 0) ^ isRedCorrect;
+    int diff = red - blue;
+    if (Math.abs(diff) < Constants.INTAKE_COLOR_THRESHOLD) {
+      // Red / blue signal is not strong enough to make a judgment
+      return true;
+    }
+    return (diff < 0) ^ isRedCorrect;
   }
 
   public void setPneumaticOverride(boolean override) {

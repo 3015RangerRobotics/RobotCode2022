@@ -32,6 +32,7 @@ import frc.robot.commands.CompressorSetEnabled;
 import frc.robot.commands.DriveAutoRotate;
 import frc.robot.commands.DriveSetBrakeMode;
 import frc.robot.commands.DriveFeedbackWhileDisabled;
+import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveMakeAllCurrentModuleAnglesZero;
 import frc.robot.commands.DriveOneModule;
 import frc.robot.commands.DriveSetModuleAngles;
@@ -193,6 +194,12 @@ public class RobotContainer {
     SmartDashboard.putData("Enable Debug Mode", new DebugAll());
     SmartDashboard.putData("Climber Coast", new ClimberStop(false));
     SmartDashboard.putData("Climber Brake", new ClimberStop(true));
+    SmartDashboard.putData("Drive X", new DriveFollowPath("xPath"));
+    SmartDashboard.putData("Drive Y", new DriveFollowPath("yPath"));
+    SmartDashboard.putData("Heading", new DriveFollowPath("forwardMoveRight"));
+    SmartDashboard.putData("Rotation", new DriveFollowPath("forwardRotateLeft"));
+    SmartDashboard.putData("Set Drive Brake Mode", new DriveSetBrakeMode(true));
+    SmartDashboard.putData("Set Drive Coast Mode", new DriveSetBrakeMode(false));
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
     // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
@@ -234,6 +241,11 @@ public class RobotContainer {
       .whileActiveContinuous(parallel(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle)))
       .whenInactive(parallel(new ShooterSetSpeed(0, lowFenderSpeed), new ShooterSetSpeed(1, lowFenderSpeed)));
     driverLB.whenActive(new DriveZeroGyro());
+    driverRB.and(isClimberRunning.negate())
+      .whenActive(new IntakeBall(0))
+      .whenActive(new IntakeBall(1))
+      .whenInactive(new IntakeStop(0))
+      .whenInactive(new IntakeStop(1));
     driverA.and(isClimberRunning.negate())
       .whenActive(new IntakeBall(0))
       .whenActive(new IntakeBall(1))

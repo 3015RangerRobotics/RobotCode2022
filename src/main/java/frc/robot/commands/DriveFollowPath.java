@@ -142,6 +142,10 @@ public class DriveFollowPath extends CommandBase {
     HolonomicDriveController controller;
     boolean resetOdometry;
 
+    double xError = 0;
+    double yError = 0;
+    double rError = 0;
+
     String pathName;
 
     public DriveFollowPath(String pathname) {
@@ -157,8 +161,8 @@ public class DriveFollowPath extends CommandBase {
 
         this.trajectory = PathPlanner.loadPath(pathName, maxVel, maxAccel);
 
-        PIDController xController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, 0, 0);
-        PIDController yController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, 0, 0);
+        PIDController xController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_X_P, 0, 0);
+        PIDController yController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_Y_P, 0, 0);
         ProfiledPIDController thetaController = new ProfiledPIDController(
                 Constants.DRIVE_AUTO_ROTATE_CONTROLLER_P, 0, 0,
                 new TrapezoidProfile.Constraints(Constants.DRIVE_MAX_ANGULAR_VELOCITY,
@@ -206,9 +210,14 @@ public class DriveFollowPath extends CommandBase {
 
         Pose2d currentPose = RobotContainer.drive.getPoseMeters();
         String tString = " [" + Math.round(timer.get() * 100) / 100.0 + "]";
-        System.out.println(pathName + tString + " x error: " + (desiredState.poseMeters.getX() - currentPose.getX()));
-        System.out.println(pathName + tString + " y error: " + (desiredState.poseMeters.getY() - currentPose.getY()));
-        System.out.println(pathName + tString + " r error: " + (desiredState.holonomicRotation.getDegrees() - currentPose.getRotation().getDegrees()));
+        xError = desiredState.poseMeters.getX() - currentPose.getX();
+        yError = desiredState.poseMeters.getY() - currentPose.getY();
+        rError = desiredState.holonomicRotation.getDegrees() - currentPose.getRotation().getDegrees();
+        System.out.println(pathName + tString + " x error: " + xError);
+        System.out.println(pathName + tString + " y error: " + yError);
+        System.out.println(pathName + tString + " r error: " + rError);
+
+
 
         RobotContainer.drive.drive(targetSpeeds);
     }
@@ -221,6 +230,7 @@ public class DriveFollowPath extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(trajectory.getTotalTimeSeconds());
+        return timer.hasElapsed(trajectory.getTotalTimeSeconds()) && 
+        (timer.hasElapsed(trajectory.getTotalTimeSeconds() + 0.1) || ((xError * xError + yError * yError) < 0.0004) && (rError < 5));
     }
 }
