@@ -29,6 +29,7 @@ public class HoodHome extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.hood.overriderRestPosition(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -51,6 +52,7 @@ public class HoodHome extends CommandBase {
       RobotContainer.hood.resetZero();
       RobotContainer.hood.setHomed();
     }
+    RobotContainer.hood.overriderRestPosition(false);
   }
 
   // Returns true when the command should end.

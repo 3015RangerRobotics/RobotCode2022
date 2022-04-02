@@ -122,7 +122,7 @@ public class Auto5Ball extends SequentialCommandGroup {
                                 new WaitCommand(1), 
                                 new HoodSetPosition(secondAngle),
                                 new DriveTurnToLimelight(),
-                                new ShootBalls(0, secondSpeed)),
+                                new ShootBalls(0, secondSpeed, 0.1)),
                         new ShooterStop(0),
                         new ShooterStop(1),
                         new HoodOverrideRestPosition(false),

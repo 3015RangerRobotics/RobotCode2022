@@ -158,7 +158,7 @@ public class RobotContainer {
     shooter[1] = new Shooter(1);
     hood = new Hood();
     isClimberRunning = new SubsystemActiveTrigger(climber);
-    shooterOverride = new ShooterSetSpeedOverride();
+    shooterOverride = new ShooterSetSpeedOverride(true);
     SmartDashboard.putData("Front Right Control", new DriveOneModule(0));
     SmartDashboard.putData("Front Left Control", new DriveOneModule(1));
     SmartDashboard.putData("Back Left Control", new DriveOneModule(2));
@@ -181,7 +181,8 @@ public class RobotContainer {
     SmartDashboard.putData("Limelight manual on", new LimelightManualOn());
     SmartDashboard.putData("Set Modules 0", new DriveSetModuleAngles(0));
     SmartDashboard.putData("Set Modules 90", new DriveSetModuleAngles(90));
-    SmartDashboard.putData("Override shooters", shooterOverride);
+    SmartDashboard.putData("Override shooters", new ShooterSetSpeedOverride(true));
+    SmartDashboard.putData("Override Shooters off", new ShooterSetSpeedOverride(false));
     SmartDashboard.putData("Test Everything", new TestAll());
     SmartDashboard.putData("Test Drive", new TestDrive());
     SmartDashboard.putData("Test Intake and Feeder", new TestIntakeAndFeeder());
@@ -254,14 +255,16 @@ public class RobotContainer {
       .whenInactive(new IntakeStop(1));
     driverX.and(isClimberRunning.negate())
       .whileActiveContinuous(new DriveXMode());
+    // driverLT.and(isClimberRunning.negate())
+    //   .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterSetSpeed(0, setSpeed), new ShooterSetSpeed(1, setSpeed), new HoodSetPosition(setAngle), new HoodOverrideRestPosition(true)))
+    //   .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1), new HoodOverrideRestPosition(false)));
     driverLT.and(isClimberRunning.negate())
-      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterSetSpeed(0, setSpeed), new ShooterSetSpeed(1, setSpeed), new HoodSetPosition(setAngle), new HoodOverrideRestPosition(true)))
-      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1), new HoodOverrideRestPosition(false)));
+      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
     driverRT.and(isClimberRunning.negate()).and(coDriverDUp.negate())
       .whileActiveContinuous(new CG_ShootAll()); 
     driverRT.and(isClimberRunning.negate()).and(coDriverDUp)
       .whileActiveContinuous(new CG_ShootAll(0.6, 0.6));
-
     
     /*================ CoDriver Controls ================*/
     coDriverA.and(isClimberRunning.negate())
@@ -287,15 +290,17 @@ public class RobotContainer {
       .whileActiveContinuous(new CG_SetShooterSpeedAndAngle(highFenderSpeed, lowFenderSpeed, highFenderAngle))
       .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
     coDriverStart.and(coDriverBack)
-      .toggleWhenActive(parallel(new ClimbAllTheWay(), new DriveWithGamepad(true, false), new ShooterSetSpeedOverride()))
+      .toggleWhenActive(parallel(new ClimbAllTheWay(), new DriveWithGamepad(true, false), new ShooterSetSpeedOverride(true)))
       .whenActive(new RumbleCoDriver(0.5));
     coDriverLB 
       .whenPressed(parallel(new IntakeSetColorOverride(0, true), new IntakeSetColorOverride(1, true)));
     coDriverRB
       .whenPressed(parallel(new IntakeSetColorOverride(0, false), new IntakeSetColorOverride(1, false)));
+    // coDriverLT.and(isClimberRunning.negate())
+    //   .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterSetSpeed(0, setSpeed), new ShooterSetSpeed(1, setSpeed), new HoodSetPosition(setAngle), new HoodOverrideRestPosition(true)))
+    //   .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1), new HoodOverrideRestPosition(false)));
     coDriverLT.and(isClimberRunning.negate())
-      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterSetSpeed(0, setSpeed), new ShooterSetSpeed(1, setSpeed), new HoodSetPosition(setAngle), new HoodOverrideRestPosition(true)))
-      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1), new HoodOverrideRestPosition(false)));
+      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()));
     coDriverRT.and(isClimberRunning.negate()).and(coDriverDUp.negate())
       .whileActiveContinuous(new CG_ShootAll());
     coDriverRT.and(isClimberRunning.negate()).and(coDriverDUp)

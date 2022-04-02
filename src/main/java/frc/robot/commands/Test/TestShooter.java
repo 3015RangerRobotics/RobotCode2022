@@ -110,11 +110,18 @@ public class TestShooter extends CommandBase {
           stage++;
         }
         break;
-      case 6: /* set right shooter to low rpm */
+      case 6:
+        if (timer.hasElapsed(4)) {
+          timer.reset();
+          timer.start();
+          stage++;
+        }
+      break;
+      case 7: /* set right shooter to low rpm */
         rightShooter.setRPM(lowTestRPM);
         stage++;
         break;
-      case 7: /* wait until primed or 2 seconds */
+      case 8: /* wait until primed or 2 seconds */
         if(rightShooter.isPrimed()) {
           timer.reset();
           timer.start();
@@ -126,7 +133,7 @@ public class TestShooter extends CommandBase {
           stage += 2;
         }
         break;
-      case 8: /* hold low speed for one second */
+      case 9: /* hold low speed for one second */
         if (timer.hasElapsed(0.4)) {
           result &= rightShooter.isPrimed();
         }
@@ -138,10 +145,10 @@ public class TestShooter extends CommandBase {
           stage++;
         }
         break;
-      case 9: /* set to high speed */
+      case 10: /* set to high speed */
         rightShooter.setRPM(highTestRPM);
         stage++;
-      case 10: /* wait until primed or 2 seconds */
+      case 11: /* wait until primed or 2 seconds */
         if (rightShooter.isPrimed()) {
           timer.reset();
           timer.start();
@@ -154,7 +161,7 @@ public class TestShooter extends CommandBase {
           stage += 2;
         }
         break;
-      case 11: /* hold high speed for one second */
+      case 12: /* hold high speed for one second */
         if (timer.hasElapsed(0.4)) {
           result &= rightShooter.isPrimed();
         }
@@ -178,6 +185,6 @@ public class TestShooter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return stage == 12;
+    return stage == 13;
   }
 }

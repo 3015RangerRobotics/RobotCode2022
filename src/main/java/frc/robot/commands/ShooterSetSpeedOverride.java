@@ -6,39 +6,26 @@ package frc.robot.commands;
 
 import com.fasterxml.jackson.databind.ser.std.NumberSerializers.FloatSerializer;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 
-public class ShooterSetSpeedOverride extends CommandBase {
+public class ShooterSetSpeedOverride extends InstantCommand {
+  boolean enabled;
   /** Creates a new ShooterSetSpeedOverride. */
-  public ShooterSetSpeedOverride() {
+  public ShooterSetSpeedOverride(boolean enabled) {
+    this.enabled = enabled;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter[0].setMinSpeedOverride(true);
-    RobotContainer.shooter[0].stop();
-    RobotContainer.shooter[1].setMinSpeedOverride(true);
-    RobotContainer.shooter[1].stop();
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    RobotContainer.shooter[0].setMinSpeedOverride(false);
-    RobotContainer.shooter[1].setMinSpeedOverride(false);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+    RobotContainer.shooter[0].setMinSpeedOverride(enabled);
+    RobotContainer.shooter[1].setMinSpeedOverride(enabled);
+    if (enabled) {
+      RobotContainer.shooter[0].stop();
+      RobotContainer.shooter[1].stop();
+    }
   }
 
   public boolean runsWhenDisabled() {

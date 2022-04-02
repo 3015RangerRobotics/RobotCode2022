@@ -127,7 +127,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     SmartDashboard.putBoolean("isEnabled", true);
     // SmartDashboard.getEntry("Override shooters/running").setBoolean(false);
-    RobotContainer.shooterOverride.cancel();
+    RobotContainer.shooter[0].setMinSpeedOverride(false);
+    RobotContainer.shooter[1].setMinSpeedOverride(false);
     RobotContainer.drive.setBrakeModes(new boolean[] {false, true, false, true});
     matchTimer.reset();
     matchTimer.start();
