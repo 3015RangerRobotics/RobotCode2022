@@ -179,15 +179,18 @@ public class Limelight extends SubsystemBase {
 	}
 
 	public double getCorrectedAngleX() {
-		double distance = getDistanceFromLLPlane();
-		double correctedDistance = getCorrectedDistanceFromLLPlane();
-		double angleX = getTargetAngleX();
-		double sinAngle = Math.sin(Math.toRadians(90 - angleX));
-		if (angleX > 0) {
-			return -Math.toDegrees(Math.asin(sinAngle * distance / correctedDistance)) + 90;
-		} else {
-			return Math.toDegrees(Math.asin(sinAngle * distance / correctedDistance)) - 90;
-		}
+		// double distance = getDistanceFromLLPlane();
+		// double correctedDistance = getCorrectedDistanceFromLLPlane();
+		// double angleX = getTargetAngleX();
+		// double sinAngle = Math.sin(Math.toRadians(90 - angleX));
+		// if (angleX > 0) {
+		// 	return -Math.toDegrees(Math.asin(sinAngle * distance / correctedDistance)) + 90;
+		// } else {
+		// 	return Math.toDegrees(Math.asin(sinAngle * distance / correctedDistance)) - 90;
+		// }
+		/* Centering the limelight is the best decision we have made thus far. 
+			Specifically because we no longer need to deal with the above bullshit. */
+		return getTargetAngleX();
 	}
 
 	/**

@@ -95,11 +95,11 @@ public final class Constants {
     public static final double DRIVE_ROTATION_CONTROLLER_F = 0;
 
     public static final double DRIVE_POS_ERROR_CONTROLLER_X_P = 1.1; // 1.1
-    public static final double DRIVE_POS_ERROR_CONTROLLER_Y_P = 0.1;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_Y_P = 0.067;
 
-    public static final double DRIVE_AUTO_ROTATE_CONTROLLER_P = 2.4;
+    public static final double DRIVE_AUTO_ROTATE_CONTROLLER_P = 2.4; // 8
     public static final double DRIVE_AUTO_ROTATE_CONTROLLER_I = 0;
-    public static final double DRIVE_AUTO_ROTATE_CONTROLLER_D = 0;
+    public static final double DRIVE_AUTO_ROTATE_CONTROLLER_D = 0; // 0.65
 
     public static final double DRIVE_ROTATION_MIN_VELOCITY = 30;
 
@@ -225,5 +225,5 @@ public final class Constants {
     public static final double INTAKE_TEST_SPEED = 0.8;
     public static final I2C.Port[] I2C_PORTS = {I2C.Port.kOnboard, I2C.Port.kMXP}; // {left, right}
 
-    public static final int INTAKE_COLOR_THRESHOLD = 70;
+    public static final int INTAKE_COLOR_THRESHOLD = 300;
 }

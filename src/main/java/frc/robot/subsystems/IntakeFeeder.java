@@ -4,12 +4,13 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.PicoColorSensor;
+import frc.robot.PicoColorSensor.RawColor;
 
 public class IntakeFeeder extends SubsystemBase {
   private DoubleSolenoid intakeSolenoid;
@@ -27,7 +30,9 @@ public class IntakeFeeder extends SubsystemBase {
 	private DigitalInput intakeSensor;
   private TalonSRX feederMotor;
   private DigitalInput feederDetector;
-  private ColorSensorV3 colorSensor;
+  private static PicoColorSensor picoColorSensor = new PicoColorSensor();
+  private Supplier<Boolean> colorSensorConnected;
+  private Supplier<RawColor> colorSensorRawColor;
   private Timer pneumaticTimer;
   private Timer intakeBadTimer;
   private Timer intakeDelayTimer;
@@ -59,6 +64,8 @@ public class IntakeFeeder extends SubsystemBase {
   private State state = State.kOff;
   private State prevState = State.kOff;
 
+
+
   /**
 	 * Do not use
 	 */
@@ -71,8 +78,12 @@ public class IntakeFeeder extends SubsystemBase {
     this.id = id;
     this.doPeriodic = true;
 
+    colorSensorConnected = id == 1 ? picoColorSensor::isSensor0Connected : picoColorSensor::isSensor1Connected;
+    colorSensorRawColor = id == 1 ? picoColorSensor::getRawColor0 : picoColorSensor::getRawColor1;
 
-    colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
+    // if (!colorSensorConnected.get()) {
+    //   picoColorSensor.
+    // }
 
     //Feeder stuff
     feederMotor = new TalonSRX(Constants.FEEDER_TOP_MOTORS[id]);
@@ -125,10 +136,12 @@ public class IntakeFeeder extends SubsystemBase {
     //send sensors to DS
     SmartDashboard.putBoolean("Intake Sensor " + (id == 0 ? "Left" : "Right"), getIntakeSensor());
     SmartDashboard.putBoolean("Feeder Sensor " + (id == 0 ? "Left" : "Right"), getFeederDetector());
+    SmartDashboard.putBoolean("Color Sensor " + (id == 0 ? "Left" : "Right"), colorSensorConnected.get());
     if (debug) {
       SmartDashboard.putString("Intake State " + (id == 0 ? "Left" : "Right"), state.toString());
-      if (colorSensor.isConnected()) {
-        SmartDashboard.putNumber((id == 0 ? "Left" : "Right") + " Color Sensor Diff", colorSensor.getRed() - colorSensor.getBlue());
+      if (colorSensorConnected.get() || true) {
+        RawColor color = colorSensorRawColor.get();
+        SmartDashboard.putNumber((id == 0 ? "Left" : "Right") + " Color Sensor Diff", color.red - color.blue);
       }
     }
 
@@ -322,19 +335,13 @@ public class IntakeFeeder extends SubsystemBase {
       return true;
     }
 
-    if (!colorSensor.isConnected()) {
+    if (!colorSensorConnected.get()) {
       return true;
     }
-
-    int red = colorSensor.getRed();
-    int blue = colorSensor.getBlue();
-    int proximity = colorSensor.getProximity();
-
-    if (red == 0 && blue == 0 && proximity == 0) {
-      // Color sensor is disconnected, attempt to reconnect
-      colorSensor = new ColorSensorV3(Constants.I2C_PORTS[id]);
-      return true;
-    }
+    
+    RawColor color = colorSensorRawColor.get();
+    int red = color.red;
+    int blue = color.blue;
 
     int diff = red - blue;
     if (Math.abs(diff) < Constants.INTAKE_COLOR_THRESHOLD) {
@@ -363,4 +370,6 @@ public class IntakeFeeder extends SubsystemBase {
   public void setDebugMode(boolean debug) {
     this.debug = debug;
   }
+
+  
 }

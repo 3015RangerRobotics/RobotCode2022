@@ -164,7 +164,7 @@ public class DriveFollowPath extends CommandBase {
         PIDController xController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_X_P, 0, 0);
         PIDController yController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_Y_P, 0, 0);
         ProfiledPIDController thetaController = new ProfiledPIDController(
-                Constants.DRIVE_AUTO_ROTATE_CONTROLLER_P, 0, 0,
+                Constants.DRIVE_AUTO_ROTATE_CONTROLLER_P, 0, Constants.DRIVE_AUTO_ROTATE_CONTROLLER_D,
                 new TrapezoidProfile.Constraints(Constants.DRIVE_MAX_ANGULAR_VELOCITY,
                         Constants.DRIVE_MAX_ANGULAR_ACCEL));
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -230,7 +230,6 @@ public class DriveFollowPath extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(trajectory.getTotalTimeSeconds()) && 
-        (timer.hasElapsed(trajectory.getTotalTimeSeconds() + 0.1) || ((xError * xError + yError * yError) < 0.0004) && (rError < 5));
+        return timer.hasElapsed(trajectory.getTotalTimeSeconds());
     }
 }

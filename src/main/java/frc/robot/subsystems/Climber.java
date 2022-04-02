@@ -68,6 +68,7 @@ public class Climber extends SubsystemBase {
     }
 
     public void periodic() {
+        SmartDashboard.putBoolean("Climber Homed", hasBeenHomed);
         if (debug) {
             SmartDashboard.putBoolean("Bottom climber switch", getBottomLimit());
             SmartDashboard.putNumber("Climber position", getClimberPos());

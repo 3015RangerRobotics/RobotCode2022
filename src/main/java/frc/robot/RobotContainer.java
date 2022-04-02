@@ -38,6 +38,7 @@ import frc.robot.commands.DriveOneModule;
 import frc.robot.commands.DriveSetModuleAngles;
 import frc.robot.commands.DriveTurnToAngle;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.commands.DriveXMode;
 import frc.robot.commands.DriveZeroGyro;
 import frc.robot.commands.FloppyArmDown;
 import frc.robot.commands.FloppyArmUp;
@@ -194,10 +195,10 @@ public class RobotContainer {
     SmartDashboard.putData("Enable Debug Mode", new DebugAll());
     SmartDashboard.putData("Climber Coast", new ClimberStop(false));
     SmartDashboard.putData("Climber Brake", new ClimberStop(true));
-    SmartDashboard.putData("Drive X", new DriveFollowPath("xPath"));
-    SmartDashboard.putData("Drive Y", new DriveFollowPath("yPath"));
-    SmartDashboard.putData("Heading", new DriveFollowPath("forwardMoveRight"));
-    SmartDashboard.putData("Rotation", new DriveFollowPath("forwardRotateLeft"));
+    SmartDashboard.putData("Drive X", new DriveFollowPath("xPath", 3, 4));
+    SmartDashboard.putData("Drive Y", new DriveFollowPath("yPath", 3, 4));
+    SmartDashboard.putData("Heading", new DriveFollowPath("forwardMoveRight", 3, 4));
+    SmartDashboard.putData("Rotation", new DriveFollowPath("forwardRotateLeft", 3, 4));
     SmartDashboard.putData("Set Drive Brake Mode", new DriveSetBrakeMode(true));
     SmartDashboard.putData("Set Drive Coast Mode", new DriveSetBrakeMode(false));
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
@@ -251,6 +252,8 @@ public class RobotContainer {
       .whenActive(new IntakeBall(1))
       .whenInactive(new IntakeStop(0))
       .whenInactive(new IntakeStop(1));
+    driverX.and(isClimberRunning.negate())
+      .whileActiveContinuous(new DriveXMode());
     driverLT.and(isClimberRunning.negate())
       .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterSetSpeed(0, setSpeed), new ShooterSetSpeed(1, setSpeed), new HoodSetPosition(setAngle), new HoodOverrideRestPosition(true)))
       .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1), new HoodOverrideRestPosition(false)));

@@ -335,7 +335,7 @@ public class Drive extends SubsystemBase {
      */
     public Pose2d getPoseMeters() {
         Pose2d pose = odometry.getPoseMeters();
-        pose = new Pose2d(new Translation2d(pose.getX(), pose.getY()), new Rotation2d(-pose.getRotation().getRadians()));
+        pose = new Pose2d(pose.getTranslation(), new Rotation2d(-pose.getRotation().getRadians()));
         return pose;
     }
 

@@ -36,8 +36,12 @@ public class TestHood extends CommandBase {
   @Override
   public void initialize() {
     stage = 0;
+    result = true;
     timer.reset();
     timer.start();
+    testTable.getEntry("Hood homing test").setBoolean(false);
+    testTable.getEntry("Hood position test").setBoolean(false);
+    hood.overriderRestPosition(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,6 +56,8 @@ public class TestHood extends CommandBase {
         }
         hood.setHoodOutputPercentage(-1);
         hood.setReverseLimit(false);
+        timer.reset();
+        timer.start();
         stage++;
         break;
       case 1: /* home hood, immediately end test if this fails */
@@ -60,6 +66,7 @@ public class TestHood extends CommandBase {
           testTable.getEntry("Hood homing test").setBoolean(true);
           hood.setReverseLimit(true);
           hood.resetZero();
+          hood.setHomed();
           timer.reset();
           timer.start();
           stage++;
@@ -91,7 +98,10 @@ public class TestHood extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    hood.overriderRestPosition(false);
+    hood.setHoodOutputPercentage(0);
+  }
 
   // Returns true when the command should end.
   @Override

@@ -51,6 +51,5 @@ public class ClimberHomePosition extends CommandBase {
   public boolean isFinished() {
     return RobotContainer.climber.getBottomLimit() || RobotContainer.climber.getClimberCurrent() > threshold
        || RobotContainer.climber.hasBeenHomed();
-
   }
 }
