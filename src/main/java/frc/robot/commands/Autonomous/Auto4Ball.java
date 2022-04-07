@@ -35,8 +35,10 @@ public class Auto4Ball extends SequentialCommandGroup {
   public Auto4Ball() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    double firstSpeed = 3800;
+    double firstSpeed = 3900;
     double firstAngle = 24.5;
+    double secondSpeed = 3800;
+    double secondAngle = 24.5;
     addCommands(
         new DriveSetBrakeMode(false),
         new DriveZeroGyro(115),
@@ -46,42 +48,52 @@ public class Auto4Ball extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new DriveFollowPath("4BallAutopt1", 3, 4), 
             new HoodHome(1),
-            new IntakeBall(0)),
+            new IntakeBall(0)
+        ),
         new ParallelDeadlineGroup(
             new WaitCommand(0.5), 
             new HoodHome(1),
-            new IntakeBall(0)),
+            new IntakeBall(0)
+        ),
         new ParallelDeadlineGroup(
             new WaitCommand(1.2),
             new DriveTurnToAngle(-30),
             new HoodSetPosition(firstAngle),
             new ShooterSetSpeed(0, firstSpeed),
-            new ShooterSetSpeed(1, firstSpeed)),
+            new ShooterSetSpeed(1, firstSpeed)
+        ),
         new ParallelDeadlineGroup(
             new WaitCommand(0.8), 
-            new DriveTurnToLimelight()),
+            new DriveTurnToLimelight()
+        ),
         new ParallelDeadlineGroup(
             new WaitCommand(0.5),
             new ShootBalls(0, 0),
-            new ShootBalls(1, 0)),
+            new ShootBalls(1, 0)
+        ),
         new ShooterStop(0),
         new ShooterStop(1),
         new ParallelDeadlineGroup(
             new DriveFollowPath("4BallAutopt2", 3, 4, false), 
-            new IntakeBall(0)),
+            new IntakeBall(0)
+        ),
         new ParallelDeadlineGroup(
             new WaitCommand(2), 
-            new IntakeBall(0)),
+            new IntakeBall(0)
+        ),
         new ParallelDeadlineGroup(
             new DriveFollowPath("4BallAutopt3", 3, 4, false), 
-            new HoodSetPosition(firstAngle),
-            new ShooterSetSpeed(0, firstSpeed)),
+            new HoodSetPosition(secondAngle),
+            new ShooterSetSpeed(0, secondSpeed)
+        ),
         new ParallelDeadlineGroup(
             new WaitCommand(1.2), 
-            new DriveTurnToLimelight()),
+            new DriveTurnToLimelight()
+        ),
         new ParallelDeadlineGroup(
             new WaitCommand(1), 
-            new ShootBalls(0, 0, 0.4)),
+            new ShootBalls(0, 0, 0.4)
+        ),
         new ShooterStop(0),
         new DriveSetBrakeMode(true)
     );

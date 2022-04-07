@@ -58,10 +58,13 @@ import frc.robot.commands.ShooterAutoPrep;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterSetSpeedOverride;
 import frc.robot.commands.ShooterStop;
+import frc.robot.commands.Autonomous.Auto1Ball;
 import frc.robot.commands.Autonomous.Auto2Ball;
+import frc.robot.commands.Autonomous.Auto2BallSteal;
 import frc.robot.commands.Autonomous.Auto3Ball;
 import frc.robot.commands.Autonomous.Auto4Ball;
 import frc.robot.commands.Autonomous.Auto5Ball;
+import frc.robot.commands.DriveWithGamepad.DefaultWheelStates;
 import frc.robot.commands.Test.DebugAll;
 import frc.robot.commands.Test.TestAll;
 import frc.robot.commands.Test.TestDrive;
@@ -202,6 +205,9 @@ public class RobotContainer {
     SmartDashboard.putData("Rotation", new DriveFollowPath("forwardRotateLeft", 3, 4));
     SmartDashboard.putData("Set Drive Brake Mode", new DriveSetBrakeMode(true));
     SmartDashboard.putData("Set Drive Coast Mode", new DriveSetBrakeMode(false));
+    // drive.setDefaultCommand(new DriveWithGamepad(true, true,
+    //   new DefaultWheelStates(
+    //     new double[]{135, 225, 315, 45})));
     drive.setDefaultCommand(new DriveWithGamepad(true, true));
     // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
@@ -210,8 +216,10 @@ public class RobotContainer {
     autoChooser.setDefaultOption("No Auto Selected", new WaitCommand(1.0));
     autoChooser.addOption("5 Ball Auto", new Auto5Ball());
     autoChooser.addOption("4 Ball Auto", new Auto4Ball());
-    autoChooser.addOption("3 Ball Auto (Feed Me)", new Auto3Ball());
+    autoChooser.addOption("3 Ball Auto", new Auto3Ball());
     autoChooser.addOption("2 Ball Auto (Feed Me)", new Auto2Ball());
+    autoChooser.addOption("2 Ball Auto (Feed Me, Steal)", new Auto2BallSteal());
+    autoChooser.addOption("Auto for bottoms and third picks (Lizzie's Auto)", new Auto1Ball());
 
     SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -375,6 +383,7 @@ public class RobotContainer {
   }
 
   public static double getDriverRightStickX() {
+    System.out.println(driver.getRightX());
     return Math.abs(driver.getRightX()) < Constants.DRIVE_DEADZONE ? 0 : driver.getRightX();
   }
 

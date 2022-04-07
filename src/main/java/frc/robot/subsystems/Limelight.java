@@ -167,7 +167,7 @@ public class Limelight extends SubsystemBase {
 		// double distance = (getCorrectedDistanceFromLLPlane() -
 		// Constants.LL_GOAL_RADIUS)
 		double distance = getDistanceInches();
-		double lookupRPM = Constants.SHOOTER_LOOKUP_TABLE.lookupCeil(distance);
+		double lookupRPM = Constants.SHOOTER_LOOKUP_TABLE.lookup(distance);
 		SmartDashboard.putNumber("Lookup Distance Inches", distance);
 		return lookupRPM + Constants.SHOOTER_LL_ADJUST;
 	}

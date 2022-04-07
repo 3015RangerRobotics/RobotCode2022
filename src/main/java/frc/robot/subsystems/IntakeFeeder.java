@@ -58,7 +58,7 @@ public class IntakeFeeder extends SubsystemBase {
     kPurgeFeeder,
     kPurgeIntake, 
     kWaiting,
-    kTesting
+    kManual
   }
 
   private State state = State.kOff;
@@ -254,7 +254,7 @@ public class IntakeFeeder extends SubsystemBase {
         intakeSpeed = 0.0;
         intakeUp = true;
         break;
-      case kTesting:
+      case kManual:
       break;
       default:
         feederSpeed = 0.0;
@@ -271,12 +271,12 @@ public class IntakeFeeder extends SubsystemBase {
       pneumaticTimer.stop();
     }
   
-    if (!pneumaticOverride && state != State.kTesting) {
+    if (!pneumaticOverride && state != State.kManual) {
       setPneumaticDown(!pneumaticTimer.hasElapsed(0.25));
     }
 
     //set the motors to the speeds defined in the case structure
-    if (state != State.kTesting) {
+    if (state != State.kManual) {
       intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
       feederMotor.set(ControlMode.PercentOutput, feederSpeed);
     }

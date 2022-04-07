@@ -9,6 +9,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -22,6 +23,25 @@ public class DriveWithGamepad extends CommandBase {
   double currentAngle;
   double previousGyroAngle;
   final double trainingWheels = 0.85;
+  DefaultWheelStates defaultWheelStates;
+
+  public static class DefaultWheelStates {
+    double[] positions;
+    boolean[] brakes;
+
+    public DefaultWheelStates(double[] positions, boolean[] brakes) {
+      this.positions = positions;
+      this.brakes = brakes;
+    }
+
+    public DefaultWheelStates(double[] positions) {
+      this.positions = positions;
+    }
+
+    public DefaultWheelStates(boolean[] brakes) {
+      this.brakes = brakes;
+    }
+  }
 
   /**
    * Command for controlling the robot with the gamepad.
@@ -29,6 +49,15 @@ public class DriveWithGamepad extends CommandBase {
    * Runs indefinitely.
    */
   public DriveWithGamepad(boolean isFieldRelative, boolean isCounterRotationOn) {
+    this(isFieldRelative, isCounterRotationOn, null);
+  }
+
+  /**
+   * Command for controlling the robot with the gamepad.
+   * 
+   * Runs indefinitely.
+   */
+  public DriveWithGamepad(boolean isFieldRelative, boolean isCounterRotationOn, DefaultWheelStates defaultWheelStates) {
     addRequirements(RobotContainer.drive);
     rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P,
         Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,
@@ -36,6 +65,7 @@ public class DriveWithGamepad extends CommandBase {
     rotationController.enableContinuousInput(-180, 180);
     this.isFieldRelative = isFieldRelative;
     this.isCounterRotationOn = isCounterRotationOn;
+    this.defaultWheelStates = defaultWheelStates;
   }
 
   // Called when the command is initially scheduled.
@@ -52,6 +82,8 @@ public class DriveWithGamepad extends CommandBase {
     double rightStickX = RobotContainer.getDriverRightStickX();
     double leftStickY = RobotContainer.getDriverLeftStickY();
     double leftStickX = RobotContainer.getDriverLeftStickX();
+
+    // System.out.println(rightStickX);
 
     double rotationOutput = rightStickX;
 
@@ -73,13 +105,27 @@ public class DriveWithGamepad extends CommandBase {
       rotationController.reset(currentAngle);
       rotationOutput *= Constants.DRIVE_MAX_ANGULAR_VELOCITY;
     }
+    if (leftStickX == 0 && leftStickY == 0 && Math.abs(rotationOutput) < 0.05 && defaultWheelStates != null) {
+      if (defaultWheelStates.positions != null) {
+        for (int i = 0; i < 4; i++) {
+          RobotContainer.drive.setModuleRotation(defaultWheelStates.positions[i], i);
+        }
+        if (defaultWheelStates.brakes != null) {
+          RobotContainer.drive.setBrakeModes(defaultWheelStates.brakes);
+        }
+      }
+    } else if (defaultWheelStates != null && defaultWheelStates.brakes != null) {
+      RobotContainer.drive.setBrakeModes(new boolean[]{false, true, false, true});
+    }
     previousGyroAngle = RobotContainer.drive.getAngleDegrees();
     double xVel = -leftStickY * Constants.SWERVE_MAX_VELOCITY_METERS * trainingWheels;
     double yVel = leftStickX * Constants.SWERVE_MAX_VELOCITY_METERS * trainingWheels;
 
     Translation2d corrections = new Translation2d(xVel, yVel);
 
-    RobotContainer.drive.drive(corrections.getX(), corrections.getY(), rotationOutput, isFieldRelative);
+    if (Math.abs(corrections.getX()) > 0 || Math.abs(corrections.getY()) > 0 || Math.abs(rotationOutput) > 0 || defaultWheelStates == null) {
+      RobotContainer.drive.drive(corrections.getX(), corrections.getY(), rotationOutput, isFieldRelative);
+    }
   }
 
   // Called once the command ends or is interrupted.

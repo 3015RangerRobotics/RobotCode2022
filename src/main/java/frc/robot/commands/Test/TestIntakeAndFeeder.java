@@ -37,8 +37,8 @@ public class TestIntakeAndFeeder extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeFeederLeft.setState(State.kTesting);
-    intakeFeederRight.setState(State.kTesting);
+    intakeFeederLeft.setState(State.kManual);
+    intakeFeederRight.setState(State.kManual);
     timer.reset();
     timer.start();
     testTable.getEntry("Left Feeder Sensor").setBoolean(false);
