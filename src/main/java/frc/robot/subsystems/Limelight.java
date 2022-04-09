@@ -174,7 +174,7 @@ public class Limelight extends SubsystemBase {
 
 	public double getHoodPos() {
 		double distance = getDistanceInches();
-		double lookupAngle = Constants.HOOD_POSITION_TABLE.lookupFloor(distance);
+		double lookupAngle = Constants.HOOD_LOOKUP_TABLE.lookupFloor(distance);
 		return lookupAngle + Constants.HOOD_LL_ADJUST;
 	}
 

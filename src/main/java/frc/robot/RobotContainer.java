@@ -44,6 +44,7 @@ import frc.robot.commands.FloppyArmDown;
 import frc.robot.commands.FloppyArmUp;
 import frc.robot.commands.HoodHome;
 import frc.robot.commands.HoodOverrideRestPosition;
+import frc.robot.commands.HoodSetByNetwork;
 import frc.robot.commands.HoodSetPosition;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.IntakeSetColorOverride;
@@ -55,6 +56,7 @@ import frc.robot.commands.LimelightPowerCycle;
 import frc.robot.commands.PurgeBall;
 import frc.robot.commands.RumbleCoDriver;
 import frc.robot.commands.ShooterAutoPrep;
+import frc.robot.commands.ShooterSetByNetwork;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterSetSpeedOverride;
 import frc.robot.commands.ShooterStop;
@@ -208,7 +210,7 @@ public class RobotContainer {
     // drive.setDefaultCommand(new DriveWithGamepad(true, true,
     //   new DefaultWheelStates(
     //     new double[]{135, 225, 315, 45})));
-    drive.setDefaultCommand(new DriveWithGamepad(true, true));
+    drive.setDefaultCommand(new DriveWithGamepad(true, false));
     // hood.setDefaultCommand(new HoodHome());
     // hood.setDefaultCommand(new HoodDPad());
     // SmartDashboard.putData(climber);
@@ -269,11 +271,35 @@ public class RobotContainer {
     driverLT.and(isClimberRunning.negate())
       .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
       .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+    driverDUp.and(isClimberRunning.negate())
+    .whenActive(parallel(
+        new IntakeSetOverride(0, true),
+        new IntakeSetOverride(1, true),
+        new IntakeSetPneumatic(0, false),
+        new IntakeSetPneumatic(1, false),
+        new IntakeBall(0),
+        new IntakeBall(1)
+      ))
+      .whenInactive(parallel(
+        new IntakeStop(0),
+        new IntakeStop(1),
+        new IntakeSetOverride(0, false),
+        new IntakeSetOverride(1, false)
+      ));
+    driverDLeft.and(isClimberRunning.negate())
+      .whileActiveContinuous(new IntakeBall(0));
+    driverDRight.and(isClimberRunning.negate())
+      .whileActiveContinuous(new IntakeBall(1));
     driverRT.and(isClimberRunning.negate()).and(coDriverDUp.negate())
       .whileActiveContinuous(new CG_ShootAll()); 
     driverRT.and(isClimberRunning.negate()).and(coDriverDUp)
       .whileActiveContinuous(new CG_ShootAll(0.6, 0.6));
-    
+
+    /* For shooter tuning, do not use in comp */
+    // driverLT
+    //   .whileActiveContinuous(parallel(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork()))
+    //   .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+      
     /*================ CoDriver Controls ================*/
     coDriverA.and(isClimberRunning.negate())
       .whenActive(new IntakeBall(0))
