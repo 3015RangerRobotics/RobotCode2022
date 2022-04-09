@@ -52,6 +52,8 @@ public class ShooterAutoPrep extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     RobotContainer.limelight.uncheckout();
+    RobotContainer.shooter[0].stop();
+    RobotContainer.shooter[1].stop();
   }
 
   // Returns true when the command should end.

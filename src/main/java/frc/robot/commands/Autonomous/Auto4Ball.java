@@ -22,6 +22,7 @@ import frc.robot.commands.IntakeBall;
 import frc.robot.commands.IntakeSetOverride;
 import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.ShootBalls;
+import frc.robot.commands.ShooterAutoPrep;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
 import frc.robot.subsystems.Intake;
@@ -37,8 +38,8 @@ public class Auto4Ball extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     double firstSpeed = 3900;
     double firstAngle = 24.5;
-    double secondSpeed = 3800;
-    double secondAngle = 24.5;
+    double secondSpeed = 3645;
+    double secondAngle = 25.5;
     addCommands(
         new DriveSetBrakeMode(false),
         new DriveZeroGyro(115),
@@ -58,18 +59,20 @@ public class Auto4Ball extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new WaitCommand(1.2),
             new DriveTurnToAngle(-30),
-            new HoodSetPosition(firstAngle),
-            new ShooterSetSpeed(0, firstSpeed),
-            new ShooterSetSpeed(1, firstSpeed)
+            new ShooterAutoPrep()
+            // new ShooterSetSpeed(0, firstSpeed),
+            // new ShooterSetSpeed(1, firstSpeed)
         ),
         new ParallelDeadlineGroup(
             new WaitCommand(0.8), 
-            new DriveTurnToLimelight()
+            new DriveTurnToLimelight(),
+            new ShooterAutoPrep()
         ),
         new ParallelDeadlineGroup(
             new WaitCommand(0.5),
             new ShootBalls(0, 0),
-            new ShootBalls(1, 0)
+            new ShootBalls(1, 0),
+            new ShooterAutoPrep()
         ),
         new ShooterStop(0),
         new ShooterStop(1),
@@ -83,16 +86,17 @@ public class Auto4Ball extends SequentialCommandGroup {
         ),
         new ParallelDeadlineGroup(
             new DriveFollowPath("4BallAutopt3", 3, 4, false), 
-            new HoodSetPosition(secondAngle),
-            new ShooterSetSpeed(0, secondSpeed)
+            new ShooterAutoPrep()
         ),
         new ParallelDeadlineGroup(
             new WaitCommand(1.2), 
-            new DriveTurnToLimelight()
+            new DriveTurnToLimelight(),
+            new ShooterAutoPrep()
         ),
         new ParallelDeadlineGroup(
             new WaitCommand(1), 
-            new ShootBalls(0, 0, 0.4)
+            new ShootBalls(0, 0, 0.4),
+            new ShooterAutoPrep()
         ),
         new ShooterStop(0),
         new DriveSetBrakeMode(true)

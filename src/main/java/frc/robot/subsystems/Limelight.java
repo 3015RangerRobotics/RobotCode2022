@@ -17,6 +17,7 @@ public class Limelight extends SubsystemBase {
 	ArrayList<Double> avgDistance = new ArrayList<>();
 	double users = 0;
 	boolean debug = false;
+    boolean zoneMode = false;
 
 	public enum LEDMode {
 		PIPELINE(0),
@@ -95,6 +96,7 @@ public class Limelight extends SubsystemBase {
 			SmartDashboard.putNumber("Limelight Users", users);
 			SmartDashboard.putNumber("Limelight RPM Target", getShooterSpeed());
 			SmartDashboard.putNumber("Limelight Hood Target", getHoodPos());
+            SmartDashboard.putBoolean("Limelight Awful mode", zoneMode);
 		}
 
 		if (users > 0) {
@@ -167,14 +169,24 @@ public class Limelight extends SubsystemBase {
 		// double distance = (getCorrectedDistanceFromLLPlane() -
 		// Constants.LL_GOAL_RADIUS)
 		double distance = getDistanceInches();
-		double lookupRPM = Constants.SHOOTER_LOOKUP_TABLE.lookup(distance);
+		double lookupRPM;
+        if (zoneMode) {
+            lookupRPM = Constants.SHOOTER_ZONE_TABLE.lookup(distance);
+        } else {
+            lookupRPM = Constants.SHOOTER_LOOKUP_TABLE.lookupCeil(distance);
+        }
 		SmartDashboard.putNumber("Lookup Distance Inches", distance);
 		return lookupRPM + Constants.SHOOTER_LL_ADJUST;
 	}
 
 	public double getHoodPos() {
 		double distance = getDistanceInches();
-		double lookupAngle = Constants.HOOD_LOOKUP_TABLE.lookupFloor(distance);
+        double lookupAngle;
+        if (zoneMode) {
+            lookupAngle = Constants.HOOD_ZONE_TABLE.lookup(distance);
+        } else {
+            lookupAngle = Constants.HOOD_LOOKUP_TABLE.lookup(distance);
+        }
 		return lookupAngle + Constants.HOOD_LL_ADJUST;
 	}
 
@@ -351,6 +363,10 @@ public class Limelight extends SubsystemBase {
 
 	public void setDebugMode(boolean debug) {
         this.debug = debug;
+    }
+
+    public void setZoneMode(boolean zoneMode) {
+        this.zoneMode = zoneMode;
     }
 
 	/*

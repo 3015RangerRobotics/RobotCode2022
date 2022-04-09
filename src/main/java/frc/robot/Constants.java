@@ -124,6 +124,7 @@ public final class Constants {
 
     public static final double SHOOTER_TOLERANCE = .0065;
     public static final LookupTable SHOOTER_LOOKUP_TABLE = new LookupTable();
+    public static final LookupTable SHOOTER_ZONE_TABLE = new LookupTable();
     public static final double SHOOTER_LL_ADJUST = 0; // 185
 
     public static final double SHOOTER_REST_SPEED = 1600;
@@ -158,6 +159,12 @@ public final class Constants {
         SHOOTER_LOOKUP_TABLE.put(165.0, 4100);
         SHOOTER_LOOKUP_TABLE.put(170.0, 4150);
         SHOOTER_LOOKUP_TABLE.put(175.0, 4150);
+    }
+    static {
+        SHOOTER_ZONE_TABLE.put(65, 3685);
+        SHOOTER_ZONE_TABLE.put(95, 3685);
+        SHOOTER_ZONE_TABLE.put(115, 3935);
+        SHOOTER_ZONE_TABLE.put(150, 3935);
     }
 
     /* Limelight Constants */
@@ -209,9 +216,11 @@ public final class Constants {
 
     public static final double HOOD_TOLERANCE = .5;
     public static final double HOOD_REST_POSITION = 22;
-    public static final double HOOD_LL_ADJUST = 0.6;
+    public static final double HOOD_LL_ADJUST = 0;
 
     public static final LookupTable HOOD_LOOKUP_TABLE = new LookupTable();
+    public static final LookupTable HOOD_ZONE_TABLE = new LookupTable();
+
     static {
         HOOD_LOOKUP_TABLE.put(35.2, 19.00);
         HOOD_LOOKUP_TABLE.put(40.4, 21.25);
@@ -244,6 +253,14 @@ public final class Constants {
         HOOD_LOOKUP_TABLE.put(175.0, 30.25);
     }
 
+    static {
+        HOOD_ZONE_TABLE.put(65, 25.2);
+        HOOD_ZONE_TABLE.put(94.99, 25.2);
+        HOOD_ZONE_TABLE.put(95, 27.2);
+        HOOD_ZONE_TABLE.put(150, 27.2);
+
+    }
+
     /* Feeder Constants */
     public static final double FEEDER_INTAKE_SPEED = 0.5;
     public static final double FEEDER_PURGE_SPEED = -0.4;
@@ -256,6 +273,7 @@ public final class Constants {
     public static final double INTAKE_PURGE_SPEED = -0.4;
     public static final double INTAKE_TEST_SPEED = 0.8;
     public static final I2C.Port[] I2C_PORTS = {I2C.Port.kOnboard, I2C.Port.kMXP}; // {left, right}
+    public static final int[] COLOR_DRIFT = {92, 78};
 
     public static final int INTAKE_COLOR_THRESHOLD = 300;
 }

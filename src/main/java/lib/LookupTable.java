@@ -77,6 +77,28 @@ public class LookupTable {
         return hasVal.value;
     }
 
+    public double lookupNearest(double key) {
+        InterpolatingDouble k = new InterpolatingDouble(key);
+        InterpolatingDouble hasVal = treeMap.get(k);
+        if (hasVal == null) {
+            InterpolatingDouble top = treeMap.ceilingKey(k);
+            InterpolatingDouble bottom = treeMap.floorKey(k);
+
+            if (bottom == null) {
+                return treeMap.get(top).value;
+            }
+            if (top == null) {
+                return treeMap.get(bottom).value;
+            }
+            if (top.value - k.value <= k.value - bottom.value) {
+                return treeMap.get(top).value;
+            } else {
+                return treeMap.get(bottom).value;
+            }
+        }
+        return hasVal.value;
+    }
+
     // public double lookupRound(double key){
     //     InterpolatingDouble k = new InterpolatingDouble(key);
     //     InterpolatingDouble hasVal = treeMap.get(k);

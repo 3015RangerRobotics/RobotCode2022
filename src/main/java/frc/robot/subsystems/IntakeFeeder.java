@@ -141,7 +141,7 @@ public class IntakeFeeder extends SubsystemBase {
       SmartDashboard.putString("Intake State " + (id == 0 ? "Left" : "Right"), state.toString());
       if (colorSensorConnected.get() || true) {
         RawColor color = colorSensorRawColor.get();
-        SmartDashboard.putNumber((id == 0 ? "Left" : "Right") + " Color Sensor Diff", color.red - color.blue);
+        SmartDashboard.putNumber((id == 0 ? "Left" : "Right") + " Color Sensor Diff", color.red - color.blue + Constants.COLOR_DRIFT[id]);
       }
     }
 
@@ -343,7 +343,7 @@ public class IntakeFeeder extends SubsystemBase {
     int red = color.red;
     int blue = color.blue;
 
-    int diff = red - blue;
+    int diff = red - blue + Constants.COLOR_DRIFT[id];
     if (Math.abs(diff) < Constants.INTAKE_COLOR_THRESHOLD) {
       // Red / blue signal is not strong enough to make a judgment
       return true;

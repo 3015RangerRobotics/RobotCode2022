@@ -53,6 +53,7 @@ import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.LimelightManualOn;
 import frc.robot.commands.LimelightPowerCycle;
+import frc.robot.commands.LimelightZoneMode;
 import frc.robot.commands.PurgeBall;
 import frc.robot.commands.RumbleCoDriver;
 import frc.robot.commands.ShooterAutoPrep;
@@ -207,6 +208,8 @@ public class RobotContainer {
     SmartDashboard.putData("Rotation", new DriveFollowPath("forwardRotateLeft", 3, 4));
     SmartDashboard.putData("Set Drive Brake Mode", new DriveSetBrakeMode(true));
     SmartDashboard.putData("Set Drive Coast Mode", new DriveSetBrakeMode(false));
+    SmartDashboard.putData("Set Zone Mode On", new LimelightZoneMode(true));
+    SmartDashboard.putData("Set Zone Mode Off", new LimelightZoneMode(false));
     // drive.setDefaultCommand(new DriveWithGamepad(true, true,
     //   new DefaultWheelStates(
     //     new double[]{135, 225, 315, 45})));
@@ -268,9 +271,10 @@ public class RobotContainer {
     // driverLT.and(isClimberRunning.negate())
     //   .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterSetSpeed(0, setSpeed), new ShooterSetSpeed(1, setSpeed), new HoodSetPosition(setAngle), new HoodOverrideRestPosition(true)))
     //   .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1), new HoodOverrideRestPosition(false)));
-    driverLT.and(isClimberRunning.negate())
-      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
-      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+
+    // driverLT.and(isClimberRunning.negate())
+    //   .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
+    //   .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
     driverDUp.and(isClimberRunning.negate())
     .whenActive(parallel(
         new IntakeSetOverride(0, true),
@@ -296,9 +300,9 @@ public class RobotContainer {
       .whileActiveContinuous(new CG_ShootAll(0.6, 0.6));
 
     /* For shooter tuning, do not use in comp */
-    // driverLT
-    //   .whileActiveContinuous(parallel(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork()))
-    //   .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+    driverLT
+      .whileActiveContinuous(parallel(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork()))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
       
     /*================ CoDriver Controls ================*/
     coDriverA.and(isClimberRunning.negate())
@@ -409,7 +413,6 @@ public class RobotContainer {
   }
 
   public static double getDriverRightStickX() {
-    System.out.println(driver.getRightX());
     return Math.abs(driver.getRightX()) < Constants.DRIVE_DEADZONE ? 0 : driver.getRightX();
   }
 

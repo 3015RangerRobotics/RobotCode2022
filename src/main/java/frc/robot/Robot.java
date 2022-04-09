@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
   int fps = 15;
 
   Timer matchTimer;
+  Timer llTimer;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -69,11 +70,19 @@ public class Robot extends TimedRobot {
     matchTimer.reset();
     matchTimer.stop();
 
+    llTimer = new Timer();
+    llTimer.reset();
+    llTimer.start();
+
     // cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
 
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    
+    RobotContainer.limelight.checkout();
+    // RobotContainer.limelight.setZoneMode(true);
+    RobotContainer.limelight.setZoneMode(false);
   }
 
   /**
@@ -105,6 +114,13 @@ public class Robot extends TimedRobot {
       // cameraSelection.setString(camera2.getName());
     }
     SmartDashboard.putString("alliance", DriverStation.getAlliance() == Alliance.Red ? "red" : "blue");
+
+    if (llTimer.hasElapsed(60)) {
+        RobotContainer.limelight.uncheckout();
+        llTimer.reset();
+        llTimer.stop();
+    }
+
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic

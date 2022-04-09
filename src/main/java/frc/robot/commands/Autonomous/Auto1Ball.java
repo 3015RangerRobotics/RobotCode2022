@@ -14,6 +14,7 @@ import frc.robot.commands.HoodHome;
 import frc.robot.commands.HoodOverrideRestPosition;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ShooterAutoPrep;
+import frc.robot.commands.ShooterAutoShoot;
 import frc.robot.commands.ShooterSetSpeed;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -22,7 +23,7 @@ import frc.robot.commands.ShooterSetSpeed;
 public class Auto1Ball extends SequentialCommandGroup {
     /** Creates a new Auto1Ball. */
     public Auto1Ball() {
-        double cheese = 3000;
+        double cheese = 3685;
 
         addCommands(
             new DriveZeroGyro(270),
@@ -40,6 +41,8 @@ public class Auto1Ball extends SequentialCommandGroup {
                 ),
             new ParallelDeadlineGroup(
                 new WaitCommand(2),
+                new DriveTurnToLimelight(),
+                new ShooterAutoPrep(),
                 new ShootBalls(0, cheese),
                 new ShootBalls(1, cheese)));
     }
