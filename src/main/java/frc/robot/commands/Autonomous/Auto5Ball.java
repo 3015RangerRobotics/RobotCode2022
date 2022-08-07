@@ -6,6 +6,8 @@
 
 package frc.robot.commands.Autonomous;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -23,6 +25,7 @@ import frc.robot.commands.IntakeBall;
 import frc.robot.commands.IntakeSetOverride;
 import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.ShootBalls;
+import frc.robot.commands.ShooterAutoPrep;
 import frc.robot.commands.ShooterSetSpeed;
 import frc.robot.commands.ShooterStop;
 import frc.robot.subsystems.Intake;
@@ -33,8 +36,8 @@ import frc.robot.subsystems.Intake;
 public class Auto5Ball extends SequentialCommandGroup {
         /** Creates a new Auto5Ball. */
         public Auto5Ball() {
-                double firstSpeed = 3785;
-                double secondSpeed = 3785;
+                double firstSpeed = 3875;
+                double secondSpeed = 3875;
                 double firstAngle = 24.5;
                 double secondAngle = 24.5;
                 addCommands(
@@ -49,31 +52,73 @@ public class Auto5Ball extends SequentialCommandGroup {
                                 new DriveFollowPath("5BallAutopt1", 3, 4),
                                 new HoodHome(1),
                                 new ShooterSetSpeed(0, firstSpeed),
-                                new ShooterSetSpeed(1, firstSpeed),
+                                // new SequentialCommandGroup(
+                                //     new ParallelDeadlineGroup(
+                                //         new WaitUntilCommand(this::s0revved), 
+                                //         new ShooterSetSpeed(0, 6500)
+                                //     ),
+                                //     new ShooterSetSpeed(0, 4000)
+                                // ),
+                                // new SequentialCommandGroup(
+                                //     new ParallelDeadlineGroup(
+                                //         new WaitUntilCommand(this::s0revved), 
+                                //         new ShooterSetSpeed(1, 6500)
+                                //     ),
+                                //     new ShooterSetSpeed(1, 4000)
+                                // ),
                                 new IntakeBall(0)
                         ),
                         new ParallelDeadlineGroup(
                                 new WaitUntilCommand(RobotContainer.intakeFeeder[0]::getIntakeSensor).withTimeout(0.8),
                                 new HoodHome(1),
+                                new ShooterSetSpeed(0, firstSpeed),
+                                // new SequentialCommandGroup(
+                                //     new ParallelDeadlineGroup(
+                                //         new WaitUntilCommand(this::s0revved), 
+                                //         new ShooterSetSpeed(0, 6500)
+                                //     ),
+                                //     new ShooterSetSpeed(0, 4000)
+                                // ),
+                                // new SequentialCommandGroup(
+                                //     new ParallelDeadlineGroup(
+                                //         new WaitUntilCommand(this::s0revved), 
+                                //         new ShooterSetSpeed(1, 6500)
+                                //     ),
+                                //     new ShooterSetSpeed(1, 4000)
+                                // ),
                                 new IntakeBall(0)
                         ),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt2", 3, 4, false),
                                 new IntakeBall(0),
                                 new HoodHome(1),
-                                new ShooterSetSpeed(0, firstSpeed),
-                                new ShooterSetSpeed(1, firstSpeed)
+                                new ShooterSetSpeed(0, firstSpeed)
+                                // new SequentialCommandGroup(
+                                //     new ParallelDeadlineGroup(
+                                //         new WaitUntilCommand(this::s0revved), 
+                                //         new ShooterSetSpeed(0, 6500)
+                                //     ),
+                                //     new ShooterSetSpeed(0, 4000)
+                                // )
+                                // new SequentialCommandGroup(
+                                //     new ParallelDeadlineGroup(
+                                //         new WaitUntilCommand(this::s0revved), 
+                                //         new ShooterSetSpeed(1, 6500)
+                                //     ),
+                                //     new ShooterSetSpeed(1, 4000)
+                                // )
                         ),
                         new ParallelDeadlineGroup(
-                                new WaitCommand(0.6),
+                                new WaitCommand(0.85),
                                 new DriveTurnToLimelight(),
-                                // new ShooterAutoPrep(),
+                                // new ShooterAutoPrep()
                                 new HoodSetPosition(firstAngle),
                                 new ShooterSetSpeed(0, firstSpeed),
                                 new ShooterSetSpeed(1, firstSpeed)
                         ),
                         new ParallelDeadlineGroup(
-                                new WaitCommand(0.75), 
+                                new WaitCommand(0.45), 
+                                new DriveTurnToLimelight(),
                                 new HoodSetPosition(firstAngle),
                                 new ShootBalls(0, firstSpeed),
                                 new ShootBalls(1, firstSpeed)
@@ -96,6 +141,7 @@ public class Auto5Ball extends SequentialCommandGroup {
                                 new WaitCommand(0.5), 
                                 new DriveTurnToLimelight(),
                                 new HoodSetPosition(firstAngle),
+                                // new ShooterAutoPrep(),
                                 new ShootBalls(0, firstSpeed)
                         ),
                         new ShooterStop(0),
@@ -110,27 +156,28 @@ public class Auto5Ball extends SequentialCommandGroup {
                                         new WaitUntilCommand(RobotContainer.intakeFeeder[0]::getFeederDetector),
                                         new WaitUntilCommand(RobotContainer.intakeFeeder[0]::getIntakeSensor)
                                 ).withTimeout(1.5),
-                                new HoodSetPosition(secondAngle),
+                                // new HoodSetPosition(secondAngle),
                                 new IntakeBall(0)
                         ),
                         //new IntakeSetPneumatic(Intake.IntakeSolenoidPosition.kUp),
                         new ParallelDeadlineGroup(
                                 new DriveFollowPath("5BallAutopt5", 4, 4.5, false), 
-                                new ShooterSetSpeed(0, secondSpeed),
-                                new HoodSetPosition(secondAngle),
+                                // new ShooterSetSpeed(0, secondSpeed),
+                                // new HoodSetPosition(secondAngle),
                                 new IntakeBall(0)
                         ),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(0.8), 
-                                new HoodSetPosition(secondAngle),
-                                new ShooterSetSpeed(0, secondSpeed),
-                                // new ShooterAutoPrep(),
+                                // new HoodSetPosition(secondAngle),
+                                // new ShooterSetSpeed(0, secondSpeed),
+                                new ShooterAutoPrep(),
                                 new DriveTurnToLimelight()
                         ),
                         //new CompressorSetEnabled(true),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(1), 
-                                new HoodSetPosition(secondAngle),
+                                // new HoodSetPosition(secondAngle),
+                                new ShooterAutoPrep(),
                                 new DriveTurnToLimelight(),
                                 new ShootBalls(0, secondSpeed, 0.1)
                         ),
@@ -140,4 +187,12 @@ public class Auto5Ball extends SequentialCommandGroup {
                         new IntakeSetOverride(0, false)
                 );
         }         
+
+        private boolean s0revved() {
+            return RobotContainer.shooter[0].getRPM() > 4150;
+        }
+
+        private boolean s1revved() {
+            return RobotContainer.shooter[1].getRPM() > 4150;
+        }
 }

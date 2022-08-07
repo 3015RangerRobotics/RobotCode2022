@@ -31,16 +31,16 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  UsbCamera camera1;
-  UsbCamera camera2;
-  VideoSink server;
-  NetworkTableEntry cameraSelection;
-  int hRes = 320;
-  int vRes = 240;
-  int fps = 15;
+//   UsbCamera camera1;
+//   UsbCamera camera2;
+//   VideoSink server;
+//   NetworkTableEntry cameraSelection;
+//   int hRes = 320;
+//   int vRes = 240;
+//   int fps = 15;
 
   Timer matchTimer;
-  Timer llTimer;
+//   Timer llTimer;S
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -50,29 +50,29 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     LiveWindow.setEnabled(false);
     LiveWindow.disableAllTelemetry();
-    camera1 = CameraServer.startAutomaticCapture("Left Camera", 0);
-    // camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    // camera1.setPixelFormat(PixelFormat.kMJPEG);
-    camera1.setVideoMode(PixelFormat.kMJPEG, hRes, vRes, fps);
+    // camera1 = CameraServer.startAutomaticCapture("Left Camera", 0);
+    // // camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    // // camera1.setPixelFormat(PixelFormat.kMJPEG);
+    // camera1.setVideoMode(PixelFormat.kMJPEG, hRes, vRes, fps);
 
-    camera2 = CameraServer.startAutomaticCapture("Right Camera", 1);
-    // camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    // camera2.setPixelFormat(PixelFormat.kMJPEG);
-    camera2.setVideoMode(PixelFormat.kMJPEG, hRes, vRes, fps);
+    // camera2 = CameraServer.startAutomaticCapture("Right Camera", 1);
+    // // camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    // // camera2.setPixelFormat(PixelFormat.kMJPEG);
+    // camera2.setVideoMode(PixelFormat.kMJPEG, hRes, vRes, fps);
 
-    server = CameraServer.getServer();
+    // server = CameraServer.getServer();
 
-    server.setSource(camera1);
+    // server.setSource(camera1);
 
-    SmartDashboard.putString("active camera", "L");
+    // SmartDashboard.putString("active camera", "L");
 
     matchTimer = new Timer();
     matchTimer.reset();
     matchTimer.stop();
 
-    llTimer = new Timer();
-    llTimer.reset();
-    llTimer.start();
+    // llTimer = new Timer();
+    // llTimer.reset();
+    // llTimer.start();
 
     // cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
 
@@ -99,27 +99,21 @@ public class Robot extends TimedRobot {
     //   camera2 = CameraServer.startAutomaticCapture(1);
     //   camera2.setVideoMode(PixelFormat.kMJPEG, 320, 240, 15);
     // }
-    if (RobotContainer.coDriverDLeft.get() || RobotContainer.driverDLeft.get()) {
-      camera2.setConnectionStrategy(ConnectionStrategy.kForceClose);
-      camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-      server.setSource(camera1);
-      SmartDashboard.putString("active camera", "L");
-      // cameraSelection.setString(camera1.getName());
-    }
-    if (RobotContainer.driverDRight.get() || RobotContainer.coDriverDRight.get()) {
-      camera1.setConnectionStrategy(ConnectionStrategy.kForceClose);
-      camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-      server.setSource(camera2);
-      SmartDashboard.putString("active camera", "R");
-      // cameraSelection.setString(camera2.getName());
-    }
+    // if (RobotContainer.coDriverDLeft.get() || RobotContainer.driverDLeft.get()) {
+    //   camera2.setConnectionStrategy(ConnectionStrategy.kForceClose);
+    //   camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    //   server.setSource(camera1);
+    //   SmartDashboard.putString("active camera", "L");
+    //   // cameraSelection.setString(camera1.getName());
+    // }
+    // if (RobotContainer.driverDRight.get() || RobotContainer.coDriverDRight.get()) {
+    //   camera1.setConnectionStrategy(ConnectionStrategy.kForceClose);
+    //   camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    //   server.setSource(camera2);
+    //   SmartDashboard.putString("active camera", "R");
+    //   // cameraSelection.setString(camera2.getName());
+    // }
     SmartDashboard.putString("alliance", DriverStation.getAlliance() == Alliance.Red ? "red" : "blue");
-
-    if (llTimer.hasElapsed(60)) {
-        RobotContainer.limelight.uncheckout();
-        llTimer.reset();
-        llTimer.stop();
-    }
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,

@@ -51,6 +51,7 @@ import frc.robot.commands.IntakeSetColorOverride;
 import frc.robot.commands.IntakeSetOverride;
 import frc.robot.commands.IntakeSetPneumatic;
 import frc.robot.commands.IntakeStop;
+import frc.robot.commands.LimelightManualOff;
 import frc.robot.commands.LimelightManualOn;
 import frc.robot.commands.LimelightPowerCycle;
 import frc.robot.commands.LimelightZoneMode;
@@ -63,6 +64,7 @@ import frc.robot.commands.ShooterSetSpeedOverride;
 import frc.robot.commands.ShooterStop;
 import frc.robot.commands.Autonomous.Auto1Ball;
 import frc.robot.commands.Autonomous.Auto2Ball;
+import frc.robot.commands.Autonomous.Auto2Ball2;
 import frc.robot.commands.Autonomous.Auto2BallSteal;
 import frc.robot.commands.Autonomous.Auto3Ball;
 import frc.robot.commands.Autonomous.Auto4Ball;
@@ -210,6 +212,7 @@ public class RobotContainer {
     SmartDashboard.putData("Set Drive Coast Mode", new DriveSetBrakeMode(false));
     SmartDashboard.putData("Set Zone Mode On", new LimelightZoneMode(true));
     SmartDashboard.putData("Set Zone Mode Off", new LimelightZoneMode(false));
+    SmartDashboard.putData("Limelight Manual Off", new LimelightManualOff());
     // drive.setDefaultCommand(new DriveWithGamepad(true, true,
     //   new DefaultWheelStates(
     //     new double[]{135, 225, 315, 45})));
@@ -224,6 +227,7 @@ public class RobotContainer {
     autoChooser.addOption("3 Ball Auto", new Auto3Ball());
     autoChooser.addOption("2 Ball Auto (Feed Me)", new Auto2Ball());
     autoChooser.addOption("2 Ball Auto (Feed Me, Steal)", new Auto2BallSteal());
+    autoChooser.addOption("2 Ball Auto (Steal)", new Auto2Ball2());
     autoChooser.addOption("Auto for bottoms and third picks (Lizzie's Auto)", new Auto1Ball());
 
     SmartDashboard.putData("Auto Mode", autoChooser);
@@ -252,9 +256,11 @@ public class RobotContainer {
     /*================  Driver Controls  ================*/
     driverB.and(isClimberRunning.negate())
       .whileActiveContinuous(parallel(new PurgeBall(0), new PurgeBall(1)));
+    // driverY.and(isClimberRunning.negate())
+    //   .whileActiveContinuous(parallel(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle)))
+    //   .whenInactive(parallel(new ShooterSetSpeed(0, lowFenderSpeed), new ShooterSetSpeed(1, lowFenderSpeed)));
     driverY.and(isClimberRunning.negate())
-      .whileActiveContinuous(parallel(new ShooterSetSpeed(0, highFenderSpeed), new ShooterSetSpeed(1, highFenderSpeed), new HoodSetPosition(highFenderAngle)))
-      .whenInactive(parallel(new ShooterSetSpeed(0, lowFenderSpeed), new ShooterSetSpeed(1, lowFenderSpeed)));
+        .whenActive(new HoodHome());
     driverLB.whenActive(new DriveZeroGyro());
     driverRB.and(isClimberRunning.negate())
       .whenActive(new IntakeBall(0))
@@ -272,9 +278,9 @@ public class RobotContainer {
     //   .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterSetSpeed(0, setSpeed), new ShooterSetSpeed(1, setSpeed), new HoodSetPosition(setAngle), new HoodOverrideRestPosition(true)))
     //   .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1), new HoodOverrideRestPosition(false)));
 
-    // driverLT.and(isClimberRunning.negate())
-    //   .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
-    //   .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+    driverLT.and(isClimberRunning.negate())
+      .whileActiveContinuous(parallel(new DriveAutoRotate(), new ShooterAutoPrep()))
+      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
     driverDUp.and(isClimberRunning.negate())
     .whenActive(parallel(
         new IntakeSetOverride(0, true),
@@ -300,9 +306,9 @@ public class RobotContainer {
       .whileActiveContinuous(new CG_ShootAll(0.6, 0.6));
 
     /* For shooter tuning, do not use in comp */
-    driverLT
-      .whileActiveContinuous(parallel(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork()))
-      .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
+    // driverLT
+    //   .whileActiveContinuous(parallel(new ShooterSetByNetwork(0), new ShooterSetByNetwork(1), new HoodSetByNetwork()))
+    //   .whenInactive(parallel(new ShooterStop(0), new ShooterStop(1)));
       
     /*================ CoDriver Controls ================*/
     coDriverA.and(isClimberRunning.negate())

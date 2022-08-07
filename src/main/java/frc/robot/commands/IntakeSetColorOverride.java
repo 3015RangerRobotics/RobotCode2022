@@ -15,7 +15,8 @@ public class IntakeSetColorOverride extends InstantCommand {
   boolean override;
 
   public IntakeSetColorOverride(int side, boolean override) {
-    // Use addRequirements() here to declare subsystem dependencies.
+      this.side = side;
+      this.override = override;
   }
 
   // Called when the command is initially scheduled.

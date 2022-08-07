@@ -20,7 +20,7 @@ public class ShooterSetSpeed extends InstantCommand {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = RobotContainer.shooter[side];
     addRequirements(shooter);
-    this.rpm = rpm + 50 * side;
+    this.rpm = rpm;
   }
 
   // Called when the command is initially scheduled.

@@ -48,11 +48,15 @@ public class Auto4Ball extends SequentialCommandGroup {
         // new DriveSetModuleAngles(90),
         new ParallelDeadlineGroup(
             new DriveFollowPath("4BallAutopt1", 3, 4), 
+            new ShooterSetSpeed(0, 3900),
+            new ShooterSetSpeed(1, 3900),
             new HoodHome(1),
             new IntakeBall(0)
         ),
         new ParallelDeadlineGroup(
             new WaitCommand(0.5), 
+            new ShooterSetSpeed(0, 3900),
+            new ShooterSetSpeed(1, 3900),
             new HoodHome(1),
             new IntakeBall(0)
         ),

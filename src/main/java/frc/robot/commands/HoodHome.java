@@ -36,9 +36,7 @@ public class HoodHome extends CommandBase {
   @Override
   public void execute() {
     RobotContainer.hood.setReverseLimit(false);
-    if (!RobotContainer.hood.hasBeenHomed()) {
-      RobotContainer.hood.setHoodOutputPercentage(speed);
-    }
+    RobotContainer.hood.setHoodOutputPercentage(speed);
   }
 
   // Called once the command ends or is interrupted.
@@ -58,6 +56,6 @@ public class HoodHome extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.hood.getReverseLimit() || RobotContainer.hood.hasBeenHomed();
+    return RobotContainer.hood.getReverseLimit();
   }
 }

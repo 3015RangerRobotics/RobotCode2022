@@ -72,14 +72,13 @@ public class Shooter extends SubsystemBase {
 			if (debug) {
 				powerTable.getEntry((id == 0 ? "Left" : "Right") + " Shooter Current");
 				SmartDashboard.putNumber((id == 0 ? "Left " : "Right ") + "Shooter RPM", getRPM());
-				SmartDashboard.putBoolean((id == 0 ? "Left " : "Right ") + "Shooter Primed",
-						isPrimed() && lastSetpoint != 0);
-				if (id == 0) {
-					int left = (isPrimed() && lastSetpoint != 0) ? 1 : 0;
-					int right = SmartDashboard.getBoolean("Right Shooter Primed", false) ? 1 : 0;
-					SmartDashboard.putNumber("Shooters ready", left + right);
-				}
 			}
+            SmartDashboard.putBoolean((id == 0 ? "Left " : "Right ") + "Shooter Primed", isPrimed() && lastSetpoint != 0);
+            if (id == 0) {
+                int left = (isPrimed() && lastSetpoint != 0) ? 1 : 0;
+                int right = SmartDashboard.getBoolean("Right Shooter Primed", false) ? 1 : 0;
+                SmartDashboard.putNumber("Shooters ready", left + right);
+            }
 			// SmartDashboard.putNumber("PIDTarget", lastSetpoint);
 			// SmartDashboard.putNumber("PIDActual", getRPM());
 			if (getRPM() < Constants.SHOOTER_REST_SPEED && lastSetpoint == 0 && !override) {

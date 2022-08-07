@@ -26,21 +26,27 @@ public class Auto2BallSteal extends SequentialCommandGroup {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
-                new Auto2Ball(),
-                new IntakeSetColorOverride(0, true),
-                new ParallelDeadlineGroup(
-                        new DriveFollowPath("2BallAutoStealPt1", 3, 4),
-                        new IntakeSetPneumatic(0, true),
-                        new IntakeBall(0)),
-                new ParallelDeadlineGroup(
-                        new WaitUntilCommand(RobotContainer.intakeFeeder[0]::getIntakeSensor).withTimeout(1),
-                        new IntakeBall(0)),
-                new IntakeSetPneumatic(0, false),
-                new ParallelCommandGroup(
-                        new DriveFollowPath("2BallAutoStealPt2", 3, 4),
-                        new IntakeBall(0).withTimeout(0.2)),
-                new WaitCommand(0.2),
-                new IntakeSetColorOverride(0, false),
-                new PurgeBall(0, -0.275));
+            new Auto2Ball(),
+            new IntakeSetColorOverride(0, true),
+            new IntakeSetColorOverride(1, true),
+            new ParallelDeadlineGroup(
+                new DriveFollowPath("2BallAutoStealPt1", 3, 4),
+                new IntakeSetPneumatic(0, true),
+                new IntakeBall(0)
+            ),
+            new ParallelDeadlineGroup(
+                new WaitUntilCommand(RobotContainer.intakeFeeder[0]::getFeederDetector).withTimeout(1),
+                new IntakeBall(0)
+            ),
+            new IntakeSetPneumatic(0, false),
+            new ParallelCommandGroup(
+                new DriveFollowPath("2BallAutoStealPt2", 3, 4),
+                new IntakeBall(0).withTimeout(0.2)
+            ),
+            new WaitCommand(0.2),
+            new IntakeSetColorOverride(0, false),
+            new IntakeSetColorOverride(1, false),
+            new PurgeBall(0, -0.275)
+        );
     }
 }

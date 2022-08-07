@@ -125,7 +125,7 @@ public final class Constants {
     public static final double SHOOTER_TOLERANCE = .0065;
     public static final LookupTable SHOOTER_LOOKUP_TABLE = new LookupTable();
     public static final LookupTable SHOOTER_ZONE_TABLE = new LookupTable();
-    public static final double SHOOTER_LL_ADJUST = 0; // 185
+    public static final double SHOOTER_LL_ADJUST = 20; // 185
 
     public static final double SHOOTER_REST_SPEED = 1600;
 
@@ -138,9 +138,9 @@ public final class Constants {
         SHOOTER_LOOKUP_TABLE.put(60.0, 3225);
         SHOOTER_LOOKUP_TABLE.put(65.0, 3380);
         SHOOTER_LOOKUP_TABLE.put(70.0, 3380);
-        SHOOTER_LOOKUP_TABLE.put(75.0, 3380);
-        SHOOTER_LOOKUP_TABLE.put(80.0, 3430);
-        SHOOTER_LOOKUP_TABLE.put(85.0, 3430);
+        SHOOTER_LOOKUP_TABLE.put(75.0, 3500);
+        SHOOTER_LOOKUP_TABLE.put(80.0, 3450);
+        SHOOTER_LOOKUP_TABLE.put(85.0, 3465);
         SHOOTER_LOOKUP_TABLE.put(90.0, 3480);
         SHOOTER_LOOKUP_TABLE.put(95.0, 3525);
         SHOOTER_LOOKUP_TABLE.put(100.0, 3545);
@@ -149,16 +149,16 @@ public final class Constants {
         SHOOTER_LOOKUP_TABLE.put(115.0, 3685);
         SHOOTER_LOOKUP_TABLE.put(120.0, 3795);
         SHOOTER_LOOKUP_TABLE.put(125.0, 3825);
-        SHOOTER_LOOKUP_TABLE.put(130.0, 3875);
-        SHOOTER_LOOKUP_TABLE.put(135.0, 3925);
-        SHOOTER_LOOKUP_TABLE.put(140.0, 3935);
-        SHOOTER_LOOKUP_TABLE.put(145.0, 3935);
-        SHOOTER_LOOKUP_TABLE.put(150.0, 3935);
-        SHOOTER_LOOKUP_TABLE.put(155.0, 3965);
-        SHOOTER_LOOKUP_TABLE.put(160.0, 4020);
-        SHOOTER_LOOKUP_TABLE.put(165.0, 4100);
-        SHOOTER_LOOKUP_TABLE.put(170.0, 4150);
-        SHOOTER_LOOKUP_TABLE.put(175.0, 4150);
+        SHOOTER_LOOKUP_TABLE.put(130.0, 3855);
+        SHOOTER_LOOKUP_TABLE.put(135.0, 3905);
+        SHOOTER_LOOKUP_TABLE.put(140.0, 3915);
+        SHOOTER_LOOKUP_TABLE.put(145.0, 3915);
+        SHOOTER_LOOKUP_TABLE.put(150.0, 3915);
+        SHOOTER_LOOKUP_TABLE.put(155.0, 3945);
+        SHOOTER_LOOKUP_TABLE.put(160.0, 4000);
+        SHOOTER_LOOKUP_TABLE.put(165.0, 4070);
+        SHOOTER_LOOKUP_TABLE.put(170.0, 4120);
+        SHOOTER_LOOKUP_TABLE.put(175.0, 4120);
     }
     static {
         SHOOTER_ZONE_TABLE.put(65, 3685);
@@ -229,11 +229,11 @@ public final class Constants {
         HOOD_LOOKUP_TABLE.put(55.0, 25.50);
         HOOD_LOOKUP_TABLE.put(60.0, 25.50);
         HOOD_LOOKUP_TABLE.put(65.0, 25.50);
-        HOOD_LOOKUP_TABLE.put(70.0, 25.50);
-        HOOD_LOOKUP_TABLE.put(75.0, 25.50);
-        HOOD_LOOKUP_TABLE.put(80.0, 25.50);
-        HOOD_LOOKUP_TABLE.put(85.0, 25.50);
-        HOOD_LOOKUP_TABLE.put(90.0, 25.50);
+        HOOD_LOOKUP_TABLE.put(70.0, 24.0);
+        HOOD_LOOKUP_TABLE.put(75.0, 24.0);
+        HOOD_LOOKUP_TABLE.put(80.0, 24.0);
+        HOOD_LOOKUP_TABLE.put(85.0, 24.50);
+        HOOD_LOOKUP_TABLE.put(90.0, 25.00);
         HOOD_LOOKUP_TABLE.put(95.0, 25.50);
         HOOD_LOOKUP_TABLE.put(100.0, 25.50);
         HOOD_LOOKUP_TABLE.put(105.0, 25.50);
@@ -248,9 +248,9 @@ public final class Constants {
         HOOD_LOOKUP_TABLE.put(150.0, 26.80);
         HOOD_LOOKUP_TABLE.put(155.0, 27.25);
         HOOD_LOOKUP_TABLE.put(160.0, 27.25);
-        HOOD_LOOKUP_TABLE.put(165.0, 29.50);
-        HOOD_LOOKUP_TABLE.put(170.0, 29.75);
-        HOOD_LOOKUP_TABLE.put(175.0, 30.25);
+        HOOD_LOOKUP_TABLE.put(165.0, 29.70);
+        HOOD_LOOKUP_TABLE.put(170.0, 29.95);
+        HOOD_LOOKUP_TABLE.put(175.0, 30.45);
     }
 
     static {

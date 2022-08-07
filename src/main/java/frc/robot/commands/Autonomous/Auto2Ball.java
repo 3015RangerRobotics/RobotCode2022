@@ -50,40 +50,50 @@ public class Auto2Ball extends SequentialCommandGroup {
                 new IntakeSetOverride(1, true),
                 new IntakeSetPneumatic(1, true),
                 new ParallelDeadlineGroup(
-                        new WaitUntilCommand(RobotContainer.intakeFeeder[1]::getIntakeSensor).withTimeout(4),
+                        new WaitUntilCommand(RobotContainer.intakeFeeder[1]::getIntakeSensor).withTimeout(2),
                         new HoodHome(),
-                        new IntakeBall(1)),
-                new IntakeSetPneumatic(1, false),
+                        new IntakeBall(1)
+                ),
                 new ParallelDeadlineGroup(
                         new DriveFollowPath("2BallAutopt1", 3, 4),
                         new HoodSetPosition(firstAngle),
                         new ShooterSetSpeed(0, firstSpeed),
-                        new ShooterSetSpeed(1, firstSpeed)),
+                        new ShooterSetSpeed(1, firstSpeed)
+                ),
                 new ParallelDeadlineGroup(
-                        new WaitCommand(1),
+                        new WaitCommand(0.8),
                         new DriveTurnToLimelight(),
                         new ShooterAutoPrep(),
-                        new IntakeSetPneumatic(1, true),
-                        new IntakeBall(1)),
+                        new IntakeBall(1),
+                        new SequentialCommandGroup(
+                                new WaitCommand(0.5),
+                                new IntakeSetPneumatic(1, true)
+                        )
+                ),
                 new ParallelDeadlineGroup(
-                        new WaitCommand(0.75),
+                        new WaitCommand(0.6),
                         new ShooterAutoPrep(),
                         new ShootBalls(0, 0),
-                        new ShootBalls(1, 0, 0.2, 0.2)),
+                        new ShootBalls(1, 0, 0, 0)
+                ),
                 new ParallelDeadlineGroup(
                         new DriveFollowPath("2BallAutopt2", 3, 4, false),
                         new HoodSetPosition(secondAngle),
                         new ShooterSetSpeed(1, secondSpeed),
-                        new IntakeBall(1)),
+                        new IntakeBall(1)
+                ),
                 new ParallelDeadlineGroup(
                         new WaitUntilCommand(RobotContainer.intakeFeeder[1]::getIntakeSensor).withTimeout(1),
                         new DriveTurnToLimelight(),
                         new ShooterAutoPrep(),
-                        new IntakeBall(1)),
+                        new IntakeBall(1)
+                ),
                 new ParallelDeadlineGroup(
                         new WaitCommand(0.75),
                         new ShootBalls(1, 0),
                         new ShooterAutoPrep(),
-                        new DriveTurnToLimelight()));
+                        new DriveTurnToLimelight()
+                )
+        );
     }
 }
